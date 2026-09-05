@@ -1,0 +1,28 @@
+// Security rules for the tracker's Firestore database.
+//
+// The Firebase web config in web/auth.js is public by design — it identifies the project and
+// authorises nothing. THESE RULES are what stop one trainer reading or wiping another's
+// collection log, so they must be deployed before the site is trusted with real progress:
+//
+//   firebase deploy --only firestore:rules
+//
+// A database left in test mode is world-readable and world-writable, and test mode expires
+// into world-DENIED after 30 days, which looks exactly like a bug in the site.
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // One document per trainer: users/{uid} = { caught: [<canonical key>, …], updatedAt }.
+    // Readable and writable only by that signed-in trainer, and by nobody else at all.
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Nothing else in the database is reachable from the web client.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

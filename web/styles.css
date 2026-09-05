@@ -283,3 +283,61 @@ footer .srcs { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 6px; }
   .chip-label { min-width: auto; }
   .grid.wide { grid-template-columns: 1fr; }
 }
+
+/* ---------- sign-in ---------- */
+
+.sitenav .spacer { flex: 1; }
+
+.authbox { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.authbox .authnote { color: var(--muted); font-size: 12px; }
+.authbox .avatar { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--border-bright); }
+.authbox .who { color: var(--text); font-weight: 600; max-width: 14ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.authbox .linkbtn {
+  font: inherit; font-size: 12px; background: none; color: var(--muted);
+  border: 0; padding: 4px 6px; cursor: pointer; text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.authbox .linkbtn:hover { color: var(--text); }
+
+.signin {
+  display: inline-flex; align-items: center; gap: 8px;
+  font: inherit; font-size: 13px; font-weight: 600;
+  background: var(--surface-2); color: var(--text);
+  border: 1px solid var(--border-bright); border-radius: 8px;
+  padding: 6px 13px; cursor: pointer; transition: .15s;
+}
+.signin:hover { border-color: var(--accent); }
+.signin .g { width: 15px; height: 15px; flex: 0 0 15px; }
+.signin.big { font-size: 14px; padding: 10px 18px; }
+.signin.big .g { width: 17px; height: 17px; flex: 0 0 17px; }
+
+/* Gate banner — sits above the sticky summary bar on every tracker page. */
+.authgate {
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  background: var(--surface); border: 1px solid var(--border-bright);
+  border-radius: var(--radius); padding: 16px 18px; margin-bottom: 20px;
+}
+.authgate .gate-body { flex: 1; min-width: 260px; }
+.authgate strong { display: block; font-size: 15px; margin-bottom: 4px; }
+.authgate p { margin: 0; color: var(--muted); font-size: 13px; max-width: 68ch; }
+.authgate.bad { border-color: #f87171; }
+.authgate.bad strong { color: #f87171; }
+
+/* Fired by Auth.prompt() when a locked card is clicked. */
+@keyframes gate-flash {
+  0%, 100% { border-color: var(--border-bright); }
+  30%      { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(91,140,255,.18); }
+}
+.authgate.flash { animation: gate-flash .9s ease 2; }
+@media (prefers-reduced-motion: reduce) { .authgate.flash { animation: none; } }
+
+/* Signed out the lists still read fine, but nothing looks tickable. */
+body.signed-out .card,
+body.signed-out .super { cursor: default; }
+body.signed-out .card:hover,
+body.signed-out .super:hover { border-color: var(--border); transform: none; }
+body.signed-out .check { opacity: .25; }
+body.signed-out #reset { opacity: .4; }
+
+/* Don't flash a sign-in prompt while the session is still being restored. */
+body.auth-busy .authgate { display: none; }

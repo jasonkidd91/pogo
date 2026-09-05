@@ -82,14 +82,20 @@ function visible(p) {
 }
 
 function makeCard(p, cls) {
+  const on = Store.has(p.id);
+  // Signed out the card still renders — it just can't be ticked. trackerToggle turns the
+  // click into a sign-in prompt instead.
+  const locked = Store.locked;
   const card = document.createElement('div');
-  card.className = cls + (Store.has(p.id) ? ' caught' : '');
-  card.tabIndex = 0;
+  card.className = cls + (on ? ' caught' : '');
+  card.tabIndex = locked ? -1 : 0;
   card.setAttribute('role', 'checkbox');
-  card.setAttribute('aria-checked', String(Store.has(p.id)));
-  card.setAttribute('aria-label', `${p.name}, ${Store.has(p.id) ? 'caught' : 'not caught'}`);
+  card.setAttribute('aria-checked', String(on));
+  if (locked) card.setAttribute('aria-disabled', 'true');
+  card.setAttribute('aria-label',
+    locked ? `${p.name}, sign in to track` : `${p.name}, ${on ? 'caught' : 'not caught'}`);
 
-  const onActivate = () => Store.toggle(p.id);
+  const onActivate = () => trackerToggle(p.id);
   card.addEventListener('click', onActivate);
   card.addEventListener('keydown', (e) => {
     if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); onActivate(); }
@@ -243,6 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('reset').addEventListener('click', () => {
+    if (Store.locked) return Auth.prompt();
     if (confirm('Clear the Megas tracked for this event? This cannot be undone.')) {
       Store.clear(ALL.map((p) => p.id));
     }

@@ -35,14 +35,19 @@ function typePills(types) {
  */
 function collectionCard(p, opts = {}) {
   const on = Store.has(p.key);
+  // Signed out the card still renders — it just can't be ticked. trackerToggle turns the
+  // click into a sign-in prompt instead.
+  const locked = Store.locked;
   const card = document.createElement('div');
   card.className = 'card mon' + (on ? ' caught' : '');
-  card.tabIndex = 0;
+  card.tabIndex = locked ? -1 : 0;
   card.setAttribute('role', 'checkbox');
   card.setAttribute('aria-checked', String(on));
-  card.setAttribute('aria-label', `${p.name}, ${on ? 'caught' : 'not caught'}`);
+  if (locked) card.setAttribute('aria-disabled', 'true');
+  card.setAttribute('aria-label',
+    locked ? `${p.name}, sign in to track` : `${p.name}, ${on ? 'caught' : 'not caught'}`);
 
-  const hit = () => { Store.toggle(p.key); };
+  const hit = () => { trackerToggle(p.key); };
   card.addEventListener('click', hit);
   card.addEventListener('keydown', (e) => {
     if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); hit(); }
@@ -116,6 +121,7 @@ function setupControls({ onChange, prefix }) {
   const reset = document.getElementById('reset');
   if (reset) {
     reset.addEventListener('click', () => {
+      if (Store.locked) return Auth.prompt();
       if (confirm('Clear tracked progress on this page? This cannot be undone.')) Store.clear(prefix);
     });
   }

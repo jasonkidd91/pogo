@@ -80,8 +80,8 @@ date parts on purpose — using `toISOString()` mis-fires for anyone whose UTC d
 
 ## Step 5 — the page
 
-Copy `web/index.html`. It already wires `store.js` → data → `app.js`. Keep that script order;
-`store.js` must load first.
+Copy `web/index.html`. It already wires `store.js` → `auth.js` → data → `app.js`. Keep that
+script order; `store.js` must load first and `auth.js` second.
 
 Then register the page in the nav — edit the `links` array in `buildNav()` in `web/store.js`,
 and call `buildNav('<id>')` with the new id.
@@ -97,8 +97,17 @@ Store.id.gmax(name)   // 'gmax:venusaur'
 ```
 
 Ticking Mega Beedrill on an event page must show it collected on `megas.html`. A day-scoped or
-event-scoped key breaks that and is a bug. Progress is in `localStorage` — long-lived. Only an
-explicit Reset may clear it, and only its own prefixes.
+event-scoped key breaks that and is a bug. Progress lives in Firestore under the signed-in
+Google account — long-lived. Only an explicit Reset may clear it, and only its own prefixes.
+
+## Step 6b — the sign-in gate
+
+Tracking requires a signed-in account. Cards must call `trackerToggle(key)`, never
+`Store.toggle(key)` — `trackerToggle` refuses when signed out and raises the sign-in prompt
+instead. Signed out, a card gets `tabIndex = -1` and `aria-disabled="true"`; copy that from
+`makeCard()` in `app.js`. Guard the Reset button with `if (Store.locked) return Auth.prompt();`.
+The gate banner and the nav sign-in control are painted by `auth.js` — a new page gets both for
+free as long as it has a `.wrap` and calls `buildNav()`.
 
 ## Step 7 — verify in a browser
 
@@ -106,8 +115,10 @@ explicit Reset may clear it, and only its own prefixes.
 python3 -m http.server 8777 --directory web
 ```
 
-Check: card count matches the roster, **zero broken images**, totals update on tick, filters
-work, no horizontal scroll, and a tick shows up on `megas.html`. Assert rather than eyeball:
+Check signed out first: the list renders, the gate banner shows, and clicking a card scrolls to
+the gate instead of ticking. Then sign in and check: card count matches the roster, **zero broken
+images**, totals update on tick, filters work, no horizontal scroll, and a tick shows up on
+`megas.html`. Assert rather than eyeball:
 
 ```js
 [...document.querySelectorAll('img')].filter(i => i.complete && !i.naturalWidth)  // must be []
