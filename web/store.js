@@ -151,7 +151,8 @@ function stickySummary() {
 /** Shared site nav. Each page calls buildNav('<id>'). */
 function buildNav(active) {
   const links = [
-    ['event', 'index.html', 'Mega Finale'],
+    ['events', 'index.html', "What's on"],
+    ['finale', 'mega-finale.html', 'Mega Finale'],
     ['megas', 'megas.html', 'Mega Pokémon'],
     ['dynamax', 'dynamax.html', 'Dynamax'],
   ];

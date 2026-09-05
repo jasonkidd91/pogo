@@ -9,7 +9,8 @@ origin breaks Google sign-in and Firestore:
 
 | File | What it is |
 |---|---|
-| `index.html` | GO Fest 2026: Mega Finale event tracker — habitats, times, raid passes |
+| `index.html` | **What's on** — current and upcoming events, live from the LeekDuck feed |
+| `mega-finale.html` | GO Fest 2026: Mega Finale event tracker — habitats, times, raid passes |
 | `megas.html` | All 63 released Mega Evolutions and Primal Reversions, with raid class |
 | `dynamax.html` | All 143 Dynamax-capable Pokémon + 17 Gigantamax forms |
 
@@ -20,8 +21,25 @@ origin breaks Google sign-in and Firestore:
 | `store.js` | Collection state + canonical keys + site nav. **Single source of truth for identity.** |
 | `auth.js` | Google sign-in, the Firestore backend, the sign-in gate. Loads the Firebase SDK from the CDN. |
 | `collection.js` | Card renderer, filters, search shared by the two collection pages |
+| `events.js` | The events page: fetches the live feed, groups by now / next 7 days / later |
 | `styles.css` | All styling |
 | `data.js` / `mega-data.js` / `max-data.js` | Data, each with its sources in the header comment |
+| `events-data.js` | Fallback snapshot for the events page — **not** how that page stays current |
+
+## The events page
+
+`index.html` fetches [ScrapedDuck](https://github.com/bigfoott/ScrapedDuck)'s JSON of the
+[LeekDuck](https://leekduck.com/events/) event list on every load and renders that. Events are
+live data — a file baked at build time would be wrong within days — so `events-data.js` is only
+the fallback shown while the request is in flight or if it fails, and the footer line says
+which of the two you are reading.
+
+Times without a trailing `Z` are **local wall-clock**: a Community Day at 14:00 starts at 14:00
+wherever you are. Times with a `Z` are a real worldwide instant, which is how GO Battle League
+rotations are published; those are tagged `global` and converted into the reader's zone.
+
+Only pages with `<body data-tracker>` get the sign-in gate. The events page has nothing to
+tick, so it has no gate — and a tracker page missing that attribute is a bug.
 
 ## Raid class pills
 

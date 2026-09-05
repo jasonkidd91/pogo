@@ -5,7 +5,7 @@ description: Build a new catch-list tracker page for a Pokémon GO event on the 
 
 # Build an event tracker page
 
-Produces a page like `web/index.html` (GO Fest 2026: Mega Finale): raid targets grouped by day
+Produces a page like `web/mega-finale.html` (GO Fest 2026: Mega Finale): raid targets grouped by day
 and habitat, with times, costs, per-Pokémon checkboxes and a running "raid passes needed" total.
 
 ## Step 1 — get the roster right, before writing any code
@@ -80,7 +80,7 @@ date parts on purpose — using `toISOString()` mis-fires for anyone whose UTC d
 
 ## Step 5 — the page
 
-Copy `web/index.html`. It already wires `store.js` → `auth.js` → data → `app.js`. Keep that
+Copy `web/mega-finale.html`. It already wires `store.js` → `auth.js` → data → `app.js`. Keep that
 script order; `store.js` must load first and `auth.js` second.
 
 Then register the page in the nav — edit the `links` array in `buildNav()` in `web/store.js`,

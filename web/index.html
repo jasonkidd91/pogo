@@ -3,76 +3,83 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mega Finale Tracker — Pokémon GO Fest 2026</title>
-<meta name="description" content="Track every Mega Raid in Pokémon GO Fest 2026: Mega Finale — habitat times, Mega Energy costs and raid passes needed.">
+<title>What's on in Pokémon GO — current and upcoming events</title>
+<meta name="description" content="Every current and upcoming Pokémon GO event in one plain list: what it is, when it starts, when it ends, and what you get.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27%235b8cff%27/%3E%3Cpath d=%27M2 16h28%27 stroke=%27%230f1219%27 stroke-width=%273%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%230f1219%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%23e8ecf4%27/%3E%3C/svg%3E">
 <!-- auth.js pulls the Firebase SDK from here; warm the connection during parse. -->
 <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<!-- the live event feed -->
+<link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="wrap">
-
   <header class="hero">
-    <p class="eyebrow">Pokémon GO Fest 2026</p>
-    <h1 id="ev-name">Mega Finale</h1>
+    <p class="eyebrow">Pokémon GO</p>
+    <h1>What's on</h1>
     <p class="sub">
-      Every Mega Raid across both days, with habitat windows, first-time Mega Energy costs and
-      the raid passes you still need. Tick one off as you catch it — progress is saved to your Google account and
-      shared with the rest of the site.
+      Everything running now and everything coming up, with the times in your own clock.
+      Nothing else — no bundles, no shop copy. Times are local unless a card says
+      <em>global</em>.
     </p>
-    <ul class="bonuses" id="bonuses"></ul>
+    <div id="background" class="bgstrip"></div>
   </header>
 
   <div class="summary">
     <div class="stats">
-      <div class="stat hl">
-        <div class="num" id="s-passes">0</div>
-        <div class="lbl">Raid passes needed</div>
-      </div>
-      <div class="stat ok">
-        <div class="num" id="s-caught">0</div>
-        <div class="lbl">Caught</div>
-      </div>
-      <div class="stat">
-        <div class="num" id="s-energy">0</div>
-        <div class="lbl" id="s-energy-note">Mega Energy left</div>
-      </div>
+      <div class="stat ok"><div class="num" id="c-live">0</div><div class="lbl">On now</div></div>
+      <div class="stat hl"><div class="num" id="c-soon">0</div><div class="lbl">Next 7 days</div></div>
+      <div class="stat"><div class="num" id="c-later">0</div><div class="lbl">Later</div></div>
     </div>
-    <div class="bar"><i id="bar"></i></div>
     <div class="controls">
-      <button data-filter="all" aria-pressed="true">All</button>
-      <button data-filter="remaining" aria-pressed="false">Still needed</button>
-      <button data-filter="caught" aria-pressed="false">Caught</button>
-      <span class="spacer"></span>
-      <button id="reset" class="danger">Reset</button>
+      <span class="chip-label">Show</span>
+      <button data-group="kind" data-filter="all" aria-pressed="true">Everything</button>
+      <button data-group="kind" data-filter="big" aria-pressed="false">Events</button>
+      <button data-group="kind" data-filter="raids" aria-pressed="false">Raids</button>
+      <button data-group="kind" data-filter="max" aria-pressed="false">Max Battles</button>
+      <button data-group="kind" data-filter="hours" aria-pressed="false">Hours</button>
+      <button data-group="kind" data-filter="league" aria-pressed="false">Battle League</button>
     </div>
   </div>
 
-  <main id="days"></main>
+  <section class="rhythmbox">
+    <h2>The weekly rhythm</h2>
+    <p>Worked out from the schedule below, so it stays true if it changes.</p>
+    <div id="rhythm" class="rhythm"></div>
+  </section>
+
+  <main>
+    <section id="now"></section>
+    <section id="soon"></section>
+    <section id="later"></section>
+  </main>
 
   <footer>
-    <strong>Event:</strong> Sat 5 – Sun 6 September 2026, 10:00 – 18:00 local time each day.
-    Four habitats per day, each running twice. One raid pass counted per Pokémon.
-    <div class="srcs">
-      <span>Verified against</span>
-      <a id="ev-official" href="https://pokemongo.com/gofest/megafinale">pokemongo.com (official)</a>
-      <a href="https://leekduck.com/events/pokemon-go-fest-2026-mega-finale/">LeekDuck</a>
-      <a href="https://pokemongohub.net/post/event/pokemon-go-fest-2026-mega-finale/">GO Hub</a>
-      <a href="https://bulbapedia.bulbagarden.net/wiki/Mega_Evolution_(GO)">Bulbapedia (energy costs)</a>
-    </div>
+    <strong id="freshness" class="freshness">Loading…</strong>
     <p>
-      Mega Energy figures are standing <em>first-time</em> activation costs — they are not published
-      per-Pokémon for this event, and are lower if you have already Mega Evolved that species.
-      Mega Mewtwo X/Y are left unpriced deliberately; verify in game before committing energy.
-      Artwork for the seven Megas debuting here falls back to base-species art, as no Mega artwork exists yet.
+      Event data comes from the <a href="https://leekduck.com/events/">LeekDuck</a> event list
+      via the <a href="https://github.com/bigfoott/ScrapedDuck">ScrapedDuck</a> JSON feed, fetched
+      fresh every time this page loads. If that fetch fails you get the saved copy shipped with
+      the site, and the line above says so.
+    </p>
+    <p>
+      <strong>Times.</strong> Almost everything in Pokémon GO runs on <em>local</em> time — a
+      Community Day at 14:00 starts at 14:00 wherever you are. GO Battle League rotations are
+      the exception: they are published as one worldwide moment, so they are marked
+      <em>global</em> and shown converted into your time zone.
+    </p>
+    <p>
+      <strong>Catch trackers</strong> are separate pages and only exist where they earn their
+      keep — right now <a href="mega-finale.html">GO Fest 2026: Mega Finale</a>, plus the
+      standing <a href="megas.html">Mega</a> and <a href="dynamax.html">Dynamax</a> lists. An
+      event without a tracker link simply doesn't have one.
     </p>
   </footer>
-
 </div>
+
 <script src="store.js"></script>
 <script src="auth.js"></script>
-<script src="data.js"></script>
-<script src="app.js"></script>
+<script src="events-data.js"></script>
+<script src="events.js"></script>
 </body>
 </html>

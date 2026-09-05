@@ -263,6 +263,10 @@ const Auth = (() => {
   }
 
   function paintGate() {
+    // Only pages that own a catch list get a sign-in gate. The events page has nothing to
+    // tick, so a "sign in to use the tracker" banner there would be noise about a feature
+    // that page does not have.
+    if (!document.body.hasAttribute('data-tracker')) return;
     const wrap = document.querySelector('.wrap');
     if (!wrap) return;
 

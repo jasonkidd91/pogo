@@ -394,3 +394,108 @@ body.signed-out #reset { opacity: .4; }
     text-transform: uppercase; color: var(--muted);
   }
 }
+
+/* ---------- events page ---------- */
+
+/* Season and GO Pass run for months. They belong on the page but not in the same list as a
+   three-hour Community Day, so they sit in the header as a strip. */
+.bgstrip { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.bgchip {
+  display: inline-flex; align-items: baseline; gap: 8px; text-decoration: none;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 999px;
+  padding: 6px 14px; font-size: 12.5px; color: var(--muted);
+}
+.bgchip:hover { border-color: var(--accent); }
+.bgchip.soon { opacity: .72; border-style: dashed; }
+.bgchip strong { color: var(--text); font-weight: 600; }
+
+.etype {
+  font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 999px; white-space: nowrap;
+  border: 1px solid currentColor;
+}
+.etype[data-k="fest"]    { color: var(--super); }
+.etype[data-k="cday"]    { color: var(--done); }
+.etype[data-k="raidday"] { color: var(--e300); }
+.etype[data-k="max"]     { color: #7dd3fc; }
+.etype[data-k="hour"]    { color: var(--e200); }
+.etype[data-k="raid"]    { color: #9ab3e8; }
+.etype[data-k="gbl"]     { color: var(--muted); }
+.etype[data-k="bg"]      { color: var(--muted); }
+.etype[data-k="event"]   { color: var(--accent); }
+
+/* A UTC-published time lands at a different clock time depending on where you are, and that
+   catches people out — so it is called out rather than silently converted. */
+.gtag {
+  font-size: 9.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--muted); border: 1px dashed var(--border-bright);
+  border-radius: 4px; padding: 1px 5px; margin-left: 8px; cursor: help;
+}
+
+/* Happening now */
+.egrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+.ecard {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 16px;
+}
+.ecard.live { border-left: 3px solid var(--done); }
+.ehead { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.eleft { margin-left: auto; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.eleft.urgent { color: var(--e200); font-weight: 700; }
+.ecard h3 { margin: 0 0 6px; font-size: 16px; line-height: 1.3; letter-spacing: -.01em; }
+.ewhen { margin: 0; font-size: 13px; color: var(--text); font-variant-numeric: tabular-nums; }
+.edetail { margin: 6px 0 0; font-size: 12.5px; color: var(--muted); }
+
+.elinks { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.elink {
+  font-size: 12px; text-decoration: none; color: var(--muted);
+  border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px;
+}
+.elink:hover { color: var(--text); border-color: var(--accent); }
+.elink.track { color: var(--accent); border-color: var(--accent); font-weight: 600; }
+
+/* Upcoming rows */
+.dayrow {
+  font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--muted); margin: 20px 0 8px;
+}
+.erows { display: flex; flex-direction: column; gap: 6px; }
+.erow {
+  display: flex; align-items: flex-start; gap: 14px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 14px;
+}
+.erow:hover { border-color: var(--border-bright); }
+.etime {
+  flex: 0 0 auto; min-width: 58px; font-size: 13px; font-weight: 600;
+  font-variant-numeric: tabular-nums; color: var(--text); padding-top: 1px;
+}
+.ebody { flex: 1; min-width: 0; }
+.eline { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ename { font-size: 14px; }
+.esub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.erow .elinks { margin-top: 0; flex: 0 0 auto; }
+
+/* Weekly rhythm */
+.rhythmbox {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px 18px; margin-bottom: 28px;
+}
+.rhythmbox h2 { margin: 0 0 4px; font-size: 15px; }
+.rhythmbox p { margin: 0 0 12px; font-size: 12.5px; color: var(--muted); }
+.rhythm { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+.rh { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+
+/* Which of the two lists you are looking at — live feed or the copy shipped with the site. */
+.freshness { display: block; font-size: 12.5px; margin-bottom: 6px; }
+.freshness.live { color: var(--done); }
+.freshness.snapshot { color: var(--muted); }
+.freshness.stale { color: var(--e200); }
+
+@media (max-width: 560px) {
+  .egrid { grid-template-columns: 1fr; }
+  .erow { flex-wrap: wrap; gap: 6px 12px; }
+  .etime { min-width: 0; }
+  .erow .elinks { width: 100%; }
+  .rhythm { flex-direction: column; gap: 8px; }
+}

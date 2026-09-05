@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  buildNav('event');
+  buildNav('finale');
   Store.onChange(render);
   render();
   // Keep the "Live now" badge honest as habitats rotate on the hour.
