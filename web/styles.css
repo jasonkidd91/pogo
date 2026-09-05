@@ -339,5 +339,7 @@ body.signed-out .super:hover { border-color: var(--border); transform: none; }
 body.signed-out .check { opacity: .25; }
 body.signed-out #reset { opacity: .4; }
 
-/* Don't flash a sign-in prompt while the session is still being restored. */
-body.auth-busy .authgate { display: none; }
+/* While the SDK loads the gate is present but muted — never hidden. A hidden gate means a
+   rendered, inert, unexplained tracker for as long as the download takes. */
+.authgate.checking { border-color: var(--border); }
+.authgate.checking strong { color: var(--muted); font-weight: 600; }

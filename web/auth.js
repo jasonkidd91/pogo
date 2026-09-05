@@ -267,7 +267,7 @@ const Auth = (() => {
     if (!wrap) return;
 
     let gate = document.getElementById('authgate');
-    if (state === 'in' || state === 'loading') {
+    if (state === 'in') {
       if (gate) gate.remove();
       return;
     }
@@ -279,6 +279,20 @@ const Auth = (() => {
       // Above the sticky summary bar, below the page's own headline.
       wrap.insertBefore(gate, wrap.querySelector('.summary') || wrap.firstChild);
     }
+
+    // The SDK is ~700 kB over three modules. On a slow connection that is many seconds during
+    // which the cards are rendered but inert, so the gate has to be on screen from the first
+    // paint saying so — silence here reads as a broken tracker. Neutral wording, because we
+    // don't yet know whether they're signed in.
+    if (state === 'loading') {
+      gate.classList.remove('bad');
+      gate.classList.add('checking');
+      gate.innerHTML =
+        '<div class="gate-body"><strong>Checking your sign-in…</strong>' +
+        '<p>The tracker unlocks in a moment. Browsing the list works either way.</p></div>';
+      return;
+    }
+    gate.classList.remove('checking');
 
     if (state === 'error') {
       gate.classList.add('bad');

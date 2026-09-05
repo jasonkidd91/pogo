@@ -143,6 +143,11 @@ of `auth.js` follows from that and should not be "simplified" away:
   purpose; `toISOString()` gives the UTC date and mis-fires across midnight.
 - **Primal Kyogre/Groudon and Mega Rayquaza show a weather pill.** Bulbapedia's "Boosted types"
   column is weather-based for those three and is not their own typing; the generator keeps both.
+- **The sign-in gate is drawn before Firebase finishes loading**, in a muted "Checking your
+  sign-in…" state, and is never hidden. Hiding it while the SDK downloads looks tidier on a
+  fast connection and is much worse on a slow one: the cards render inert with nothing saying
+  why. Measured on throttled 3G, `dynamax.html` sat unexplained and dead for **15.6 s**; drawing
+  the gate immediately cut that to 13 ms. Don't reintroduce a `display: none` while loading.
 - **Max Battle tiers and Dynamax types are intentionally absent.** Tiers rotate weekly and would
   be stale within days. Adding them is a design change, not a gap to fill.
 
