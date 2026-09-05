@@ -343,3 +343,39 @@ body.signed-out #reset { opacity: .4; }
    rendered, inert, unexplained tracker for as long as the download takes. */
 .authgate.checking { border-color: var(--border); }
 .authgate.checking strong { color: var(--muted); font-weight: 600; }
+
+/* ---------- sticky summary on phones ---------- */
+/* The full panel is stats + progress bar + up to three filter rows — around 300px, close to
+   half a phone viewport, and it is pinned there the whole way down a 160-card list. So past
+   the top of the page it collapses to a one-line strip. Tapping the strip, or focusing
+   anything inside it (keyboard and screen-reader users never get a tap), brings it back;
+   scrolling to the top restores it too. Desktop is untouched — there is room there. */
+@media (max-width: 560px) {
+  .summary { padding: 12px 14px; margin-bottom: 20px; }
+  .summary .stats { gap: 8px 18px; }
+  .summary .controls { margin-top: 10px; }
+
+  body.scrolled .summary:not(.open):not(:focus-within) {
+    padding: 7px 12px 8px; padding-right: 78px; cursor: pointer;
+    /* Nearly opaque: at 50px tall, card titles reading through the blur look like a glitch. */
+    background: rgba(15,18,25,.97);
+    box-shadow: 0 6px 16px rgba(0,0,0,.35);
+  }
+  /* Stat blocks go inline, and the third one drops — two numbers is what you glance at. */
+  body.scrolled .summary:not(.open):not(:focus-within) .stat {
+    min-width: 0; display: flex; align-items: baseline; gap: 5px;
+  }
+  body.scrolled .summary:not(.open):not(:focus-within) .stat .num { font-size: 15px; }
+  body.scrolled .summary:not(.open):not(:focus-within) .stat .num small { font-size: 11px; }
+  body.scrolled .summary:not(.open):not(:focus-within) .stat .lbl { margin-top: 0; font-size: 9.5px; }
+  body.scrolled .summary:not(.open):not(:focus-within) .stat:nth-child(3) { display: none; }
+  body.scrolled .summary:not(.open):not(:focus-within) .bar { height: 3px; margin-top: 7px; }
+  body.scrolled .summary:not(.open):not(:focus-within) .controls { display: none; }
+  /* Without this the strip looks like a header rather than something you can open. */
+  body.scrolled .summary:not(.open):not(:focus-within)::after {
+    content: 'Filters ▾';
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    font-size: 10px; font-weight: 600; letter-spacing: .07em;
+    text-transform: uppercase; color: var(--muted);
+  }
+}

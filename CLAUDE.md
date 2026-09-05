@@ -148,6 +148,13 @@ of `auth.js` follows from that and should not be "simplified" away:
   fast connection and is much worse on a slow one: the cards render inert with nothing saying
   why. Measured on throttled 3G, `dynamax.html` sat unexplained and dead for **15.6 s**; drawing
   the gate immediately cut that to 13 ms. Don't reintroduce a `display: none` while loading.
+- **The sticky summary collapses on phones once you scroll.** At full height it is ~335px —
+  40% of a 390x844 viewport, 50% of a small phone — pinned above a list of up to 160 cards.
+  Under 560px, `body.scrolled` shrinks it to a ~50px strip (two stats, a hairline bar, a
+  `Filters` affordance); tapping the strip or focusing anything inside it re-expands, and
+  scrolling back to the top restores it. `stickySummary()` in `store.js` only toggles the
+  class — all the sizing is CSS, so desktop is untouched.
+
 - **Max Battle tiers and Dynamax types are intentionally absent.** Tiers rotate weekly and would
   be stale within days. Adding them is a design change, not a gap to fill.
 

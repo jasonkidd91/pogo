@@ -113,6 +113,41 @@ function trackerToggle(key) {
   return false;
 }
 
+/**
+ * Collapse the sticky summary bar once the page scrolls. Phones only — the CSS that acts on
+ * `body.scrolled` and `.summary.open` is inside a max-width media query.
+ *
+ * The panel is pinned at the top of a list that can run to 160 cards, and at full height it
+ * eats close to half a small viewport. Collapsed it is a one-line strip; a tap on the strip
+ * opens it again, and scrolling back to the top restores it for good.
+ */
+function stickySummary() {
+  const summary = document.querySelector('.summary');
+  if (!summary) return;
+
+  let queued = false;
+  const onScroll = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => {
+      queued = false;
+      const scrolled = window.scrollY > 4;
+      document.body.classList.toggle('scrolled', scrolled);
+      // Back at the top the panel is full size anyway, so drop any manual expansion.
+      if (!scrolled) summary.classList.remove('open');
+    });
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  summary.addEventListener('click', (e) => {
+    // A tap on a filter chip, the search box or Reset is a tap on that control, not on the
+    // strip — only bare panel area toggles.
+    if (e.target.closest('button, input, a, label')) return;
+    summary.classList.toggle('open');
+  });
+}
+
 /** Shared site nav. Each page calls buildNav('<id>'). */
 function buildNav(active) {
   const links = [
@@ -134,4 +169,6 @@ function buildNav(active) {
   // The sign-in control and the gate banner are painted by auth.js, which may not have
   // finished loading Firebase yet — it repaints on every auth change regardless.
   if (typeof Auth !== 'undefined') Auth.mount();
+
+  stickySummary();
 }
