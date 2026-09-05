@@ -18,11 +18,14 @@ The script fetches wikitext, parses, verifies every sprite URL, and only then wr
 It raises rather than writing bad data. Expected output shape:
 
 ```
+Legendary + Mythical species on Bulbapedia: 94
 parsed 63 released Megas
   rows inheriting cost via rowspan (expect only X/Y pairs): ['Mega Charizard Y', ...]
   GO-original Megas (no mainline art): 13
   with a Super Max attack: 17
   cost tiers: {100: 8, 200: 28, 300: 22, 400: 3, 7500: 2}
+  raid classes: {'Mega Raid': 55, 'Legendary Mega Raid': 6, 'Primal Raid': 2}
+    Mega Mewtwo X, Mega Mewtwo Y, Mega Latias, Mega Latios, Primal Kyogre, ...
 ```
 
 ## Check the output before trusting it
@@ -40,6 +43,9 @@ Compare against the previous run. A refresh should be a small delta.
   raises above 4, but sanity-check the names: only genuine X/Y pairs should appear.
 - **A new cost tier appears** → add a filter chip for it in `megas.html` (the `data-group="cost"`
   row). The page groups by tier automatically, but the filter buttons are hand-listed.
+- **Every Mega came out as `Mega Raid`** → the Legendary/Mythical category lookup silently
+  returned nothing. The script raises on an empty Legendary bucket, so this should be
+  impossible; if you see it, `category_members` is being bypassed.
 
 ## Then verify in the browser
 
@@ -50,6 +56,22 @@ python3 -m http.server 8777 --directory web
 Open `http://localhost:8777/megas.html` and confirm: card count matches the script output,
 no broken images, filters and search still work. If a Playwright MCP is available, assert
 `[...document.querySelectorAll('img')].filter(i => i.complete && !i.naturalWidth)` is empty.
+
+## The raid class pill
+
+Each card carries `raid`/`stars` — Mega Raid (★4), Primal Raid (★5), Legendary Mega Raid (★6).
+Derived, not memorised: the rule is quoted from `Raid_Battle_(GO)` at the top of the script,
+and Legendary/Mythical membership comes from Bulbapedia's **category API**, never from
+scraping the Legendary article (it names Ditto and Bulbasaur in prose — trap 3 in
+`scripts/bulbapedia.py`).
+
+Three guards will stop a bad refresh: zero Legendary Megas, more than 12 of them, or anything
+other than exactly 2 Primals. That last one fires when a new Primal ships — that is the point.
+Re-read `Raid_Battle_(GO)` and confirm the new one's star rating before relaxing it.
+
+**Super Mega Raid is not derived and must not be.** It is an event-driven shielded variant of
+a Mega Raid, not a property of the species. The event page holds a hand-written, per-event
+`tier` for that.
 
 ## Things that are correct and should not be "fixed"
 

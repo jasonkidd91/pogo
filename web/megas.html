@@ -41,6 +41,13 @@
       <button data-group="status" data-filter="have" aria-pressed="false">Collected</button>
     </div>
     <div class="controls">
+      <span class="chip-label">Raid</span>
+      <button data-group="raid" data-filter="all" aria-pressed="true">Any</button>
+      <button data-group="raid" data-filter="mega" aria-pressed="false">Mega ★4</button>
+      <button data-group="raid" data-filter="primal" aria-pressed="false">Primal ★5</button>
+      <button data-group="raid" data-filter="legendary" aria-pressed="false">Legendary ★6</button>
+    </div>
+    <div class="controls">
       <span class="chip-label">Cost</span>
       <button data-group="cost" data-filter="all" aria-pressed="true">Any</button>
       <button data-group="cost" data-filter="100" aria-pressed="false">100</button>
@@ -61,6 +68,10 @@
       <strong>Boosts</strong> is the party-wide type bonus — for most Megas it matches their own
       typing, but Primal Kyogre, Primal Groudon and Mega Rayquaza boost weather-based types
       instead, marked with a ⛅ pill.
+      The <strong>raid pill</strong> is the class of battle that species is fought in —
+      Mega Raid (★4), Primal Raid (★5) or Legendary Mega Raid (★6, Legendary and Mythical
+      Megas). It says nothing about whether it is in the raid rotation today, which changes
+      constantly; Super Mega Raids are an event-driven variant and so are not shown here.
       <strong>Super Max</strong> marks the extra Charged Attack unlocked at Super Max Mega Level.
       Megas tagged <strong>GO ORIGINAL</strong> have no mainline counterpart, so they show
       base-species artwork.
@@ -82,12 +93,23 @@ buildNav('megas');
 
 const ROWS = MEGAS.map((m) => ({ ...m, key: Store.id.mega(m.name) }));
 
+// Chip value -> the exact raid class in mega-data.js. Substring matching would be wrong:
+// "Legendary Mega Raid" contains "Mega Raid".
+const RAID_FILTER = {
+  mega: 'Mega Raid',
+  primal: 'Primal Raid',
+  legendary: 'Legendary Mega Raid',
+};
+
 function visible(m) {
   const cost = activeFilter('cost');
   if (cost !== 'all' && String(m.energy) !== cost) return false;
+  const raid = activeFilter('raid');
+  if (raid !== 'all' && m.raid !== RAID_FILTER[raid]) return false;
   if (!statusMatch(m.key, activeFilter('status'))) return false;
   const q = searchText();
   if (q && !(m.name.toLowerCase().includes(q) ||
+             (m.raid || '').toLowerCase().includes(q) ||
              (m.types || []).some((t) => t.toLowerCase().includes(q)))) return false;
   return true;
 }

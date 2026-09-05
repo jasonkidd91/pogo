@@ -10,7 +10,7 @@ origin breaks Google sign-in and Firestore:
 | File | What it is |
 |---|---|
 | `index.html` | GO Fest 2026: Mega Finale event tracker — habitats, times, raid passes |
-| `megas.html` | All 63 released Mega Evolutions and Primal Reversions |
+| `megas.html` | All 63 released Mega Evolutions and Primal Reversions, with raid class |
 | `dynamax.html` | All 143 Dynamax-capable Pokémon + 17 Gigantamax forms |
 
 ## Shared modules
@@ -22,6 +22,22 @@ origin breaks Google sign-in and Firestore:
 | `collection.js` | Card renderer, filters, search shared by the two collection pages |
 | `styles.css` | All styling |
 | `data.js` / `mega-data.js` / `max-data.js` | Data, each with its sources in the header comment |
+
+## Raid class pills
+
+Every Mega card and every Gigantamax card carries the class of battle that species is fought
+in, with its star rating:
+
+| Pill | Who | Source of the rule |
+|---|---|---|
+| ★4 Mega | non-Legendary Megas (55) | `Raid_Battle_(GO)` |
+| ★5 Primal | Kyogre, Groudon | `Raid_Battle_(GO)` |
+| ★6 Legendary Mega | Legendary and Mythical Megas (6) | `Raid_Battle_(GO)` + Bulbapedia's Legendary/Mythical categories |
+| ★6 Gigantamax | all 17 Gigantamax forms | `Max_Battle` difficulty table |
+
+It is the class of the battle, **not** a claim that the Pokémon is in the rotation today.
+Plain Dynamax Pokémon carry no tier on purpose — theirs belongs to the current Power Spot
+rotation, changes weekly, and would be stale within days.
 
 ## Shared checkmarks
 

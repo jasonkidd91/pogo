@@ -15,8 +15,14 @@ Two traps this module exists to solve. Do not hand-roll around them:
          | data-sort-value="100" | 100<ref group="lower-alpha" .../>
      Naively reading the cell yields no number, which then silently inherits the previous
      row's value through the rowspan fallback. `cell_value` strips attributes and refs.
+
+  3. CATEGORY MEMBERSHIP IS NOT IN THE ARTICLE. The Legendary Pokemon article names Ditto,
+     Bulbasaur and Cyclizar in prose, so scraping it for {{p|...}} links reports them as
+     Legendary. `category_members` asks the MediaWiki category API instead, which is the
+     actual membership list.
 """
 
+import json
 import re
 import subprocess
 import urllib.parse
@@ -38,6 +44,40 @@ def fetch_wikitext(page: str, strip_comments: bool = True) -> str:
     if "==" not in out:
         raise RuntimeError(f"{page} did not return wikitext (got {out[:120]!r})")
     return re.sub(r"<!--.*?-->", "", out, flags=re.DOTALL) if strip_comments else out
+
+
+def category_members(category: str) -> set[str]:
+    """Species in a Bulbapedia category, e.g. category_members('Legendary Pokémon').
+
+    Returns bare species names — the API's "Charizard (Pokémon)" titles with the suffix
+    dropped. Non-species members (the category's own article, sub-topics) are discarded.
+    See trap 3: never scrape the article for this.
+    """
+    names, cont, pages = set(), None, 0
+    while True:
+        params = {"action": "query", "list": "categorymembers",
+                  "cmtitle": "Category:" + category, "cmlimit": "500", "format": "json"}
+        if cont:
+            params["cmcontinue"] = cont
+        url = "https://bulbapedia.bulbagarden.net/w/api.php?" + urllib.parse.urlencode(params)
+        out = subprocess.run(
+            ["curl", "-sL", "-A", UA, url], capture_output=True, text=True, check=True
+        ).stdout
+        try:
+            data = json.loads(out)
+        except json.JSONDecodeError:
+            raise RuntimeError(f"category API returned non-JSON for {category!r}: {out[:120]!r}")
+        for m in data.get("query", {}).get("categorymembers", []):
+            hit = re.fullmatch(r"(.+) \(Pokémon\)", m["title"])
+            if hit:
+                names.add(hit.group(1))
+        cont = data.get("continue", {}).get("cmcontinue")
+        pages += 1
+        if not cont or pages > 10:
+            break
+    if not names:
+        raise RuntimeError(f"Category:{category} listed no species — renamed or API changed?")
+    return names
 
 
 def section(text: str, heading: str) -> str:
@@ -107,7 +147,6 @@ def check_sprites(slugs, base="https://img.pokemondb.net/sprites/home/normal/"):
 
 def write_js(path: str, header: str, blocks: dict):
     """Write `const NAME = [...]` blocks as a plain (non-module) JS data file."""
-    import json
     parts = [header]
     for name, arr in blocks.items():
         body = ",\n".join("  " + json.dumps(x, ensure_ascii=False) for x in arr)

@@ -29,6 +29,12 @@ def main():
         gmax.append({"name": (m.group(2) or m.group(1)).strip(),
                      "art": slug((m.group(2) or m.group(1)).strip()) + "-gigantamax",
                      "gmaxMove": move.group(1) if move else None,
+                     # Every Gigantamax encounter is a Gigantamax Max Battle, six stars —
+                     # see the difficulty table on
+                     # https://bulbapedia.bulbagarden.net/wiki/Max_Battle. Plain Dynamax
+                     # Pokemon get no tier: theirs is a property of the current Power Spot
+                     # rotation, not of the species.
+                     "raid": "Gigantamax Battle", "stars": 6,
                      "released": find_date(row)})
 
     # ---- Dynamax ----
@@ -81,7 +87,11 @@ HEADER = """/**
  *
  * A Gigantamax form is tracked separately from its Dynamax entry — they are different
  * catches. hasGmax marks a Dynamax entry whose species also has a Gigantamax form.
- * Max Battle tiers are deliberately NOT stored: they rotate weekly and would go stale.
+ *
+ * raid/stars is stored for Gigantamax only, where the battle is always a six-star
+ * Gigantamax Max Battle (https://bulbapedia.bulbagarden.net/wiki/Max_Battle). The tier of a
+ * plain Dynamax Pokemon belongs to the current Power Spot rotation rather than the species,
+ * rotates weekly, and is deliberately NOT stored — it would be stale within days.
  */
 """
 

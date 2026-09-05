@@ -7,27 +7,31 @@
  *
  * A Gigantamax form is tracked separately from its Dynamax entry — they are different
  * catches. hasGmax marks a Dynamax entry whose species also has a Gigantamax form.
- * Max Battle tiers are deliberately NOT stored: they rotate weekly and would go stale.
+ *
+ * raid/stars is stored for Gigantamax only, where the battle is always a six-star
+ * Gigantamax Max Battle (https://bulbapedia.bulbagarden.net/wiki/Max_Battle). The tier of a
+ * plain Dynamax Pokemon belongs to the current Power Spot rotation rather than the species,
+ * rotates weekly, and is deliberately NOT stored — it would be stale within days.
  */
 
 const GIGANTAMAX = [
-  {"name": "Venusaur", "art": "venusaur-gigantamax", "gmaxMove": "G-Max Vine Lash", "released": "October 26, 2024"},
-  {"name": "Charizard", "art": "charizard-gigantamax", "gmaxMove": "G-Max Wildfire", "released": "October 26, 2024"},
-  {"name": "Blastoise", "art": "blastoise-gigantamax", "gmaxMove": "G-Max Cannonade", "released": "October 26, 2024"},
-  {"name": "Butterfree", "art": "butterfree-gigantamax", "gmaxMove": "G-Max Befuddle", "released": "August 3, 2025"},
-  {"name": "Pikachu", "art": "pikachu-gigantamax", "gmaxMove": "G-Max Volt Crash", "released": "March 28, 2026"},
-  {"name": "Meowth", "art": "meowth-gigantamax", "gmaxMove": "G-Max Gold Rush", "released": "February 15, 2026"},
-  {"name": "Machamp", "art": "machamp-gigantamax", "gmaxMove": "G-Max Chi Strike", "released": "May 25, 2025"},
-  {"name": "Gengar", "art": "gengar-gigantamax", "gmaxMove": "G-Max Terror", "released": "October 31, 2024"},
-  {"name": "Kingler", "art": "kingler-gigantamax", "gmaxMove": "G-Max Foam Burst", "released": "February 1, 2025"},
-  {"name": "Lapras", "art": "lapras-gigantamax", "gmaxMove": "G-Max Resonance", "released": "December 8, 2024"},
-  {"name": "Snorlax", "art": "snorlax-gigantamax", "gmaxMove": "G-Max Replenish", "released": "April 19, 2025"},
-  {"name": "Garbodor", "art": "garbodor-gigantamax", "gmaxMove": "G-Max Malodor", "released": "November 1, 2025"},
-  {"name": "Rillaboom", "art": "rillaboom-gigantamax", "gmaxMove": "G-Max Drum Solo", "released": "May 29, 2025"},
-  {"name": "Cinderace", "art": "cinderace-gigantamax", "gmaxMove": "G-Max Fireball", "released": "June 5, 2025"},
-  {"name": "Inteleon", "art": "inteleon-gigantamax", "gmaxMove": "G-Max Hydrosnipe", "released": "June 12, 2025"},
-  {"name": "Toxtricity", "art": "toxtricity-gigantamax", "gmaxMove": "G-Max Stun Shock", "released": "November 16, 2024"},
-  {"name": "Grimmsnarl", "art": "grimmsnarl-gigantamax", "gmaxMove": "G-Max Snooze", "released": "November 7, 2025"}
+  {"name": "Venusaur", "art": "venusaur-gigantamax", "gmaxMove": "G-Max Vine Lash", "raid": "Gigantamax Battle", "stars": 6, "released": "October 26, 2024"},
+  {"name": "Charizard", "art": "charizard-gigantamax", "gmaxMove": "G-Max Wildfire", "raid": "Gigantamax Battle", "stars": 6, "released": "October 26, 2024"},
+  {"name": "Blastoise", "art": "blastoise-gigantamax", "gmaxMove": "G-Max Cannonade", "raid": "Gigantamax Battle", "stars": 6, "released": "October 26, 2024"},
+  {"name": "Butterfree", "art": "butterfree-gigantamax", "gmaxMove": "G-Max Befuddle", "raid": "Gigantamax Battle", "stars": 6, "released": "August 3, 2025"},
+  {"name": "Pikachu", "art": "pikachu-gigantamax", "gmaxMove": "G-Max Volt Crash", "raid": "Gigantamax Battle", "stars": 6, "released": "March 28, 2026"},
+  {"name": "Meowth", "art": "meowth-gigantamax", "gmaxMove": "G-Max Gold Rush", "raid": "Gigantamax Battle", "stars": 6, "released": "February 15, 2026"},
+  {"name": "Machamp", "art": "machamp-gigantamax", "gmaxMove": "G-Max Chi Strike", "raid": "Gigantamax Battle", "stars": 6, "released": "May 25, 2025"},
+  {"name": "Gengar", "art": "gengar-gigantamax", "gmaxMove": "G-Max Terror", "raid": "Gigantamax Battle", "stars": 6, "released": "October 31, 2024"},
+  {"name": "Kingler", "art": "kingler-gigantamax", "gmaxMove": "G-Max Foam Burst", "raid": "Gigantamax Battle", "stars": 6, "released": "February 1, 2025"},
+  {"name": "Lapras", "art": "lapras-gigantamax", "gmaxMove": "G-Max Resonance", "raid": "Gigantamax Battle", "stars": 6, "released": "December 8, 2024"},
+  {"name": "Snorlax", "art": "snorlax-gigantamax", "gmaxMove": "G-Max Replenish", "raid": "Gigantamax Battle", "stars": 6, "released": "April 19, 2025"},
+  {"name": "Garbodor", "art": "garbodor-gigantamax", "gmaxMove": "G-Max Malodor", "raid": "Gigantamax Battle", "stars": 6, "released": "November 1, 2025"},
+  {"name": "Rillaboom", "art": "rillaboom-gigantamax", "gmaxMove": "G-Max Drum Solo", "raid": "Gigantamax Battle", "stars": 6, "released": "May 29, 2025"},
+  {"name": "Cinderace", "art": "cinderace-gigantamax", "gmaxMove": "G-Max Fireball", "raid": "Gigantamax Battle", "stars": 6, "released": "June 5, 2025"},
+  {"name": "Inteleon", "art": "inteleon-gigantamax", "gmaxMove": "G-Max Hydrosnipe", "raid": "Gigantamax Battle", "stars": 6, "released": "June 12, 2025"},
+  {"name": "Toxtricity", "art": "toxtricity-gigantamax", "gmaxMove": "G-Max Stun Shock", "raid": "Gigantamax Battle", "stars": 6, "released": "November 16, 2024"},
+  {"name": "Grimmsnarl", "art": "grimmsnarl-gigantamax", "gmaxMove": "G-Max Snooze", "raid": "Gigantamax Battle", "stars": 6, "released": "November 7, 2025"}
 ];
 
 const DYNAMAX = [

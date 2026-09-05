@@ -155,8 +155,21 @@ of `auth.js` follows from that and should not be "simplified" away:
   scrolling back to the top restores it. `stickySummary()` in `store.js` only toggles the
   class — all the sizing is CSS, so desktop is untouched.
 
-- **Max Battle tiers and Dynamax types are intentionally absent.** Tiers rotate weekly and would
-  be stale within days. Adding them is a design change, not a gap to fill.
+- **Species raid class is shown; the current rotation tier is not.** These are two different
+  things and the distinction is the whole point. A species' battle *class* is stable and
+  generated into the data files — `raid`/`stars`, rendered as the pill on each card: Mega Raid
+  (★4), Primal Raid (★5), Legendary Mega Raid (★6, Legendary and Mythical Megas) and
+  Gigantamax Battle (★6). It is derived from the rule quoted on `Raid_Battle_(GO)` plus
+  Bulbapedia's Legendary/Mythical **categories** — never from memory, and never by scraping
+  the Legendary article, which names Ditto and Bulbasaur in prose (see trap 3 in
+  `scripts/bulbapedia.py`).
+
+  What stays absent: **which** Pokémon is in the raid or Power Spot rotation today, the
+  per-encounter Max Battle tier of a plain Dynamax Pokémon, and Dynamax types. Those rotate
+  weekly and would be stale within days. **Super Mega Raid is also deliberately not derived**
+  — Bulbapedia describes it as an event-driven shielded variant of a Mega Raid, not a property
+  of the species, so a per-species value would be confidently wrong. The event page's
+  hand-written `tier: 'Super Mega Raid'` is verified for that one event and stays hand-written.
 
 ## Project skills
 

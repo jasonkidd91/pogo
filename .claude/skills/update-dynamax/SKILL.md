@@ -25,6 +25,14 @@ wrote .../web/max-data.js: GIGANTAMAX=17, DYNAMAX=143
 Both counts should only ever grow. A drop means the page layout changed — investigate before
 shipping.
 
+## Tiers: Gigantamax yes, Dynamax no
+
+Gigantamax rows get `raid: 'Gigantamax Battle', stars: 6` — a Gigantamax encounter is always a
+six-star Max Battle, per the difficulty table on `Max_Battle`. Plain Dynamax rows get **no
+tier at all**, and that is deliberate: a Dynamax Pokémon's tier belongs to the current Power
+Spot rotation, not to the species, and it changes weekly. Do not "complete" the data by adding
+one — it would be wrong within days. `dynamax.html` says so in its footer.
+
 ## Two structural facts to preserve
 
 - **Gigantamax is tracked separately from Dynamax.** Gigantamax Venusaur and Dynamax Venusaur

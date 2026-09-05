@@ -30,6 +30,26 @@ function typePills(types) {
 }
 
 /**
+ * The battle this species is fought in — Mega Raid, Legendary Mega Raid, Primal Raid or
+ * Gigantamax Battle — with its star rating. This is the class of the battle, not a claim
+ * that it is in the rotation today; the data file only carries what is stable.
+ */
+function raidPill(p) {
+  const el = document.createElement('div');
+  el.className = 'raid';
+  el.dataset.stars = String(p.stars);
+  el.title = `${p.raid} — ${p.stars}-star battle. Whether it is in rotation right now changes constantly.`;
+  const stars = document.createElement('span');
+  stars.className = 'stars';
+  stars.textContent = '★'.repeat(p.stars);
+  el.appendChild(stars);
+  // "Mega Raid" -> "MEGA". The trailing noun is the same for every value in a column of
+  // these, and dropping it is what keeps the six-star label on one line in a narrow card.
+  el.appendChild(document.createTextNode(p.raid.replace(/ (Raid|Battle)$/, '')));
+  return el;
+}
+
+/**
  * @param p     entry with { name, art, key, ... }
  * @param opts  { badges: [el], sub: string }
  */
@@ -71,6 +91,8 @@ function collectionCard(p, opts = {}) {
   }
 
   if (p.types) body.appendChild(typePills(p.types));
+
+  if (p.raid) body.appendChild(raidPill(p));
 
   if (opts.badges?.length) {
     const meta = document.createElement('div');

@@ -4,7 +4,7 @@
 import os, re, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from bulbapedia import (fetch_wikitext, section, rows, cells, cell_value,
-                        find_date, slug, check_sprites, write_js)
+                        find_date, slug, check_sprites, write_js, category_members)
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "web", "mega-data.js")
 
@@ -39,7 +39,42 @@ def art_slug(name):
     return primary, base
 
 
+# Raid class per species, quoted from https://bulbapedia.bulbagarden.net/wiki/Raid_Battle_(GO):
+#
+#   "Standard Mega Raids feature non-Legendary Pokemon, and these bosses have an HP of 9500,
+#    and an Attack and Defence multiplier of 0.79, equivalent to those of a four-star raid."
+#   "Legendary Mega Raids feature Mega Evolved Legendary or Mythical Pokemon. They are
+#    classified as six-star raids."
+#   "Primal Raids feature Primal Groudon or Primal Kyogre. Despite having the same HP as
+#    six-star Mega Raid Bosses, they are classified as five-star raids."
+#
+# This is the battle's class for that species, which is stable. It is NOT a claim that the
+# Pokemon is in the raid rotation right now — that changes constantly and is not stored.
+#
+# Super Mega Raids are deliberately NOT derived here. The same page describes them as a
+# harder, shielded variant that a Mega Raid becomes during an event, not a property of the
+# species, so deriving one per Pokemon would be confidently wrong.
+
+
+def base_species(name):
+    """'Mega Charizard X' -> 'Charizard', matching Bulbapedia's species article titles."""
+    return re.sub(r" (X|Y)$", "", re.sub(r"^(Mega|Primal) ", "", name))
+
+
+def raid_class(name, special):
+    if name.startswith("Primal "):
+        return "Primal Raid", 5
+    if base_species(name) in special:
+        return "Legendary Mega Raid", 6
+    return "Mega Raid", 4
+
+
 def main():
+    # Legendary/Mythical membership decides the raid class; fetch it before parsing so a
+    # category rename fails before we have written anything.
+    special = category_members("Legendary Pokémon") | category_members("Mythical Pokémon")
+    print(f"Legendary + Mythical species on Bulbapedia: {len(special)}")
+
     txt = fetch_wikitext("Mega_Evolution_(GO)")
     seg = section(txt, "==List of Mega Evolutions and Primal Reversions==")
 
@@ -86,9 +121,11 @@ def main():
     entries = []
     for m in out:
         primary, fallback = pairs[m["name"]]
+        raid, stars = raid_class(m["name"], special)
         e = {"name": m["name"], "art": primary,
              "types": ACTUAL_TYPES.get(m["name"], m["boosts"]),
-             "boosts": m["boosts"], "energy": m["energy"], "released": m["released"]}
+             "boosts": m["boosts"], "energy": m["energy"], "raid": raid, "stars": stars,
+             "released": m["released"]}
         if m["name"] in ACTUAL_TYPES:
             e["weatherBoost"] = True
         if not exists[primary]:
@@ -105,6 +142,28 @@ def main():
     from collections import Counter
     print(f"  cost tiers: {dict(sorted(Counter(e['energy'] for e in entries).items()))}")
 
+    # A miscounted raid class is silent on the page — every Mega would just read four-star.
+    # These bounds are here to make that fail loudly instead.
+    classes = Counter(e["raid"] for e in entries)
+    print(f"  raid classes: {dict(classes)}")
+    print("    " + ", ".join(e["name"] for e in entries if e["stars"] != 4))
+    if not classes["Legendary Mega Raid"]:
+        raise RuntimeError(
+            "no Mega classified as Legendary — the Bulbapedia category lookup is failing, "
+            "which would flatten every Mega to four-star"
+        )
+    if classes["Legendary Mega Raid"] > 12:
+        raise RuntimeError(
+            f"{classes['Legendary Mega Raid']} Legendary Megas is implausible — "
+            "category_members is returning something other than species"
+        )
+    if classes["Primal Raid"] != 2:
+        raise RuntimeError(
+            f"expected exactly 2 Primals (Kyogre, Groudon), got {classes['Primal Raid']}. "
+            "A new Primal shipped — re-read Raid Battle (GO) and confirm its star rating "
+            "before trusting the five-star classification"
+        )
+
     write_js(OUT, HEADER, {"MEGAS": entries})
 
 
@@ -116,6 +175,12 @@ HEADER = """/**
  * Unreleased (HTML-commented) rows are excluded.
  *
  * energy  first-time activation cost; later activations cost far less
+ * raid    battle class for this species: Mega Raid (4 stars), Legendary Mega Raid (6) or
+ *         Primal Raid (5). Derived from the rule stated on
+ *         https://bulbapedia.bulbagarden.net/wiki/Raid_Battle_(GO) plus Bulbapedia's
+ *         Legendary and Mythical categories. It is NOT a claim that the Pokemon is in the
+ *         raid rotation right now — that rotates and is deliberately not stored.
+ *         Super Mega Raid is an event-driven variant, so it is not derived per species.
  * boosts  party-wide type bonus; weather-based (not own typing) when weatherBoost is set
  * attack  extra Charged Attack unlocked at Super Max Mega Level
  * isNew   GO-original Mega with no mainline artwork; artFallback is base-species art

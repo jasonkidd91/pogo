@@ -273,6 +273,21 @@ footer .srcs { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 6px; }
 .tag-attack { color: var(--e300); border: 1px solid rgba(244,114,182,.45); }
 .tag-weather { color: #7dd3fc; border: 1px solid rgba(125,211,252,.45); }
 
+/* Raid class pill. Colour tracks the star rating, so the ladder is readable at a glance. */
+.raid {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 9.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase;
+  padding: 2px 6px; border-radius: 4px; margin-bottom: 6px;
+  border: 1px solid currentColor;
+  /* One line: wrapped to "LEGENDARY / MEGA RAID" the pill reads as two separate badges. */
+  white-space: nowrap; max-width: 100%; overflow: hidden;
+}
+.raid .stars { letter-spacing: -1.5px; font-size: 8.5px; }
+.raid[data-stars="4"] { color: #9ab3e8; }
+.raid[data-stars="5"] { color: #fbbf24; }
+.raid[data-stars="6"] { color: var(--super); }
+.card.caught .raid { opacity: .45; }
+
 .card.mon .meta { margin-top: 2px; }
 .card.mon .note { font-size: 11px; color: var(--muted); margin-top: 5px; }
 .card.caught .types, .card.caught .form, .card.caught .note { opacity: .45; }
