@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mega Finale Tracker — Pokémon GO Fest 2026</title>
+<meta name="description" content="Track every Mega Raid in Pokémon GO Fest 2026: Mega Finale — habitat times, Mega Energy costs and raid passes needed.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27%235b8cff%27/%3E%3Cpath d=%27M2 16h28%27 stroke=%27%230f1219%27 stroke-width=%273%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%230f1219%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%23e8ecf4%27/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Pokémon GO Fest 2026</p>
+    <h1 id="ev-name">Mega Finale</h1>
+    <p class="sub">
+      Every Mega Raid across both days, with habitat windows, first-time Mega Energy costs and
+      the raid passes you still need. Tick one off as you catch it — progress is saved in this browser and
+      shared with the rest of the site.
+    </p>
+    <ul class="bonuses" id="bonuses"></ul>
+  </header>
+
+  <div class="summary">
+    <div class="stats">
+      <div class="stat hl">
+        <div class="num" id="s-passes">0</div>
+        <div class="lbl">Raid passes needed</div>
+      </div>
+      <div class="stat ok">
+        <div class="num" id="s-caught">0</div>
+        <div class="lbl">Caught</div>
+      </div>
+      <div class="stat">
+        <div class="num" id="s-energy">0</div>
+        <div class="lbl" id="s-energy-note">Mega Energy left</div>
+      </div>
+    </div>
+    <div class="bar"><i id="bar"></i></div>
+    <div class="controls">
+      <button data-filter="all" aria-pressed="true">All</button>
+      <button data-filter="remaining" aria-pressed="false">Still needed</button>
+      <button data-filter="caught" aria-pressed="false">Caught</button>
+      <span class="spacer"></span>
+      <button id="reset" class="danger">Reset</button>
+    </div>
+  </div>
+
+  <main id="days"></main>
+
+  <footer>
+    <strong>Event:</strong> Sat 5 – Sun 6 September 2026, 10:00 – 18:00 local time each day.
+    Four habitats per day, each running twice. One raid pass counted per Pokémon.
+    <div class="srcs">
+      <span>Verified against</span>
+      <a id="ev-official" href="https://pokemongo.com/gofest/megafinale">pokemongo.com (official)</a>
+      <a href="https://leekduck.com/events/pokemon-go-fest-2026-mega-finale/">LeekDuck</a>
+      <a href="https://pokemongohub.net/post/event/pokemon-go-fest-2026-mega-finale/">GO Hub</a>
+      <a href="https://bulbapedia.bulbagarden.net/wiki/Mega_Evolution_(GO)">Bulbapedia (energy costs)</a>
+    </div>
+    <p>
+      Mega Energy figures are standing <em>first-time</em> activation costs — they are not published
+      per-Pokémon for this event, and are lower if you have already Mega Evolved that species.
+      Mega Mewtwo X/Y are left unpriced deliberately; verify in game before committing energy.
+      Artwork for the seven Megas debuting here falls back to base-species art, as no Mega artwork exists yet.
+    </p>
+  </footer>
+
+</div>
+<script src="store.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

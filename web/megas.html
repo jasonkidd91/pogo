@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mega Pokémon — every Mega Evolution in Pokémon GO</title>
+<meta name="description" content="Every released Mega Evolution and Primal Reversion in Pokémon GO, with Mega Energy costs, boosted types and release dates.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27%235b8cff%27/%3E%3Cpath d=%27M2 16h28%27 stroke=%27%230f1219%27 stroke-width=%273%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%230f1219%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%23e8ecf4%27/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">Collection</p>
+    <h1>Mega Pokémon</h1>
+    <p class="sub">
+      Every Mega Evolution and Primal Reversion released in Pokémon GO, with first-time
+      Mega Energy cost, the types it boosts for your raid party, and release date.
+      Ticks are saved in this browser and shared with the rest of the site.
+    </p>
+  </header>
+
+  <div class="summary">
+    <div class="stats">
+      <div class="stat ok"><div class="num" id="s-have">0</div><div class="lbl">Collected</div></div>
+      <div class="stat hl"><div class="num" id="s-need">0</div><div class="lbl">Still needed</div></div>
+      <div class="stat"><div class="num" id="s-energy">0</div><div class="lbl">Energy for the rest</div></div>
+    </div>
+    <div class="bar"><i id="bar"></i></div>
+    <div class="controls">
+      <input id="search" class="search" type="search" placeholder="Search a Mega…" aria-label="Search Mega Pokémon">
+      <span class="spacer"></span>
+      <button id="reset" class="danger">Reset</button>
+    </div>
+    <div class="controls">
+      <span class="chip-label">Show</span>
+      <button data-group="status" data-filter="all" aria-pressed="true">All</button>
+      <button data-group="status" data-filter="need" aria-pressed="false">Still needed</button>
+      <button data-group="status" data-filter="have" aria-pressed="false">Collected</button>
+    </div>
+    <div class="controls">
+      <span class="chip-label">Cost</span>
+      <button data-group="cost" data-filter="all" aria-pressed="true">Any</button>
+      <button data-group="cost" data-filter="100" aria-pressed="false">100</button>
+      <button data-group="cost" data-filter="200" aria-pressed="false">200</button>
+      <button data-group="cost" data-filter="300" aria-pressed="false">300</button>
+      <button data-group="cost" data-filter="400" aria-pressed="false">400</button>
+      <button data-group="cost" data-filter="7500" aria-pressed="false">7,500</button>
+    </div>
+  </div>
+
+  <main id="list"></main>
+
+  <footer>
+    <strong id="count-note"></strong>
+    <p>
+      <strong>Mega Energy</strong> shown is the <em>first-time</em> activation cost. Every later
+      activation costs far less, and drops further as that Pokémon's Mega Level rises.
+      <strong>Boosts</strong> is the party-wide type bonus — for most Megas it matches their own
+      typing, but Primal Kyogre, Primal Groudon and Mega Rayquaza boost weather-based types
+      instead, marked with a ⛅ pill.
+      <strong>Super Max</strong> marks the extra Charged Attack unlocked at Super Max Mega Level.
+      Megas tagged <strong>GO ORIGINAL</strong> have no mainline counterpart, so they show
+      base-species artwork.
+    </p>
+    <div class="srcs">
+      <span>Parsed from</span>
+      <a href="https://bulbapedia.bulbagarden.net/wiki/Mega_Evolution_(GO)">Bulbapedia — Mega Evolution (GO)</a>
+      <span>· released entries only, as of 5 Sep 2026</span>
+    </div>
+  </footer>
+</div>
+
+<script src="store.js"></script>
+<script src="collection.js"></script>
+<script src="mega-data.js"></script>
+<script>
+buildNav('megas');
+
+const ROWS = MEGAS.map((m) => ({ ...m, key: Store.id.mega(m.name) }));
+
+function visible(m) {
+  const cost = activeFilter('cost');
+  if (cost !== 'all' && String(m.energy) !== cost) return false;
+  if (!statusMatch(m.key, activeFilter('status'))) return false;
+  const q = searchText();
+  if (q && !(m.name.toLowerCase().includes(q) ||
+             (m.types || []).some((t) => t.toLowerCase().includes(q)))) return false;
+  return true;
+}
+
+function render() {
+  const list = document.getElementById('list');
+  list.textContent = '';
+  const shown = ROWS.filter(visible);
+
+  // Group by first-time energy cost — that's what you plan around.
+  const tiers = [...new Set(ROWS.map((m) => m.energy))].sort((a, b) => a - b);
+  for (const tier of tiers) {
+    const mons = shown.filter((m) => m.energy === tier);
+    if (!mons.length) continue;
+    const head = document.createElement('div');
+    head.className = 'day-head';
+    const all = ROWS.filter((m) => m.energy === tier);
+    head.innerHTML =
+      `<h2>${tier.toLocaleString()} Mega Energy</h2>` +
+      `<span class="date">${all.length} Mega${all.length > 1 ? 's' : ''}</span>` +
+      `<span class="count">${Store.count(all.map((m) => m.key))} / ${all.length} collected</span>`;
+    list.appendChild(head);
+
+    const grid = document.createElement('div');
+    grid.className = 'grid wide';
+    mons.forEach((m) => {
+      const badges = [];
+      if (m.weatherBoost) badges.push(badge('tag-weather', '⛅ ' + m.boosts.join('/'), 'Weather-based party boost — not this Pokémon’s own typing'));
+      if (m.attack) badges.push(badge('tag-attack', '★ ' + m.attack, 'Extra Charged Attack unlocked at Super Max Mega Level'));
+      if (m.isNew) badges.push(badge('tag-new', 'GO ORIGINAL', 'No mainline Mega form — base-species artwork shown'));
+      grid.appendChild(collectionCard(m, { badges, sub: 'Released ' + m.released }));
+    });
+    list.appendChild(grid);
+  }
+
+  if (!shown.length) {
+    const p = document.createElement('p');
+    p.className = 'empty';
+    p.textContent = 'Nothing matches those filters.';
+    list.appendChild(p);
+  }
+
+  const have = Store.count(ROWS.map((m) => m.key));
+  const need = ROWS.filter((m) => !Store.has(m.key));
+  document.getElementById('s-have').innerHTML = `${have}<small> / ${ROWS.length}</small>`;
+  document.getElementById('s-need').textContent = need.length;
+  document.getElementById('s-energy').textContent =
+    need.reduce((n, m) => n + m.energy, 0).toLocaleString();
+  document.getElementById('bar').style.width = `${(have / ROWS.length) * 100}%`;
+  document.getElementById('count-note').textContent =
+    `${ROWS.length} Mega Evolutions and Primal Reversions released.`;
+}
+
+setupControls({ onChange: render, prefix: 'mega:' });
+render();
+</script>
+</body>
+</html>

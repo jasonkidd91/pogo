@@ -1,0 +1,10 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+
+# Python (scripts/ generators)
+__pycache__/
+*.py[cod]
+.venv/
+venv/

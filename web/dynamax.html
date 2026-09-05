@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dynamax &amp; Gigantamax — every Max Pokémon in Pokémon GO</title>
+<meta name="description" content="Every Dynamax and Gigantamax Pokémon released in Pokémon GO, with G-Max moves and release dates.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27%235b8cff%27/%3E%3Cpath d=%27M2 16h28%27 stroke=%27%230f1219%27 stroke-width=%273%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%230f1219%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%23e8ecf4%27/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">Collection</p>
+    <h1>Dynamax &amp; Gigantamax</h1>
+    <p class="sub">
+      Every Pokémon that can Dynamax in Pokémon GO, plus the Gigantamax forms and their
+      exclusive G-Max Moves. Only a Pokémon <em>caught</em> in Dynamax form can Dynamax, so
+      this doubles as a catch list. Ticks are saved in this browser and shared with the rest of the site.
+    </p>
+  </header>
+
+  <div class="summary">
+    <div class="stats">
+      <div class="stat ok"><div class="num" id="s-have">0</div><div class="lbl">Collected</div></div>
+      <div class="stat hl"><div class="num" id="s-need">0</div><div class="lbl">Still needed</div></div>
+      <div class="stat"><div class="num" id="s-gmax">0</div><div class="lbl">Gigantamax left</div></div>
+    </div>
+    <div class="bar"><i id="bar"></i></div>
+    <div class="controls">
+      <input id="search" class="search" type="search" placeholder="Search a Pokémon…" aria-label="Search Dynamax Pokémon">
+      <span class="spacer"></span>
+      <button id="reset" class="danger">Reset</button>
+    </div>
+    <div class="controls">
+      <span class="chip-label">Show</span>
+      <button data-group="status" data-filter="all" aria-pressed="true">All</button>
+      <button data-group="status" data-filter="need" aria-pressed="false">Still needed</button>
+      <button data-group="status" data-filter="have" aria-pressed="false">Collected</button>
+    </div>
+    <div class="controls">
+      <span class="chip-label">Kind</span>
+      <button data-group="kind" data-filter="all" aria-pressed="true">Both</button>
+      <button data-group="kind" data-filter="gmax" aria-pressed="false">Gigantamax only</button>
+      <button data-group="kind" data-filter="dmax" aria-pressed="false">Dynamax only</button>
+    </div>
+  </div>
+
+  <main id="list"></main>
+
+  <footer>
+    <strong id="count-note"></strong>
+    <p>
+      A Gigantamax form is tracked <em>separately</em> from its Dynamax entry — Gigantamax
+      Venusaur and Dynamax Venusaur are different catches, so they get their own ticks.
+      Dynamax entries marked <strong>G-MAX</strong> also have a Gigantamax form on this page.
+      Types and Max Battle tiers are deliberately not shown: tiers rotate weekly, so they'd be
+      wrong within days — check the in-game Power Spot or a live tracker instead.
+    </p>
+    <div class="srcs">
+      <span>Parsed from</span>
+      <a href="https://bulbapedia.bulbagarden.net/wiki/Dynamax_(GO)">Bulbapedia — Dynamax (GO)</a>
+      <a href="https://bulbapedia.bulbagarden.net/wiki/Gigantamax_(GO)">Gigantamax (GO)</a>
+      <span>· released entries only, as of 5 Sep 2026</span>
+    </div>
+  </footer>
+</div>
+
+<script src="store.js"></script>
+<script src="collection.js"></script>
+<script src="max-data.js"></script>
+<script>
+buildNav('dynamax');
+
+const G_ROWS = GIGANTAMAX.map((g) => ({ ...g, key: Store.id.gmax(g.name), kind: 'gmax' }));
+const D_ROWS = DYNAMAX.map((d) => ({ ...d, key: Store.id.dmax(d.art), kind: 'dmax' }));
+const ALL_ROWS = [...G_ROWS, ...D_ROWS];
+
+function visible(p) {
+  const kind = activeFilter('kind');
+  if (kind !== 'all' && p.kind !== kind) return false;
+  if (!statusMatch(p.key, activeFilter('status'))) return false;
+  const q = searchText();
+  if (q && !p.name.toLowerCase().includes(q) &&
+      !(p.gmaxMove || '').toLowerCase().includes(q)) return false;
+  return true;
+}
+
+function section(title, subtitle, rows, all) {
+  const head = document.createElement('div');
+  head.className = 'day-head';
+  head.innerHTML =
+    `<h2>${title}</h2><span class="date">${subtitle}</span>` +
+    `<span class="count">${Store.count(all.map((r) => r.key))} / ${all.length} collected</span>`;
+  const grid = document.createElement('div');
+  grid.className = 'grid wide';
+  rows.forEach((p) => {
+    const badges = [];
+    if (p.gmaxMove) badges.push(badge('tag-attack', '★ ' + p.gmaxMove, 'Exclusive G-Max Move'));
+    if (p.hasGmax) badges.push(badge('tag-new', 'G-MAX', 'Also has a Gigantamax form — tracked separately above'));
+    grid.appendChild(collectionCard(p, { badges, sub: 'Released ' + p.released }));
+  });
+  return [head, grid];
+}
+
+function render() {
+  const list = document.getElementById('list');
+  list.textContent = '';
+
+  const g = G_ROWS.filter(visible);
+  if (g.length) section('Gigantamax', `${G_ROWS.length} forms with exclusive G-Max Moves`, g, G_ROWS)
+    .forEach((el) => list.appendChild(el));
+
+  const d = D_ROWS.filter(visible);
+  if (d.length) section('Dynamax', `${D_ROWS.length} Pokémon can Dynamax`, d, D_ROWS)
+    .forEach((el) => list.appendChild(el));
+
+  if (!g.length && !d.length) {
+    const p = document.createElement('p');
+    p.className = 'empty';
+    p.textContent = 'Nothing matches those filters.';
+    list.appendChild(p);
+  }
+
+  const have = Store.count(ALL_ROWS.map((r) => r.key));
+  document.getElementById('s-have').innerHTML = `${have}<small> / ${ALL_ROWS.length}</small>`;
+  document.getElementById('s-need').textContent = ALL_ROWS.length - have;
+  document.getElementById('s-gmax').textContent =
+    G_ROWS.length - Store.count(G_ROWS.map((r) => r.key));
+  document.getElementById('bar').style.width = `${(have / ALL_ROWS.length) * 100}%`;
+  document.getElementById('count-note').textContent =
+    `${D_ROWS.length} Dynamax-capable Pokémon and ${G_ROWS.length} Gigantamax forms released.`;
+}
+
+setupControls({ onChange: render, prefix: ['dmax:', 'gmax:'] });
+render();
+</script>
+</body>
+</html>
