@@ -22,48 +22,7 @@
     </p>
   </header>
 
-  <div class="summary">
-    <div class="stats">
-      <div class="stat ok"><div class="num" id="s-have">0</div><div class="lbl">Collected</div></div>
-      <div class="stat hl"><div class="num" id="s-need">0</div><div class="lbl">Still needed</div></div>
-      <div class="stat"><div class="num" id="s-energy">0</div><div class="lbl">Energy for the rest</div></div>
-    </div>
-    <div class="bar"><i id="bar"></i></div>
-    <div class="controls">
-      <input id="search" class="search" type="search" placeholder="Search a Mega…" aria-label="Search Mega Pokémon">
-      <span class="spacer"></span>
-      <button id="reset" class="danger">Reset</button>
-    </div>
-    <div class="controls">
-      <span class="chip-label">Show</span>
-      <button data-group="status" data-filter="all" aria-pressed="true">All</button>
-      <button data-group="status" data-filter="need" aria-pressed="false">Still needed</button>
-      <button data-group="status" data-filter="have" aria-pressed="false">Collected</button>
-    </div>
-    <div class="controls">
-      <span class="chip-label">Raid</span>
-      <button data-group="raid" data-filter="all" aria-pressed="true">Any</button>
-      <button data-group="raid" data-filter="mega" aria-pressed="false">Mega ★4</button>
-      <button data-group="raid" data-filter="primal" aria-pressed="false">Primal ★5</button>
-      <button data-group="raid" data-filter="legendary" aria-pressed="false">Legendary ★6</button>
-    </div>
-    <div class="controls">
-      <span class="chip-label">Worth it</span>
-      <button data-group="rank" data-filter="all" aria-pressed="true">Any</button>
-      <button data-group="rank" data-filter="SA" aria-pressed="false">S &amp; A</button>
-      <button data-group="rank" data-filter="S" aria-pressed="false">S only</button>
-      <button data-group="rank" data-filter="D" aria-pressed="false">Collection only</button>
-    </div>
-    <div class="controls">
-      <span class="chip-label">Cost</span>
-      <button data-group="cost" data-filter="all" aria-pressed="true">Any</button>
-      <button data-group="cost" data-filter="100" aria-pressed="false">100</button>
-      <button data-group="cost" data-filter="200" aria-pressed="false">200</button>
-      <button data-group="cost" data-filter="300" aria-pressed="false">300</button>
-      <button data-group="cost" data-filter="400" aria-pressed="false">400</button>
-      <button data-group="cost" data-filter="7500" aria-pressed="false">7,500</button>
-    </div>
-  </div>
+  <div class="summary"></div>
 
   <main id="list"></main>
 
@@ -91,11 +50,31 @@
   </footer>
 </div>
 
+<script src="ui.js"></script>
 <script src="store.js"></script>
 <script src="auth.js"></script>
-<script src="collection.js"></script>
 <script src="mega-data.js"></script>
 <script>
+UI.summary('.summary', {
+  stats: [
+    { id: 's-have', label: 'Collected', tone: 'ok' },
+    { id: 's-need', label: 'Still needed', tone: 'hl' },
+    { id: 's-energy', label: 'Energy for the rest' },
+  ],
+  bar: true,
+  search: { placeholder: 'Search a Mega…', label: 'Search Mega Pokémon' },
+  reset: true,
+  filters: [
+    UI.STATUS_FILTER,
+    { label: 'Raid', group: 'raid', options: [
+      ['all', 'Any'], ['mega', 'Mega ★4'], ['primal', 'Primal ★5'], ['legendary', 'Legendary ★6']] },
+    { label: 'Worth it', group: 'rank', options: [
+      ['all', 'Any'], ['SA', 'S & A'], ['S', 'S only'], ['D', 'Collection only']] },
+    { label: 'Cost', group: 'cost', options: [
+      ['all', 'Any'], ['100', '100'], ['200', '200'], ['300', '300'], ['400', '400'], ['7500', '7,500']] },
+  ],
+});
+
 buildNav('megas');
 
 const ROWS = MEGAS.map((m) => ({ ...m, key: Store.id.mega(m.name) }));
@@ -113,20 +92,35 @@ const RAID_FILTER = {
 const RANK_FILTER = { SA: 'SA', S: 'S', D: 'D' };
 
 function visible(m) {
-  const rank = activeFilter('rank');
+  const rank = UI.activeFilter('rank');
   if (rank !== 'all' && !RANK_FILTER[rank].includes(m.rank)) return false;
-  const cost = activeFilter('cost');
+  const cost = UI.activeFilter('cost');
   if (cost !== 'all' && String(m.energy) !== cost) return false;
-  const raid = activeFilter('raid');
+  const raid = UI.activeFilter('raid');
   if (raid !== 'all' && m.raid !== RAID_FILTER[raid]) return false;
-  if (!statusMatch(m.key, activeFilter('status'))) return false;
-  const q = searchText();
+  if (!UI.statusMatch(m.key, UI.activeFilter('status'))) return false;
+  const q = UI.searchText();
   if (q && !(m.name.toLowerCase().includes(q) ||
              (m.raid || '').toLowerCase().includes(q) ||
              (m.why || '').toLowerCase().includes(q) ||
              (m.moves || '').toLowerCase().includes(q) ||
              (m.types || []).some((t) => t.toLowerCase().includes(q)))) return false;
   return true;
+}
+
+function badgesFor(m) {
+  return [
+    m.weatherBoost && UI.tag('tag-weather', '⛅ ' + m.boosts.join('/'),
+      'Weather-based party boost — not this Pokémon’s own typing'),
+    m.attack && UI.tag('tag-attack', '★ ' + m.attack,
+      'Extra Charged Attack unlocked at Super Max Mega Level'),
+    m.isNew && UI.tag('tag-new', 'GO ORIGINAL',
+      'No mainline Mega form — base-species artwork shown'),
+    // Only shown when the rank depends on it. Knowing you need Frenzy Plant to reach the
+    // grade is the actionable half; the moveset alone would just be trivia.
+    m.legacy && UI.tag('tag-legacy', '⚑ ' + m.moves,
+      'Rank assumes this moveset, which needs an Elite TM or a Community Day move'),
+  ].filter(Boolean);
 }
 
 function render() {
@@ -139,50 +133,29 @@ function render() {
   for (const tier of tiers) {
     const mons = shown.filter((m) => m.energy === tier);
     if (!mons.length) continue;
-    const head = document.createElement('div');
-    head.className = 'day-head';
     const all = ROWS.filter((m) => m.energy === tier);
-    head.innerHTML =
-      `<h2>${tier.toLocaleString()} Mega Energy</h2>` +
-      `<span class="date">${all.length} Mega${all.length > 1 ? 's' : ''}</span>` +
-      `<span class="count">${Store.count(all.map((m) => m.key))} / ${all.length} collected</span>`;
-    list.appendChild(head);
-
-    const grid = document.createElement('div');
-    grid.className = 'grid wide';
-    mons.forEach((m) => {
-      const badges = [];
-      if (m.weatherBoost) badges.push(badge('tag-weather', '⛅ ' + m.boosts.join('/'), 'Weather-based party boost — not this Pokémon’s own typing'));
-      if (m.attack) badges.push(badge('tag-attack', '★ ' + m.attack, 'Extra Charged Attack unlocked at Super Max Mega Level'));
-      if (m.isNew) badges.push(badge('tag-new', 'GO ORIGINAL', 'No mainline Mega form — base-species artwork shown'));
-      // Only shown when the rank depends on it. Knowing you need Frenzy Plant to reach the
-      // grade is the actionable half; the moveset alone would just be trivia.
-      if (m.legacy) badges.push(badge('tag-legacy', '⚑ ' + m.moves,
-        'Rank assumes this moveset, which needs an Elite TM or a Community Day move'));
-      grid.appendChild(collectionCard(m, { badges, sub: 'Released ' + m.released }));
-    });
-    list.appendChild(grid);
+    list.appendChild(UI.sectionHead({
+      title: `${tier.toLocaleString()} Mega Energy`,
+      meta: `${all.length} Mega${all.length > 1 ? 's' : ''}`,
+      count: `${Store.count(all.map((m) => m.key))} / ${all.length} collected`,
+    }));
+    list.appendChild(UI.grid('wide',
+      mons.map((m) => UI.monCard(m, { badges: badgesFor(m), sub: 'Released ' + m.released }))));
   }
 
-  if (!shown.length) {
-    const p = document.createElement('p');
-    p.className = 'empty';
-    p.textContent = 'Nothing matches those filters.';
-    list.appendChild(p);
-  }
+  if (!shown.length) list.appendChild(UI.empty('Nothing matches those filters.'));
 
   const have = Store.count(ROWS.map((m) => m.key));
   const need = ROWS.filter((m) => !Store.has(m.key));
-  document.getElementById('s-have').innerHTML = `${have}<small> / ${ROWS.length}</small>`;
-  document.getElementById('s-need').textContent = need.length;
-  document.getElementById('s-energy').textContent =
-    need.reduce((n, m) => n + m.energy, 0).toLocaleString();
-  document.getElementById('bar').style.width = `${(have / ROWS.length) * 100}%`;
+  UI.setStat('s-have', have, ROWS.length);
+  UI.setStat('s-need', need.length);
+  UI.setStat('s-energy', need.reduce((n, m) => n + m.energy, 0));
+  UI.setBar(have, ROWS.length);
   document.getElementById('count-note').textContent =
     `${ROWS.length} Mega Evolutions and Primal Reversions released.`;
 }
 
-setupControls({ onChange: render, prefix: 'mega:' });
+UI.setupControls({ onChange: render, prefix: 'mega:' });
 render();
 </script>
 </body>

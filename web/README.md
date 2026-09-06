@@ -14,14 +14,39 @@ origin breaks Google sign-in and Firestore:
 | `megas.html` | All 63 released Mega Evolutions and Primal Reversions, with raid class and rank |
 | `dynamax.html` | All 143 Dynamax-capable Pokémon + 17 Gigantamax forms, with rank and Max role |
 
+## The design system
+
+Everything visible is built by **`ui.js`** and styled by **`styles.css`**. One `el()`
+primitive, one `UI.monCard` behind all three Pokémon lists, one `UI.sectionHead`, and a
+`UI.summary()` that turns a declaration into the whole stat-and-filter panel:
+
+```js
+UI.summary('.summary', {
+  stats: [{ id: 's-have', label: 'Collected', tone: 'ok' }],
+  bar: true, reset: true,
+  search: { placeholder: 'Search a Mega…', label: 'Search Mega Pokémon' },
+  filters: [UI.STATUS_FILTER, { label: 'Cost', group: 'cost', options: [['all', 'Any']] }],
+});
+```
+
+A page script never calls `document.createElement` or assigns `innerHTML` — the only
+exceptions are two constant SVGs. `styles.css` opens with a component index mapping every
+class back to the function that emits it, and carries the tokens (`--sp-*`, `--r-*`, `--fs-*`)
+components are built from.
+
+Every page is the same five landmarks: `.wrap > header.hero + .summary + main + footer`. The
+`.summary` div ships empty and is filled at runtime; the frame itself stays in the HTML so it
+paints before any script runs.
+
 ## Shared modules
 
 | File | Role |
 |---|---|
+| `ui.js` | The design system — every component, and the `el()` primitive. Loads first. |
 | `store.js` | Collection state + canonical keys + site nav. **Single source of truth for identity.** |
 | `auth.js` | Google sign-in, the Firestore backend, the sign-in gate. Loads the Firebase SDK from the CDN. |
-| `collection.js` | Card renderer, filters, search shared by the two collection pages |
 | `events.js` | The events page: fetches the live feed, groups by now / next 7 days / later |
+| `app.js` | The Mega Finale tracker: the flat raid list and the live-habitat clock |
 | `styles.css` | All styling |
 | `data.js` / `mega-data.js` / `max-data.js` | Data, each with its sources in the header comment |
 | `events-data.js` | Fallback snapshot for the events page — **not** how that page stays current |

@@ -97,8 +97,22 @@ date in the header — preserve that convention for new event data.
 
 ## Site architecture
 
-Plain scripts, no modules or bundler. **Load order matters**: `store.js` → `auth.js` →
-data file → page script.
+Plain scripts, no modules or bundler. **Load order matters**: `ui.js` → `store.js` →
+`auth.js` → data file → page script.
+
+- **`ui.js` is the design system, and everything visible goes through it.** One `el()`
+  primitive, one `UI.monCard` used by all three Pokémon lists, one `UI.sectionHead`, one
+  `UI.summary()` that builds a page's whole stat-and-filter panel from a declaration. A page
+  script that calls `document.createElement` or assigns `innerHTML` is a bug — the only legal
+  exceptions are constant SVGs (the check mark, the Google G). `styles.css` is the other half:
+  its tokens (`--sp-*`, `--r-*`, `--fs-*`) and its component index at the top map each class
+  back to the function that emits it. Read the `design-system` skill before changing anything
+  visible.
+
+  This replaced three renderers that each built a Pokémon card differently, four ways of
+  building `.day-head` (two via `innerHTML`), and a filter-chip convention that
+  `mega-finale.html` did not follow. Introducing it left `index.html`, `dynamax.html` at
+  1200px and `megas.html` at 390px **pixel-identical** — that is the bar for a change here.
 
 - **`store.js` is the single source of truth for identity.** Every page writes to one Firestore
   document using canonical, name-derived IDs, which is what makes checkmarks shared
@@ -127,10 +141,12 @@ data file → page script.
   Progress written before sign-in existed (the old `pogo.caught.v1` localStorage key) is
   adopted once, on the first server snapshot for a brand-new account, then dropped.
 
-- **`collection.js`** — card renderer, search and filters shared by `megas.html` and
-  `dynamax.html`. Those two pages hold their own render logic inline.
-- **`app.js`** — Mega Finale tracker rendering only (habitat grouping, live-window detection).
-- **`events.js`** — the front page. See "The events page is live data" below.
+- **`app.js`** — Mega Finale tracker only: the flat raid list and the live-habitat clock.
+  Its cards, grids and headings come from `ui.js`.
+- **`events.js`** — the front page. Its own domain components (`liveCard`, `eventRow`,
+  `caveatBlock`) are built from `UI.el`/`UI.tag` — the standing line is that `ui.js` owns the
+  generic components and a page owns its domain-specific ones, built from UI primitives.
+  See "The events page is live data" below.
 
 - **Only `<body data-tracker>` pages get the sign-in gate.** `auth.js` returns early without it.
   The events page has nothing to tick, so it has no gate; a tracker page that forgets the
@@ -205,6 +221,13 @@ of `auth.js` follows from that and should not be "simplified" away:
   fast connection and is much worse on a slow one: the cards render inert with nothing saying
   why. Measured on throttled 3G, `dynamax.html` sat unexplained and dead for **15.6 s**; drawing
   the gate immediately cut that to 13 ms. Don't reintroduce a `display: none` while loading.
+- **`.summary` is an empty `<div>` in the HTML that `UI.summary()` fills.** The container and
+  `header.hero` deliberately stay in markup while their contents are generated:
+  `stickySummary()` binds to `.summary` when the nav is built, and a frame that paints only
+  after its script runs is the same class of bug as the sign-in gate below. Adding `ui.js` as
+  another blocking script was measured on throttled 3G at ±57 ms — noise. Re-measure if it
+  grows.
+
 - **The sticky summary collapses on phones once you scroll.** At full height it is ~335px —
   40% of a 390x844 viewport, 50% of a small phone — pinned above a list of up to 160 cards.
   Under 560px, `body.scrolled` shrinks it to a ~50px strip (two stats, a hairline bar, a
@@ -271,6 +294,7 @@ check the ordering still puts Mega Mewtwo Y first and Mega Sableye last.
 | `update-megas` / `update-dynamax` | Regenerating the two collection data files |
 | `update-ranks` | The S/A/B/C/D rank — the Game Master, the scoring model, the bands |
 | `new-event-tracker` | Building a catch-list page for an event **when asked** |
+| `design-system` | Anything visible — `web/ui.js` components and the `styles.css` contract |
 | `verify-site` | Browser verification, including getting Chromium up without root |
 | `deploy-site` | Shipping to GitHub Pages and confirming it is actually live |
 

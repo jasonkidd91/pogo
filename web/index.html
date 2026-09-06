@@ -25,22 +25,7 @@
     <div id="background" class="bgstrip"></div>
   </header>
 
-  <div class="summary">
-    <div class="stats">
-      <div class="stat ok"><div class="num" id="c-live">0</div><div class="lbl">On now</div></div>
-      <div class="stat hl"><div class="num" id="c-soon">0</div><div class="lbl">Next 7 days</div></div>
-      <div class="stat"><div class="num" id="c-later">0</div><div class="lbl">Later</div></div>
-    </div>
-    <div class="controls">
-      <span class="chip-label">Show</span>
-      <button data-group="kind" data-filter="all" aria-pressed="true">Everything</button>
-      <button data-group="kind" data-filter="big" aria-pressed="false">Events</button>
-      <button data-group="kind" data-filter="raids" aria-pressed="false">Raids</button>
-      <button data-group="kind" data-filter="max" aria-pressed="false">Max Battles</button>
-      <button data-group="kind" data-filter="hours" aria-pressed="false">Hours</button>
-      <button data-group="kind" data-filter="league" aria-pressed="false">Battle League</button>
-    </div>
-  </div>
+  <div class="summary"></div>
 
   <section class="rhythmbox">
     <h2>The weekly rhythm</h2>
@@ -77,6 +62,7 @@
   </footer>
 </div>
 
+<script src="ui.js"></script>
 <script src="store.js"></script>
 <script src="auth.js"></script>
 <script src="events-data.js"></script>

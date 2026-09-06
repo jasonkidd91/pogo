@@ -119,6 +119,12 @@ grade depends on. Dropping the flag would leave a rank nobody can reach with a p
    apostrophe, a gendered symbol, a new regional form.
 4. Only then suspect the model. Re-run the ordering check above before changing anything.
 
+## Where it renders
+
+The chip and the reason line are `UI.rankChip()` and the `.why` block inside `UI.monCard()` in
+`web/ui.js` — one card component for the whole site, so a change lands on every page at once.
+Read the `design-system` skill before changing how the rank looks.
+
 ## Verify
 
 Use the `verify-site` skill. The rank-specific assertions:

@@ -1,6 +1,6 @@
-/* Mega Finale tracker — rendering. Progress lives in the shared Store (store.js). */
-
-const ART_BASE = 'https://img.pokemondb.net/sprites/home/normal/';
+/* Mega Finale tracker — rendering. Cards, grids and section heads come from ui.js;
+   what is left here is what is genuinely specific to this event: the flat raid list and
+   the live-habitat clock. Progress lives in the shared Store (store.js). */
 
 /** Flat list of every raid target, in display order. Built once from DAYS. */
 const ALL = [];
@@ -12,10 +12,6 @@ for (const day of DAYS) {
     }
   }
 }
-
-/* ---------- state ---------- */
-
-let filter = 'all';
 
 /* ---------- live habitat detection ---------- */
 
@@ -52,100 +48,46 @@ function liveBlocks() {
 
 /* ---------- rendering ---------- */
 
-function spriteFor(p) {
-  const img = document.createElement('img');
-  img.loading = 'lazy';
-  img.alt = p.name;
-  img.src = ART_BASE + p.art + '.png';
-  if (p.artFallback) {
-    img.addEventListener('error', function onErr() {
-      img.removeEventListener('error', onErr);
-      img.src = ART_BASE + p.artFallback + '.png';
-    });
-  }
-  return img;
-}
-
-function energyBadge(p) {
-  const el = document.createElement('span');
-  el.className = 'energy';
-  el.dataset.e = p.energy == null ? '?' : String(p.energy);
-  el.textContent = p.energy == null ? '? energy' : `${p.energy.toLocaleString()} energy`;
-  if (p.energyNote) el.title = p.energyNote;
-  return el;
-}
-
 function visible(p) {
-  if (filter === 'remaining') return !Store.has(p.id);
-  if (filter === 'caught') return Store.has(p.id);
-  return true;
+  return UI.statusMatch(p.id, UI.activeFilter('status'));
 }
 
-function makeCard(p, cls) {
-  const on = Store.has(p.id);
-  // Signed out the card still renders — it just can't be ticked. trackerToggle turns the
-  // click into a sign-in prompt instead.
-  const locked = Store.locked;
-  const card = document.createElement('div');
-  card.className = cls + (on ? ' caught' : '');
-  card.tabIndex = locked ? -1 : 0;
-  card.setAttribute('role', 'checkbox');
-  card.setAttribute('aria-checked', String(on));
-  if (locked) card.setAttribute('aria-disabled', 'true');
-  card.setAttribute('aria-label',
-    locked ? `${p.name}, sign in to track` : `${p.name}, ${on ? 'caught' : 'not caught'}`);
+/** The badges this event puts on a card: what it costs, and whether it is debuting here. */
+function badgesFor(p) {
+  return [
+    UI.energyPill(p),
+    p.isNew && UI.tag('tag-new', 'NEW MEGA',
+      'Debuting in this event — no mainline Mega artwork exists yet'),
+  ].filter(Boolean);
+}
 
-  const onActivate = () => trackerToggle(p.id);
-  card.addEventListener('click', onActivate);
-  card.addEventListener('keydown', (e) => {
-    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); onActivate(); }
+function card(p) {
+  return UI.monCard(p, {
+    variant: p.isSuper ? 'super' : 'plain',
+    badges: badgesFor(p),
+    lead: p.isSuper ? p.tier : null,
+    sub: p.isSuper ? `${p.time} · ${p.energyNote}` : null,
   });
-
-  card.appendChild(spriteFor(p));
-
-  const body = document.createElement('div');
-  body.className = 'body';
-
-  if (p.isSuper) {
-    const tier = document.createElement('div');
-    tier.className = 'tier';
-    tier.textContent = p.tier;
-    body.appendChild(tier);
-  }
-
-  const name = document.createElement('div');
-  name.className = 'name';
-  name.textContent = p.name;
-  body.appendChild(name);
-
-  const meta = document.createElement('div');
-  meta.className = 'meta';
-  meta.appendChild(energyBadge(p));
-  if (p.isNew) {
-    const tag = document.createElement('span');
-    tag.className = 'tag-new';
-    tag.textContent = 'NEW MEGA';
-    tag.title = 'Debuting in this event — no mainline Mega artwork exists yet';
-    meta.appendChild(tag);
-  }
-  body.appendChild(meta);
-
-  if (p.isSuper) {
-    const note = document.createElement('div');
-    note.className = 'note';
-    note.textContent = `${p.time} · ${p.energyNote}`;
-    body.appendChild(note);
-  }
-
-  card.appendChild(body);
-
-  const check = document.createElement('div');
-  check.className = 'check';
-  check.innerHTML = '<svg viewBox="0 0 16 16"><polyline points="3,8.5 6.5,12 13,4.5"/></svg>';
-  card.appendChild(check);
-
-  return card;
 }
+
+/**
+ * A habitat's heading: its name, its two windows, and a Live now flag when one is open.
+ *
+ * `openNow` must already be narrowed to THIS day. Both days run the same clock, so matching
+ * a block by its "10:00 – 11:00" string alone lit Saturday's windows green on a Sunday.
+ */
+function habitatHead(hab, openNow) {
+  const isLive = hab.blocks.some((b) => openNow.has(b));
+  return UI.el('div', { class: 'habitat-head' },
+    UI.el('h3', { text: hab.name }),
+    UI.el('div', { class: 'times' },
+      hab.blocks.map((b) => UI.el('span', {
+        class: 'time' + (openNow.has(b) ? ' live' : ''), text: b,
+      }))),
+    isLive && UI.el('span', { class: 'live-tag', text: 'Live now' }));
+}
+
+const NO_BLOCKS = new Set();
 
 function render() {
   const live = liveBlocks();
@@ -155,20 +97,20 @@ function render() {
   for (const day of DAYS) {
     const shown = ALL.filter((p) => p.dayId === day.id && visible(p));
     if (!shown.length) continue;
+    // Only the day we are actually in can have an open window.
+    const openNow = live.day === day.id ? live.blocks : NO_BLOCKS;
 
     const dayTotal = ALL.filter((p) => p.dayId === day.id);
     const dayDone = dayTotal.filter((p) => Store.has(p.id)).length;
+    root.appendChild(UI.sectionHead({
+      title: day.label,
+      meta: `${day.date} · 10:00 – 18:00 local`,
+      count: `${dayDone} / ${dayTotal.length} caught`,
+    }));
 
-    const head = document.createElement('div');
-    head.className = 'day-head';
-    head.innerHTML =
-      `<h2>${day.label}</h2><span class="date">${day.date} · 10:00 – 18:00 local</span>` +
-      `<span class="count">${dayDone} / ${dayTotal.length} caught</span>`;
-    root.appendChild(head);
-
-    // Super Mega Raid
+    // Super Mega Raid — a full-width banner rather than a grid cell.
     const superP = ALL.find((p) => p.dayId === day.id && p.isSuper);
-    if (visible(superP)) root.appendChild(makeCard(superP, 'super'));
+    if (visible(superP)) root.appendChild(card(superP));
 
     for (const hab of day.habitats) {
       const mons = hab.pokemon
@@ -176,34 +118,16 @@ function render() {
         .filter(visible);
       if (!mons.length) continue;
 
-      const sec = document.createElement('section');
-      sec.className = 'habitat';
-
-      const hh = document.createElement('div');
-      hh.className = 'habitat-head';
-      const isLive = live.day === day.id && hab.blocks.some((b) => live.blocks.has(b));
-      hh.innerHTML =
-        `<h3>${hab.name}</h3>` +
-        `<div class="times">${hab.blocks
-          .map((b) => `<span class="time${live.blocks.has(b) ? ' live' : ''}">${b}</span>`)
-          .join('')}</div>` +
-        (isLive ? '<span class="live-tag">Live now</span>' : '');
-      sec.appendChild(hh);
-
-      const grid = document.createElement('div');
-      grid.className = 'grid';
-      mons.forEach((p) => grid.appendChild(makeCard(p, 'card')));
-      sec.appendChild(grid);
-      root.appendChild(sec);
+      root.appendChild(UI.el('section', { class: 'habitat' },
+        habitatHead(hab, openNow),
+        UI.grid('default', mons.map(card))));
     }
   }
 
   if (!root.children.length) {
-    const msg = document.createElement('p');
-    msg.className = 'empty';
-    msg.textContent =
-      filter === 'caught' ? 'Nothing checked off yet.' : 'All done — every Mega on the list is caught.';
-    root.appendChild(msg);
+    root.appendChild(UI.empty(UI.activeFilter('status') === 'have'
+      ? 'Nothing checked off yet.'
+      : 'All done — every Mega on the list is caught.'));
   }
 
   renderSummary();
@@ -215,48 +139,47 @@ function renderSummary() {
   const remaining = ALL.filter((p) => !Store.has(p.id));
 
   // One raid pass per Pokémon still needed.
-  const passes = remaining.length;
+  UI.setStat('s-passes', remaining.length);
+  UI.setStat('s-caught', done, total);
   // Mega Energy for what's left, excluding the two unpriced Super Mega Raid bosses.
-  const energy = remaining.reduce((sum, p) => sum + (p.energy || 0), 0);
-  const unpriced = remaining.filter((p) => p.energy == null).length;
+  UI.setStat('s-energy', remaining.reduce((sum, p) => sum + (p.energy || 0), 0));
+  UI.setBar(done, total);
 
-  document.getElementById('s-passes').textContent = passes;
-  document.getElementById('s-caught').innerHTML = `${done}<small> / ${total}</small>`;
-  document.getElementById('s-energy').textContent = energy.toLocaleString();
+  const unpriced = remaining.filter((p) => p.energy == null).length;
   document.getElementById('s-energy-note').textContent = unpriced
     ? `excl. ${unpriced} Super Mega Raid${unpriced > 1 ? 's' : ''}`
     : 'Mega Energy left';
-  document.getElementById('bar').style.width = `${(done / total) * 100}%`;
 }
 
 /* ---------- controls ---------- */
 
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('ev-name').textContent = EVENT.name;
-  document.getElementById('ev-official').href = EVENT.officialUrl;
-  document.getElementById('bonuses').innerHTML = EVENT.bonuses
-    .map((b) => `<li>${b}</li>`)
-    .join('');
-
-  document.querySelectorAll('[data-filter]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      filter = btn.dataset.filter;
-      document
-        .querySelectorAll('[data-filter]')
-        .forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-      render();
-    });
+  UI.summary('.summary', {
+    stats: [
+      { id: 's-passes', label: 'Raid passes needed', tone: 'hl' },
+      { id: 's-caught', label: 'Caught', tone: 'ok' },
+      { id: 's-energy', label: 'Mega Energy left', labelId: 's-energy-note' },
+    ],
+    bar: true,
+    reset: true,
+    // Same group name and values as every other tracker page, so activeFilter('status')
+    // and statusMatch() behave identically here. Only the wording is event-specific.
+    filters: [{ label: 'Show', group: 'status', options: [
+      ['all', 'All'], ['need', 'Still needed'], ['have', 'Caught']] }],
   });
 
-  document.getElementById('reset').addEventListener('click', () => {
-    if (Store.locked) return Auth.prompt();
-    if (confirm('Clear the Megas tracked for this event? This cannot be undone.')) {
-      Store.clear(ALL.map((p) => p.id));
-    }
+  document.getElementById('ev-name').textContent = EVENT.name;
+  document.getElementById('ev-official').href = EVENT.officialUrl;
+  document.getElementById('bonuses').append(
+    ...EVENT.bonuses.map((b) => UI.el('li', { text: b })));
+
+  UI.setupControls({
+    onChange: render,
+    prefix: ALL.map((p) => p.id),
+    resetPrompt: 'Clear the Megas tracked for this event? This cannot be undone.',
   });
 
   buildNav('finale');
-  Store.onChange(render);
   render();
   // Keep the "Live now" badge honest as habitats rotate on the hour.
   setInterval(render, 60_000);

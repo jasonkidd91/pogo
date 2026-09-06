@@ -80,8 +80,20 @@ date parts on purpose — using `toISOString()` mis-fires for anyone whose UTC d
 
 ## Step 5 — the page
 
-Copy `web/mega-finale.html`. It already wires `store.js` → `auth.js` → data → `app.js`. Keep that
-script order; `store.js` must load first and `auth.js` second.
+Copy `web/mega-finale.html`. Keep the script order — `ui.js` → `store.js` → `auth.js` → data →
+page script — and keep the five layout landmarks: `.wrap > header.hero + .summary + main +
+footer`. The `.summary` div stays **empty** in the HTML.
+
+**Build everything visible with `ui.js`.** Read the `design-system` skill first. A new tracker
+should not contain a single `document.createElement`: cards are `UI.monCard`, headings are
+`UI.sectionHead`, grids are `UI.grid`, the "nothing matches" line is `UI.empty`, and the whole
+stat/filter panel is one declarative `UI.summary('.summary', {…})` call. That is what makes a
+new page look like the existing ones instead of nearly like them.
+
+Use the shared filter contract too — group `status` with values `all` / `need` / `have`, via
+`UI.STATUS_FILTER` or a copy of it with event-specific wording, then `UI.statusMatch()` and
+`UI.setupControls()`. Inventing a page-local filter convention is how `mega-finale.html` ended
+up with buttons that had no `data-group` and needed their own click handler.
 
 Then register the page in the nav — edit the `links` array in `buildNav()` in `web/store.js`,
 and call `buildNav('<id>')` with the new id.
@@ -102,12 +114,15 @@ Google account — long-lived. Only an explicit Reset may clear it, and only its
 
 ## Step 6b — the sign-in gate
 
-Tracking requires a signed-in account. Cards must call `trackerToggle(key)`, never
-`Store.toggle(key)` — `trackerToggle` refuses when signed out and raises the sign-in prompt
-instead. Signed out, a card gets `tabIndex = -1` and `aria-disabled="true"`; copy that from
-`makeCard()` in `app.js`. Guard the Reset button with `if (Store.locked) return Auth.prompt();`.
-The gate banner and the nav sign-in control are painted by `auth.js` — a new page gets both for
-free as long as it has a `.wrap` and calls `buildNav()`.
+Tracking requires a signed-in account. `UI.monCard` already does the whole dance — it calls
+`trackerToggle(key)` rather than `Store.toggle(key)`, and sets `tabIndex = -1` and
+`aria-disabled="true"` when signed out — which is one more reason not to hand-roll a card.
+`UI.setupControls` guards Reset the same way.
+
+The gate banner and the nav sign-in control are painted by `auth.js`. A new page gets both for
+free as long as it has a `.wrap`, calls `buildNav()`, and carries **`<body data-tracker>`** —
+without that attribute `auth.js` returns early and the page renders inert cards with nothing
+explaining why.
 
 ## Step 7 — verify in a browser
 

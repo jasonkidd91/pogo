@@ -25,30 +25,7 @@
     <ul class="bonuses" id="bonuses"></ul>
   </header>
 
-  <div class="summary">
-    <div class="stats">
-      <div class="stat hl">
-        <div class="num" id="s-passes">0</div>
-        <div class="lbl">Raid passes needed</div>
-      </div>
-      <div class="stat ok">
-        <div class="num" id="s-caught">0</div>
-        <div class="lbl">Caught</div>
-      </div>
-      <div class="stat">
-        <div class="num" id="s-energy">0</div>
-        <div class="lbl" id="s-energy-note">Mega Energy left</div>
-      </div>
-    </div>
-    <div class="bar"><i id="bar"></i></div>
-    <div class="controls">
-      <button data-filter="all" aria-pressed="true">All</button>
-      <button data-filter="remaining" aria-pressed="false">Still needed</button>
-      <button data-filter="caught" aria-pressed="false">Caught</button>
-      <span class="spacer"></span>
-      <button id="reset" class="danger">Reset</button>
-    </div>
-  </div>
+  <div class="summary"></div>
 
   <main id="days"></main>
 
@@ -71,6 +48,7 @@
   </footer>
 
 </div>
+<script src="ui.js"></script>
 <script src="store.js"></script>
 <script src="auth.js"></script>
 <script src="data.js"></script>

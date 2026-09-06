@@ -18,7 +18,8 @@
  * browser-local fallback would silently diverge from the account and then have to be
  * reconciled on sign-in.
  *
- * Load order: store.js → auth.js → data file → page script.
+ * Load order: ui.js → store.js → auth.js → data file → page script.
+ * buildNav() below builds its markup with el() from ui.js, so ui.js must come first.
  */
 
 const Store = (() => {
@@ -156,16 +157,12 @@ function buildNav(active) {
     ['megas', 'megas.html', 'Mega Pokémon'],
     ['dynamax', 'dynamax.html', 'Dynamax'],
   ];
-  const nav = document.createElement('nav');
-  nav.className = 'sitenav';
-  nav.innerHTML =
-    '<span class="brand">PoGO</span>' +
-    links
-      .map(([k, href, label]) =>
-        `<a href="${href}"${k === active ? ' aria-current="page"' : ''}>${label}</a>`)
-      .join('') +
-    '<span class="spacer"></span><div class="authbox" id="authbox"></div>';
-  document.body.prepend(nav);
+  document.body.prepend(el('nav', { class: 'sitenav' },
+    el('span', { class: 'brand', text: 'PoGO' }),
+    links.map(([k, href, label]) =>
+      el('a', { href, text: label, 'aria-current': k === active ? 'page' : null })),
+    el('span', { class: 'spacer' }),
+    el('div', { class: 'authbox', id: 'authbox' })));
 
   // The sign-in control and the gate banner are painted by auth.js, which may not have
   // finished loading Firebase yet — it repaints on every auth change regardless.

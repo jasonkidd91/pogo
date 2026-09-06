@@ -22,45 +22,7 @@
     </p>
   </header>
 
-  <div class="summary">
-    <div class="stats">
-      <div class="stat ok"><div class="num" id="s-have">0</div><div class="lbl">Collected</div></div>
-      <div class="stat hl"><div class="num" id="s-need">0</div><div class="lbl">Still needed</div></div>
-      <div class="stat"><div class="num" id="s-gmax">0</div><div class="lbl">Gigantamax left</div></div>
-    </div>
-    <div class="bar"><i id="bar"></i></div>
-    <div class="controls">
-      <input id="search" class="search" type="search" placeholder="Search a Pokémon…" aria-label="Search Dynamax Pokémon">
-      <span class="spacer"></span>
-      <button id="reset" class="danger">Reset</button>
-    </div>
-    <div class="controls">
-      <span class="chip-label">Show</span>
-      <button data-group="status" data-filter="all" aria-pressed="true">All</button>
-      <button data-group="status" data-filter="need" aria-pressed="false">Still needed</button>
-      <button data-group="status" data-filter="have" aria-pressed="false">Collected</button>
-    </div>
-    <div class="controls">
-      <span class="chip-label">Worth it</span>
-      <button data-group="rank" data-filter="all" aria-pressed="true">Any</button>
-      <button data-group="rank" data-filter="SA" aria-pressed="false">S &amp; A</button>
-      <button data-group="rank" data-filter="S" aria-pressed="false">S only</button>
-      <button data-group="rank" data-filter="C" aria-pressed="false">Collection only</button>
-    </div>
-    <div class="controls">
-      <span class="chip-label">Role</span>
-      <button data-group="role" data-filter="all" aria-pressed="true">Any</button>
-      <button data-group="role" data-filter="Attacker" aria-pressed="false">Max Attacker</button>
-      <button data-group="role" data-filter="Guard" aria-pressed="false">Max Guard</button>
-      <button data-group="role" data-filter="Spirit" aria-pressed="false">Max Spirit</button>
-    </div>
-    <div class="controls">
-      <span class="chip-label">Kind</span>
-      <button data-group="kind" data-filter="all" aria-pressed="true">Both</button>
-      <button data-group="kind" data-filter="gmax" aria-pressed="false">Gigantamax only</button>
-      <button data-group="kind" data-filter="dmax" aria-pressed="false">Dynamax only</button>
-    </div>
-  </div>
+  <div class="summary"></div>
 
   <main id="list"></main>
 
@@ -85,11 +47,31 @@
   </footer>
 </div>
 
+<script src="ui.js"></script>
 <script src="store.js"></script>
 <script src="auth.js"></script>
-<script src="collection.js"></script>
 <script src="max-data.js"></script>
 <script>
+UI.summary('.summary', {
+  stats: [
+    { id: 's-have', label: 'Collected', tone: 'ok' },
+    { id: 's-need', label: 'Still needed', tone: 'hl' },
+    { id: 's-gmax', label: 'Gigantamax left' },
+  ],
+  bar: true,
+  search: { placeholder: 'Search a Pokémon…', label: 'Search Dynamax Pokémon' },
+  reset: true,
+  filters: [
+    UI.STATUS_FILTER,
+    { label: 'Worth it', group: 'rank', options: [
+      ['all', 'Any'], ['SA', 'S & A'], ['S', 'S only'], ['C', 'Collection only']] },
+    { label: 'Role', group: 'role', options: [
+      ['all', 'Any'], ['Attacker', 'Max Attacker'], ['Guard', 'Max Guard'], ['Spirit', 'Max Spirit']] },
+    { label: 'Kind', group: 'kind', options: [
+      ['all', 'Both'], ['gmax', 'Gigantamax only'], ['dmax', 'Dynamax only']] },
+  ],
+});
+
 buildNav('dynamax');
 
 const G_ROWS = GIGANTAMAX.map((g) => ({ ...g, key: Store.id.gmax(g.name), kind: 'gmax' }));
@@ -101,35 +83,37 @@ const ALL_ROWS = [...G_ROWS, ...D_ROWS];
 const RANK_FILTER = { SA: 'SA', S: 'S', C: 'C' };
 
 function visible(p) {
-  const kind = activeFilter('kind');
+  const kind = UI.activeFilter('kind');
   if (kind !== 'all' && p.kind !== kind) return false;
-  const rank = activeFilter('rank');
+  const rank = UI.activeFilter('rank');
   if (rank !== 'all' && !RANK_FILTER[rank].includes(p.rank)) return false;
-  const role = activeFilter('role');
+  const role = UI.activeFilter('role');
   if (role !== 'all' && p.role !== role) return false;
-  if (!statusMatch(p.key, activeFilter('status'))) return false;
-  const q = searchText();
+  if (!UI.statusMatch(p.key, UI.activeFilter('status'))) return false;
+  const q = UI.searchText();
   if (q && !p.name.toLowerCase().includes(q) &&
       !(p.why || '').toLowerCase().includes(q) &&
       !(p.gmaxMove || '').toLowerCase().includes(q)) return false;
   return true;
 }
 
-function section(title, subtitle, rows, all) {
-  const head = document.createElement('div');
-  head.className = 'day-head';
-  head.innerHTML =
-    `<h2>${title}</h2><span class="date">${subtitle}</span>` +
-    `<span class="count">${Store.count(all.map((r) => r.key))} / ${all.length} collected</span>`;
-  const grid = document.createElement('div');
-  grid.className = 'grid wide';
-  rows.forEach((p) => {
-    const badges = [];
-    if (p.gmaxMove) badges.push(badge('tag-attack', '★ ' + p.gmaxMove, 'Exclusive G-Max Move'));
-    if (p.hasGmax) badges.push(badge('tag-new', 'G-MAX', 'Also has a Gigantamax form — tracked separately above'));
-    grid.appendChild(collectionCard(p, { badges, sub: 'Released ' + p.released }));
-  });
-  return [head, grid];
+function badgesFor(p) {
+  return [
+    p.gmaxMove && UI.tag('tag-attack', '★ ' + p.gmaxMove, 'Exclusive G-Max Move'),
+    p.hasGmax && UI.tag('tag-new', 'G-MAX',
+      'Also has a Gigantamax form — tracked separately above'),
+  ].filter(Boolean);
+}
+
+function section(title, meta, rows, all) {
+  return [
+    UI.sectionHead({
+      title, meta,
+      count: `${Store.count(all.map((r) => r.key))} / ${all.length} collected`,
+    }),
+    UI.grid('wide',
+      rows.map((p) => UI.monCard(p, { badges: badgesFor(p), sub: 'Released ' + p.released }))),
+  ];
 }
 
 function render() {
@@ -138,30 +122,24 @@ function render() {
 
   const g = G_ROWS.filter(visible);
   if (g.length) section('Gigantamax', `${G_ROWS.length} forms with exclusive G-Max Moves`, g, G_ROWS)
-    .forEach((el) => list.appendChild(el));
+    .forEach((node) => list.appendChild(node));
 
   const d = D_ROWS.filter(visible);
   if (d.length) section('Dynamax', `${D_ROWS.length} Pokémon can Dynamax`, d, D_ROWS)
-    .forEach((el) => list.appendChild(el));
+    .forEach((node) => list.appendChild(node));
 
-  if (!g.length && !d.length) {
-    const p = document.createElement('p');
-    p.className = 'empty';
-    p.textContent = 'Nothing matches those filters.';
-    list.appendChild(p);
-  }
+  if (!g.length && !d.length) list.appendChild(UI.empty('Nothing matches those filters.'));
 
   const have = Store.count(ALL_ROWS.map((r) => r.key));
-  document.getElementById('s-have').innerHTML = `${have}<small> / ${ALL_ROWS.length}</small>`;
-  document.getElementById('s-need').textContent = ALL_ROWS.length - have;
-  document.getElementById('s-gmax').textContent =
-    G_ROWS.length - Store.count(G_ROWS.map((r) => r.key));
-  document.getElementById('bar').style.width = `${(have / ALL_ROWS.length) * 100}%`;
+  UI.setStat('s-have', have, ALL_ROWS.length);
+  UI.setStat('s-need', ALL_ROWS.length - have);
+  UI.setStat('s-gmax', G_ROWS.length - Store.count(G_ROWS.map((r) => r.key)));
+  UI.setBar(have, ALL_ROWS.length);
   document.getElementById('count-note').textContent =
     `${D_ROWS.length} Dynamax-capable Pokémon and ${G_ROWS.length} Gigantamax forms released.`;
 }
 
-setupControls({ onChange: render, prefix: ['dmax:', 'gmax:'] });
+UI.setupControls({ onChange: render, prefix: ['dmax:', 'gmax:'] });
 render();
 </script>
 </body>

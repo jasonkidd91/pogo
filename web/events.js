@@ -172,24 +172,13 @@ function describe(e) {
 
 /** Heads-up block. Each line is the source's own sentence, with a short label in front. */
 function caveatBlock(list) {
-  const wrap = document.createElement('div');
-  wrap.className = 'ecaveats';
-  for (const c of list) {
+  return UI.el('div', { class: 'ecaveats' }, list.map((c) => {
     const info = CAVEAT[c.k] || { label: 'Note', mark: '⚠' };
-    const row = document.createElement('p');
-    row.className = 'ecaveat';
-    row.dataset.k = c.k;
-    const tag = document.createElement('span');
-    tag.className = 'ctag';
-    tag.textContent = `${info.mark} ${info.label}`;
-    row.appendChild(tag);
-    // A real space, not just the tag's margin — otherwise a screen reader and anyone copying
-    // the text get "EVENT ONLYShiny Armored Mewtwo…".
-    row.appendChild(document.createTextNode(' ' + c.t));
-    row.title = c.t;
-    wrap.appendChild(row);
-  }
-  return wrap;
+    // The label and the sentence are separated by a real space, not just the tag's margin —
+    // otherwise a screen reader and anyone copying the text get "EVENT ONLYShiny Armored…".
+    return UI.el('p', { class: 'ecaveat', data: { k: c.k }, title: c.t },
+      UI.tag('ctag', `${info.mark} ${info.label}`), ' ' + c.t);
+  }));
 }
 
 function typeInfo(e) {
@@ -197,7 +186,7 @@ function typeInfo(e) {
 }
 
 function activeGroup() {
-  return document.querySelector('[data-group="kind"][aria-pressed="true"]')?.dataset.filter || 'all';
+  return UI.activeFilter('kind');
 }
 
 function passesFilter(e) {
@@ -234,11 +223,7 @@ function classify(now) {
 
 function typePill(e) {
   const info = typeInfo(e);
-  const el = document.createElement('span');
-  el.className = 'etype';
-  el.dataset.k = info.cls;
-  el.textContent = info.label;
-  return el;
+  return UI.tag('etype', info.label, null, { k: info.cls });
 }
 
 /** The one line of detail worth carrying over from the feed, if there is one. */
@@ -256,71 +241,75 @@ function detailText(e) {
 }
 
 function linkOut(e) {
-  const a = document.createElement('a');
-  a.className = 'elink';
-  a.href = e.link;
-  a.target = '_blank';
-  a.rel = 'noopener';
-  a.textContent = 'Details';
-  return a;
+  return UI.el('a', { class: 'elink', href: e.link, target: '_blank', rel: 'noopener',
+                      text: 'Details' });
 }
 
 function trackerLink(e) {
   const t = TRACKERS[e.id];
-  if (!t) return null;
-  const a = document.createElement('a');
-  a.className = 'elink track';
-  a.href = t.href;
-  a.textContent = t.label;
-  return a;
+  return t && UI.el('a', { class: 'elink track', href: t.href, text: t.label });
+}
+
+/** A long-running season or pass, shown as a chip in the header strip rather than a card. */
+function bgChip(e, now) {
+  // "GO Pass: September" already says GO Pass — only prefix when the name doesn't.
+  const label = typeInfo(e).label;
+  const start = at(e.start);
+  const end = at(e.end);
+  const note = start > now ? `starts ${fmtDay(start)} · in ${rel(start - now)}`
+    : end ? `ends ${fmtDay(end)} · ${rel(end - now)} left` : '';
+  return UI.el('a', {
+    class: 'bgchip' + (start > now ? ' soon' : ''),
+    href: e.link, target: '_blank', rel: 'noopener',
+  },
+    UI.el('strong', { text: e.name.toLowerCase().startsWith(label.toLowerCase())
+      ? e.name : `${label}: ${e.name}` }),
+    note && UI.el('span', { text: note }));
+}
+
+/**
+ * Rows under a running heading — by day for the next week, by month after that. Both lists
+ * grouped themselves identically; this is that logic, once.
+ */
+function appendGrouped(wrap, list, labelOf, rowOf) {
+  let current = null;
+  let rows = null;
+  for (const e of list) {
+    const label = labelOf(e);
+    if (label !== current) {
+      current = label;
+      wrap.appendChild(UI.el('div', { class: 'dayrow', text: label }));
+      rows = UI.el('div', { class: 'erows' });
+      wrap.appendChild(rows);
+    }
+    rows.appendChild(rowOf(e));
+  }
+}
+
+/** Tracker link first, Details second — same order on a card and on a row. */
+function linkRow(e) {
+  return UI.el('div', { class: 'elinks' }, trackerLink(e), linkOut(e));
+}
+
+/** How much of it is left, and whether that is urgent. */
+function timeLeft(e, now) {
+  const end = at(e.end);
+  if (!end) return null;
+  const ms = end - now;
+  return UI.el('span', { class: 'eleft' + (ms < DAY ? ' urgent' : ''),
+                         text: ms < DAY ? `Ends in ${rel(ms)}` : `${rel(ms)} left` });
 }
 
 /** A card for something that is on right now. Urgency first: when it ends. */
 function liveCard(e, now) {
-  const card = document.createElement('article');
-  card.className = 'ecard live';
-
-  const head = document.createElement('div');
-  head.className = 'ehead';
-  head.appendChild(typePill(e));
-  const end = at(e.end);
-  if (end) {
-    const left = document.createElement('span');
-    left.className = 'eleft';
-    const ms = end - now;
-    left.textContent = ms < DAY ? `Ends in ${rel(ms)}` : `${rel(ms)} left`;
-    if (ms < DAY) left.classList.add('urgent');
-    head.appendChild(left);
-  }
-  card.appendChild(head);
-
-  const h = document.createElement('h3');
-  h.textContent = e.name;
-  card.appendChild(h);
-
-  const when = document.createElement('p');
-  when.className = 'ewhen';
-  when.textContent = windowText(e);
-  if (isGlobal(e.start)) when.appendChild(globalTag());
-  card.appendChild(when);
-
   const detail = detailText(e);
-  if (detail) {
-    const p = document.createElement('p');
-    p.className = 'edetail';
-    p.textContent = detail;
-    card.appendChild(p);
-  }
-
-  card.appendChild(aboutBlock(e));
-
-  const links = document.createElement('div');
-  links.className = 'elinks';
-  const track = trackerLink(e);
-  if (track) links.appendChild(track);
-  links.appendChild(linkOut(e));
-  card.appendChild(links);
-  return card;
+  return UI.el('article', { class: 'ecard live' },
+    UI.el('div', { class: 'ehead' }, typePill(e), timeLeft(e, now)),
+    UI.el('h3', { text: e.name }),
+    UI.el('p', { class: 'ewhen' }, windowText(e), isGlobal(e.start) && globalTag()),
+    detail && UI.el('p', { class: 'edetail', text: detail }),
+    aboutBlock(e),
+    linkRow(e));
 }
 
 /**
@@ -328,124 +317,52 @@ function liveCard(e, now) {
  * line is always there; the other two only when the snapshot has them.
  */
 function aboutBlock(e) {
-  const wrap = document.createElement('div');
-  wrap.className = 'eabout';
   const { about, has, caveats } = describe(e);
+  return UI.el('div', { class: 'eabout' },
+    UI.el('p', { class: 'ekind', text: WHAT_IS[e.type] || 'A limited-time event.' }),
+    about && UI.el('p', { class: 'eblurb', text: about }),
+    has?.length > 0 && UI.el('p', { class: 'ehas', text: includesText(has) }),
+    caveats?.length > 0 && caveatBlock(caveats));
+}
 
-  const kind = document.createElement('p');
-  kind.className = 'ekind';
-  kind.textContent = WHAT_IS[e.type] || 'A limited-time event.';
-  wrap.appendChild(kind);
-
-  if (about) {
-    const p = document.createElement('p');
-    p.className = 'eblurb';
-    p.textContent = about;
-    wrap.appendChild(p);
-  }
-
-  if (has?.length) {
-    const row = document.createElement('p');
-    row.className = 'ehas';
-    row.textContent = 'Includes: ' + has.map((h) => HAS_LABEL[h] || h).join(' · ');
-    wrap.appendChild(row);
-  }
-
-  if (caveats?.length) wrap.appendChild(caveatBlock(caveats));
-  return wrap;
+/** "Includes: Raids · Field Research" — the feed's own table of contents, relabelled. */
+function includesText(has) {
+  return 'Includes: ' + has.map((h) => HAS_LABEL[h] || h).join(' · ');
 }
 
 /** Times published in UTC land at a different clock time depending on where you are. */
 function globalTag() {
-  const el = document.createElement('span');
-  el.className = 'gtag';
-  el.textContent = 'global';
-  el.title = 'Published as a fixed worldwide moment, shown here in your time zone. Most other events run on local time instead.';
-  return el;
+  return UI.tag('gtag', 'global',
+    'Published as a fixed worldwide moment, shown here in your time zone. '
+    + 'Most other events run on local time instead.');
 }
 
 /** A compact row for something that has not started yet. */
 function eventRow(e, now, opts = {}) {
-  const row = document.createElement('div');
-  row.className = 'erow';
-
-  const time = document.createElement('div');
-  time.className = 'etime';
   const s = at(e.start);
-  time.textContent = opts.withDate ? `${fmtDay(s)} · ${fmtTime(s)}` : fmtTime(s);
-  row.appendChild(time);
-
-  const body = document.createElement('div');
-  body.className = 'ebody';
-
-  const line = document.createElement('div');
-  line.className = 'eline';
-  line.appendChild(typePill(e));
-  const name = document.createElement('span');
-  name.className = 'ename';
-  name.textContent = e.name;
-  line.appendChild(name);
-  if (isGlobal(e.start)) line.appendChild(globalTag());
-  body.appendChild(line);
-
   const t = at(e.end);
-  const sub = document.createElement('div');
-  sub.className = 'esub';
-  const detail = detailText(e);
   const until = t && !sameDay(s, t) ? `until ${fmtDay(t)} ${fmtTime(t)}`
     : t ? `until ${fmtTime(t)}` : '';
-  sub.textContent = [until, detail].filter(Boolean).join(' · ');
-  if (sub.textContent) body.appendChild(sub);
-
+  const sub = [until, detailText(e)].filter(Boolean).join(' · ');
   // One line saying what it is. The blurb when we have one, the kind of event otherwise.
   const { about, has, caveats } = describe(e);
-  const aboutLine = document.createElement('div');
-  aboutLine.className = about ? 'eabout-row' : 'eabout-row kind';
-  aboutLine.textContent = about || WHAT_IS[e.type] || '';
-  if (aboutLine.textContent) {
-    aboutLine.title = aboutLine.textContent;
-    body.appendChild(aboutLine);
-  }
+  const aboutLine = about || WHAT_IS[e.type] || '';
 
-  // What is in it. For an event that is still a name and a date, this is the only answer.
-  if (has?.length) {
-    const inc = document.createElement('div');
-    inc.className = 'ehas';
-    inc.textContent = 'Includes: ' + has.map((h) => HAS_LABEL[h] || h).join(' · ');
-    body.appendChild(inc);
-  }
-
-  if (caveats?.length) body.appendChild(caveatBlock(caveats));
-
-  row.appendChild(body);
-
-  const links = document.createElement('div');
-  links.className = 'elinks';
-  const track = trackerLink(e);
-  if (track) links.appendChild(track);
-  links.appendChild(linkOut(e));
-  row.appendChild(links);
-  return row;
-}
-
-function sectionHead(text, note) {
-  const h = document.createElement('div');
-  h.className = 'day-head';
-  h.innerHTML = `<h2>${text}</h2>`;
-  if (note) {
-    const n = document.createElement('span');
-    n.className = 'date';
-    n.textContent = note;
-    h.appendChild(n);
-  }
-  return h;
-}
-
-function empty(text) {
-  const p = document.createElement('p');
-  p.className = 'empty';
-  p.textContent = text;
-  return p;
+  return UI.el('div', { class: 'erow' },
+    UI.el('div', { class: 'etime',
+                   text: opts.withDate ? `${fmtDay(s)} · ${fmtTime(s)}` : fmtTime(s) }),
+    UI.el('div', { class: 'ebody' },
+      UI.el('div', { class: 'eline' },
+        typePill(e),
+        UI.el('span', { class: 'ename', text: e.name }),
+        isGlobal(e.start) && globalTag()),
+      sub && UI.el('div', { class: 'esub', text: sub }),
+      aboutLine && UI.el('div', { class: about ? 'eabout-row' : 'eabout-row kind',
+                                  title: aboutLine, text: aboutLine }),
+      // What is in it. For an event that is still a name and a date, this is the only answer.
+      has?.length > 0 && UI.el('div', { class: 'ehas', text: includesText(has) }),
+      caveats?.length > 0 && caveatBlock(caveats)),
+    linkRow(e));
 }
 
 /* ---------- the weekly rhythm ---------- */
@@ -483,133 +400,69 @@ function render() {
   // Background strip
   const bg = document.getElementById('background');
   bg.textContent = '';
-  for (const e of buckets.background) {
-    const chip = document.createElement('a');
-    chip.className = 'bgchip';
-    chip.href = e.link;
-    chip.target = '_blank';
-    chip.rel = 'noopener';
-    const lbl = document.createElement('strong');
-    // "GO Pass: September" already says GO Pass — only prefix when the name doesn't.
-    const label = typeInfo(e).label;
-    lbl.textContent = e.name.toLowerCase().startsWith(label.toLowerCase())
-      ? e.name : `${label}: ${e.name}`;
-    chip.appendChild(lbl);
-    const start = at(e.start);
-    const end = at(e.end);
-    const note = document.createElement('span');
-    if (start > now) {
-      chip.classList.add('soon');
-      note.textContent = `starts ${fmtDay(start)} · in ${rel(start - now)}`;
-    } else if (end) {
-      note.textContent = `ends ${fmtDay(end)} · ${rel(end - now)} left`;
-    }
-    if (note.textContent) chip.appendChild(note);
-    bg.appendChild(chip);
-  }
+  bg.append(...buckets.background.map((e) => bgChip(e, now)));
 
   // Happening now
   const nowWrap = document.getElementById('now');
   nowWrap.textContent = '';
   const live = filtered(buckets.live);
-  nowWrap.appendChild(sectionHead('Happening now', live.length ? `${live.length} running` : ''));
+  nowWrap.appendChild(UI.sectionHead({ title: 'Happening now', meta: live.length ? `${live.length} running` : '' }));
   if (live.length) {
-    const grid = document.createElement('div');
-    grid.className = 'egrid';
-    live.forEach((e) => grid.appendChild(liveCard(e, now)));
-    nowWrap.appendChild(grid);
+    nowWrap.appendChild(UI.grid('events', live.map((e) => liveCard(e, now))));
   } else {
-    nowWrap.appendChild(empty('Nothing running under this filter right now.'));
+    nowWrap.appendChild(UI.empty('Nothing running under this filter right now.'));
   }
 
   // Next seven days, grouped by day
   const soonWrap = document.getElementById('soon');
   soonWrap.textContent = '';
   const soon = filtered(buckets.soon);
-  soonWrap.appendChild(sectionHead('Next 7 days', soon.length ? `${soon.length} starting` : ''));
+  soonWrap.appendChild(UI.sectionHead({ title: 'Next 7 days', meta: soon.length ? `${soon.length} starting` : '' }));
   if (soon.length) {
-    let day = null;
-    let list = null;
-    for (const e of soon) {
-      const s = at(e.start);
-      const label = dayLabel(s, now);
-      if (label !== day) {
-        day = label;
-        const h = document.createElement('div');
-        h.className = 'dayrow';
-        h.textContent = label;
-        soonWrap.appendChild(h);
-        list = document.createElement('div');
-        list.className = 'erows';
-        soonWrap.appendChild(list);
-      }
-      list.appendChild(eventRow(e, now));
-    }
+    appendGrouped(soonWrap, soon, (e) => dayLabel(at(e.start), now), (e) => eventRow(e, now));
   } else {
-    soonWrap.appendChild(empty('Nothing starting in the next week under this filter.'));
+    soonWrap.appendChild(UI.empty('Nothing starting in the next week under this filter.'));
   }
 
   // Later, grouped by month
   const laterWrap = document.getElementById('later');
   laterWrap.textContent = '';
   const later = filtered(buckets.later);
-  laterWrap.appendChild(sectionHead('Later', later.length ? `${later.length} scheduled` : ''));
+  laterWrap.appendChild(UI.sectionHead({ title: 'Later', meta: later.length ? `${later.length} scheduled` : '' }));
   if (later.length) {
-    let month = null;
-    let list = null;
-    for (const e of later) {
-      const s = at(e.start);
-      const label = s.toLocaleDateString([], { month: 'long', year: 'numeric' });
-      if (label !== month) {
-        month = label;
-        const h = document.createElement('div');
-        h.className = 'dayrow';
-        h.textContent = label;
-        laterWrap.appendChild(h);
-        list = document.createElement('div');
-        list.className = 'erows';
-        laterWrap.appendChild(list);
-      }
-      list.appendChild(eventRow(e, now, { withDate: true }));
-    }
+    appendGrouped(laterWrap, later,
+      (e) => at(e.start).toLocaleDateString([], { month: 'long', year: 'numeric' }),
+      (e) => eventRow(e, now, { withDate: true }));
   } else {
-    laterWrap.appendChild(empty('Nothing further out under this filter.'));
+    laterWrap.appendChild(UI.empty('Nothing further out under this filter.'));
   }
 
   // Weekly rhythm
   const rh = document.getElementById('rhythm');
   rh.textContent = '';
   for (const r of rhythm(now)) {
-    const el = document.createElement('div');
-    el.className = 'rh';
-    const pill = document.createElement('span');
-    pill.className = 'etype';
-    pill.dataset.k = r.cls;
-    pill.textContent = r.label;
-    el.appendChild(pill);
-    const when = document.createElement('span');
-    when.textContent = r.when;
-    el.appendChild(when);
-    rh.appendChild(el);
+    rh.appendChild(UI.el('div', { class: 'rh' },
+      UI.tag('etype', r.label, null, { k: r.cls }),
+      UI.el('span', { text: r.when })));
   }
 
   // Counts and freshness
-  document.getElementById('c-live').textContent = buckets.live.length;
-  document.getElementById('c-soon').textContent = buckets.soon.length;
-  document.getElementById('c-later').textContent = buckets.later.length;
+  UI.setStat('c-live', buckets.live.length);
+  UI.setStat('c-soon', buckets.soon.length);
+  UI.setStat('c-later', buckets.later.length);
   paintSource();
 }
 
 function paintSource() {
-  const el = document.getElementById('freshness');
-  if (!el) return;
-  el.className = 'freshness ' + source;
+  const node = document.getElementById('freshness');
+  if (!node) return;
+  node.className = 'freshness ' + source;
   const text = {
     live: `Live from the LeekDuck feed · checked ${checkedAt}`,
     snapshot: `Loading the live list… showing the saved copy from ${checkedAt}`,
     stale: `Live feed unreachable — showing the saved copy from ${checkedAt}. Times may have moved.`,
   }[source];
-  el.textContent = text;
+  node.textContent = text;
 }
 
 /* ---------- live feed ---------- */
@@ -657,6 +510,18 @@ async function refresh() {
 /* ---------- boot ---------- */
 
 document.addEventListener('DOMContentLoaded', () => {
+  UI.summary('.summary', {
+    stats: [
+      { id: 'c-live', label: 'On now', tone: 'ok' },
+      { id: 'c-soon', label: 'Next 7 days', tone: 'hl' },
+      { id: 'c-later', label: 'Later' },
+    ],
+    // No search, no bar, no Reset: this page is a summary of what is on, not a tracker.
+    filters: [{ label: 'Show', group: 'kind', options: [
+      ['all', 'Everything'], ['big', 'Events'], ['raids', 'Raids'],
+      ['max', 'Max Battles'], ['hours', 'Hours'], ['league', 'Battle League']] }],
+  });
+
   buildNav('events');
 
   if (typeof EVENTS_SNAPSHOT !== 'undefined') {
@@ -670,13 +535,9 @@ document.addEventListener('DOMContentLoaded', () => {
   render();          // paint the snapshot immediately — never an empty page while fetching
   refresh();
 
-  document.querySelectorAll('[data-group="kind"]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('[data-group="kind"]')
-        .forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-      render();
-    });
-  });
+  // Same chip plumbing as every tracker page, minus the search box and Reset it has no
+  // use for — setupControls skips both when the elements are absent.
+  UI.setupControls({ onChange: render });
 
   // Countdowns drift and events roll over; the minute is the smallest unit shown.
   setInterval(render, 60_000);

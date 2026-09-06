@@ -133,6 +133,15 @@ const TRACKERS = {
 
 An event appearing on this page is not a request for a tracker.
 
+## Rendering
+
+`events.js` builds nothing by hand — cards, rows, pills, headings and empty states all come
+from `web/ui.js`. Its own components (`liveCard`, `eventRow`, `caveatBlock`, `bgChip`) are
+assembled from `UI.el` and `UI.tag`, which is the standing line: **`ui.js` owns the generic
+components, a page owns its domain-specific ones but builds them from UI primitives.** The
+filter chips and the stat row are declared through `UI.summary()` like every other page. See
+the `design-system` skill before changing any of it.
+
 ## A new event type appears
 
 Add it to `TYPES` in `events.js` (short label, colour class, filter group) **and** to
@@ -162,4 +171,6 @@ Use the `verify-site` skill, which covers this page. The events-specific asserti
 - the weekly rhythm box has rows,
 - caveats render with a label **and** a quoted sentence, the label is not glued to the text,
   and the Community Day exclusive-move deadline is among them,
-- there is **no sign-in gate** — this page has no `data-tracker` attribute and nothing to tick.
+- there is **no sign-in gate** — this page has no `data-tracker` attribute and nothing to tick,
+- the design-system checks pass: five layout landmarks, every chip carries `data-group` and
+  `aria-pressed`, one pressed per group, every chip row labelled.

@@ -224,42 +224,39 @@ const Auth = (() => {
     '<path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/>' +
     '</svg>';
 
+  /**
+   * The Google button. The G is a constant SVG, so it goes in as markup the way ui.js's
+   * check mark does; the label is a text node.
+   */
+  function googleButton(cls, label) {
+    const btn = el('button', { class: cls, on: { click: signIn } });
+    btn.innerHTML = GOOGLE_G;
+    btn.appendChild(document.createTextNode(label));
+    return btn;
+  }
+
   function paintNav() {
     const box = document.getElementById('authbox');
     if (!box) return;
     box.textContent = '';
 
     if (state === 'loading') {
-      box.innerHTML = '<span class="authnote">Checking sign-in…</span>';
+      box.appendChild(el('span', { class: 'authnote', text: 'Checking sign-in…' }));
       return;
     }
     if (state === 'in') {
       const u = Store.user;
-      // Built as nodes, not innerHTML: displayName is whatever Google has on file for this
+      // Built as nodes, never innerHTML: displayName is whatever Google has on file for this
       // account and is not ours to trust as markup.
-      if (u.photo) {
-        const img = document.createElement('img');
-        img.className = 'avatar';
-        img.alt = '';
-        img.referrerPolicy = 'no-referrer'; // lh3 URLs 403 when a referrer is sent
-        img.src = u.photo;
-        box.appendChild(img);
-      }
-      const who = document.createElement('span');
-      who.className = 'who';
-      who.textContent = u.name.split(' ')[0];
-      who.title = u.email;
-      box.appendChild(who);
-
-      const out = document.createElement('button');
-      out.className = 'linkbtn';
-      out.textContent = 'Sign out';
-      out.addEventListener('click', signOutNow);
-      box.appendChild(out);
+      box.append(
+        // lh3 URLs 403 when a referrer is sent.
+        u.photo && el('img', { class: 'avatar', alt: '', referrerPolicy: 'no-referrer', src: u.photo }),
+        el('span', { class: 'who', text: u.name.split(' ')[0], title: u.email }),
+        el('button', { class: 'linkbtn', text: 'Sign out', on: { click: signOutNow } }),
+      );
       return;
     }
-    box.innerHTML = `<button class="signin" id="signin">${GOOGLE_G}Sign in</button>`;
-    box.querySelector('#signin').addEventListener('click', signIn);
+    box.appendChild(googleButton('signin', 'Sign in'));
   }
 
   function paintGate() {
@@ -276,10 +273,7 @@ const Auth = (() => {
       return;
     }
     if (!gate) {
-      gate = document.createElement('div');
-      gate.id = 'authgate';
-      gate.className = 'authgate';
-      gate.setAttribute('role', 'status');
+      gate = el('div', { id: 'authgate', class: 'authgate', role: 'status' });
       // Above the sticky summary bar, below the page's own headline.
       wrap.insertBefore(gate, wrap.querySelector('.summary') || wrap.firstChild);
     }
@@ -288,31 +282,30 @@ const Auth = (() => {
     // which the cards are rendered but inert, so the gate has to be on screen from the first
     // paint saying so — silence here reads as a broken tracker. Neutral wording, because we
     // don't yet know whether they're signed in.
+    const body = (head, text) => el('div', { class: 'gate-body' },
+      el('strong', { text: head }), el('p', { text }));
+
+    gate.textContent = '';
     if (state === 'loading') {
       gate.classList.remove('bad');
       gate.classList.add('checking');
-      gate.innerHTML =
-        '<div class="gate-body"><strong>Checking your sign-in…</strong>' +
-        '<p>The tracker unlocks in a moment. Browsing the list works either way.</p></div>';
+      gate.appendChild(body('Checking your sign-in…',
+        'The tracker unlocks in a moment. Browsing the list works either way.'));
       return;
     }
     gate.classList.remove('checking');
 
     if (state === 'error') {
       gate.classList.add('bad');
-      gate.innerHTML = '<div class="gate-body"><strong>Tracking is unavailable</strong><p></p></div>';
-      gate.querySelector('p').textContent = problem;
+      gate.appendChild(body('Tracking is unavailable', problem));
       return;
     }
     gate.classList.remove('bad');
-    gate.innerHTML =
-      '<div class="gate-body">' +
-      '<strong>Sign in to use the tracker</strong>' +
-      '<p>Ticking Pokémon off needs a Google account — progress is saved to it and follows you ' +
-      'to every device and every page here. Browsing the lists works without signing in.</p>' +
-      '</div>' +
-      `<button class="signin big" id="gate-signin">${GOOGLE_G}Sign in with Google</button>`;
-    gate.querySelector('#gate-signin').addEventListener('click', signIn);
+    gate.append(
+      body('Sign in to use the tracker',
+        'Ticking Pokémon off needs a Google account — progress is saved to it and follows you '
+        + 'to every device and every page here. Browsing the lists works without signing in.'),
+      googleButton('signin big', 'Sign in with Google'));
   }
 
   // Progress changes fire this too, and there is no reason to rebuild the nav — and re-request

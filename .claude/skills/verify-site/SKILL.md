@@ -40,6 +40,25 @@ Keep the sysroot in the scratchpad and reuse it; rebuilding takes minutes.
 
 ## What to assert
 
+### The design system, on every page
+
+Everything visible comes from `web/ui.js` (see the `design-system` skill), so these are
+cross-page invariants — a failure means one page has drifted from the others:
+
+- all five layout landmarks present: `.wrap`, `header.hero`, `.summary`, `main`, `footer`
+- every card is exactly `img` + `.body` + `.check`, in that order
+- **no card contains a bare `"0"` text node.** `list.length && el(…)` evaluates to the number
+  `0` for an empty list, and that shipped a stray "0" onto every card without badges
+- every filter chip has `data-group` **and** `aria-pressed`, and exactly one chip per group is
+  pressed
+- every chip row has a `.chip-label`
+
+A static check belongs with them — the only legal hits are constant SVGs:
+
+```bash
+grep -n 'createElement\|innerHTML' web/*.js web/*.html | grep -v '^web/ui.js'
+```
+
 ### Every page
 
 - cards/rows actually rendered, with the count you expect
