@@ -515,3 +515,24 @@ body.signed-out #reset { opacity: .4; }
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 .eabout-row.kind { color: var(--muted); font-size: 12px; }
+
+/* Heads-up notes: the exclusive-move deadline, a regional split, a bonus window that isn't
+   the event window. Quoted from the source, never composed here. */
+.ecaveats { margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
+.ecaveat {
+  margin: 0; font-size: 12px; line-height: 1.45; color: var(--text);
+  background: rgba(251,191,36,.07); border-left: 2px solid var(--e200);
+  border-radius: 0 6px 6px 0; padding: 6px 9px;
+}
+.ecaveat .ctag {
+  display: inline; font-weight: 700; font-size: 10.5px; letter-spacing: .04em;
+  text-transform: uppercase; color: var(--e200); margin-right: 7px; white-space: nowrap;
+}
+/* A debut or a shiny boost is good news, not a warning — same shape, calmer colour. */
+.ecaveat[data-k="debut"], .ecaveat[data-k="costume"], .ecaveat[data-k="shiny"] {
+  background: rgba(167,139,250,.07); border-left-color: var(--super);
+}
+.ecaveat[data-k="debut"] .ctag,
+.ecaveat[data-k="costume"] .ctag,
+.ecaveat[data-k="shiny"] .ctag { color: var(--super); }
+.erow .ecaveat { font-size: 11.5px; }

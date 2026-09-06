@@ -60,6 +60,24 @@ const WHAT_IS = {
   'event': 'A limited-time event with its own spawns, bonuses and research.',
 };
 
+/**
+ * The easy-to-miss things, labelled. The sentence itself is quoted from the event's page by
+ * scripts/update_events.py — these are just the short labels that make one scannable.
+ *
+ * `move` is the one that actually costs you something: the exclusive-move deadline is often
+ * a different time from the end of the event, and an evolution made late cannot be redone.
+ */
+const CAVEAT = {
+  move:     { label: 'Evolve in time', mark: '⏳' },
+  window:   { label: 'Different window', mark: '⏳' },
+  only:     { label: 'Event only', mark: '⚠' },
+  rare:     { label: 'Rarely available', mark: '⚠' },
+  regional: { label: 'Region-locked', mark: '🌍' },
+  debut:    { label: 'Debut', mark: '✦' },
+  costume:  { label: 'Costume', mark: '✦' },
+  shiny:    { label: 'Shiny boosted', mark: '✦' },
+};
+
 /** The event page's own contents list, in plain words. */
 const HAS_LABEL = {
   bonuses: 'Bonuses', spawns: 'Wild spawns', eggs: 'Eggs', raids: 'Raids',
@@ -145,7 +163,33 @@ function windowText(e) {
 
 function describe(e) {
   const extra = described.get(e.id);
-  return { about: extra?.blurb || null, has: extra?.has || null };
+  return {
+    about: extra?.blurb || null,
+    has: extra?.has || null,
+    caveats: extra?.caveats || null,
+  };
+}
+
+/** Heads-up block. Each line is the source's own sentence, with a short label in front. */
+function caveatBlock(list) {
+  const wrap = document.createElement('div');
+  wrap.className = 'ecaveats';
+  for (const c of list) {
+    const info = CAVEAT[c.k] || { label: 'Note', mark: '⚠' };
+    const row = document.createElement('p');
+    row.className = 'ecaveat';
+    row.dataset.k = c.k;
+    const tag = document.createElement('span');
+    tag.className = 'ctag';
+    tag.textContent = `${info.mark} ${info.label}`;
+    row.appendChild(tag);
+    // A real space, not just the tag's margin — otherwise a screen reader and anyone copying
+    // the text get "EVENT ONLYShiny Armored Mewtwo…".
+    row.appendChild(document.createTextNode(' ' + c.t));
+    row.title = c.t;
+    wrap.appendChild(row);
+  }
+  return wrap;
 }
 
 function typeInfo(e) {
@@ -286,7 +330,7 @@ function liveCard(e, now) {
 function aboutBlock(e) {
   const wrap = document.createElement('div');
   wrap.className = 'eabout';
-  const { about, has } = describe(e);
+  const { about, has, caveats } = describe(e);
 
   const kind = document.createElement('p');
   kind.className = 'ekind';
@@ -306,6 +350,8 @@ function aboutBlock(e) {
     row.textContent = 'Includes: ' + has.map((h) => HAS_LABEL[h] || h).join(' · ');
     wrap.appendChild(row);
   }
+
+  if (caveats?.length) wrap.appendChild(caveatBlock(caveats));
   return wrap;
 }
 
@@ -352,7 +398,7 @@ function eventRow(e, now, opts = {}) {
   if (sub.textContent) body.appendChild(sub);
 
   // One line saying what it is. The blurb when we have one, the kind of event otherwise.
-  const { about, has } = describe(e);
+  const { about, has, caveats } = describe(e);
   const aboutLine = document.createElement('div');
   aboutLine.className = about ? 'eabout-row' : 'eabout-row kind';
   aboutLine.textContent = about || WHAT_IS[e.type] || '';
@@ -368,6 +414,8 @@ function eventRow(e, now, opts = {}) {
     inc.textContent = 'Includes: ' + has.map((h) => HAS_LABEL[h] || h).join(' · ');
     body.appendChild(inc);
   }
+
+  if (caveats?.length) body.appendChild(caveatBlock(caveats));
 
   row.appendChild(body);
 
@@ -613,7 +661,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (typeof EVENTS_SNAPSHOT !== 'undefined') {
     EVENTS_SNAPSHOT.forEach((e) => {
-      if (e.blurb || e.has) described.set(e.id, { blurb: e.blurb, has: e.has });
+      if (e.blurb || e.has || e.caveats) {
+        described.set(e.id, { blurb: e.blurb, has: e.has, caveats: e.caveats });
+      }
     });
   }
   events = typeof EVENTS_SNAPSHOT !== 'undefined' ? EVENTS_SNAPSHOT.slice() : [];

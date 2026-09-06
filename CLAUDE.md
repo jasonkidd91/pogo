@@ -142,6 +142,11 @@ Three things there are easy to get wrong:
   `global`. Do not normalise it away in the generator or the renderer.
 - **The snapshot paints before the fetch resolves.** Same lesson as the sign-in gate: a page
   that waits for the network shows nothing and reads as broken.
+- **Caveats quote the source, verbatim.** Each event can carry up to four flagged notes — the
+  exclusive-move deadline, a regional split, boosted Shiny odds, a debut, a bonus window that
+  differs from the event's. The generator's patterns only *select and label* a sentence from
+  the event's page; they never compose one. An evolution made after the deadline cannot be
+  redone, so a caveat written from memory is the most expensive wrong thing this site could say.
 - **Trackers are opt-in.** An event appearing in the feed is not a reason to build a catch
   list for it. `TRACKERS` in `events.js` maps the few feed ids that have one; build a new one
   only when asked.

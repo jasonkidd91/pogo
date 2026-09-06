@@ -87,6 +87,101 @@ def naive(ts):
     return datetime.datetime.fromisoformat(ts.replace("Z", "+00:00")).replace(tzinfo=None)
 
 
+# ---------------------------------------------------------------------------------------
+# CAVEATS — the things that are easy to miss and expensive to miss.
+#
+# Every caveat QUOTES a sentence from the event's own page. The patterns below only decide
+# which sentence to surface and what to label it; nothing here writes a claim of its own.
+# That matters more here than anywhere else on the site: "you must evolve before 9 p.m." and
+# "this one is regional" are exactly the class of fact that must never be answered from
+# memory, and a wrong one costs somebody an evolution they cannot redo.
+
+RULES = [
+    ("move",     re.compile(r"\bEvolve\b.{0,200}?\b(to get|to receive|that knows|knowing)\b", re.I)),
+    ("shiny",    re.compile(r"\b(higher|increased) chance[^,]{0,60}\bShiny\b", re.I)),
+    ("shiny",    re.compile(r"\bShiny\b.{0,80}?\b(debut|for the first time)\b", re.I)),
+    ("debut",    re.compile(r"\b(mak(es|ing) (its|their)[^.]{0,40}debut|will debut|debuts? in "
+                            r"Pokémon GO|for the first time in Pokémon GO|Pokémon GO debut)\b", re.I)),
+    ("regional", re.compile(r"\b(will appear in the .{0,60}?region|regional[- ]exclusive"
+                            r"|appear(s|ing)? (only )?in the (Asia-Pacific|Europe|Americas))", re.I)),
+    ("rare",     re.compile(r"\b(last seen in \d{4}|for the first time since|has not been "
+                            r"(available|seen)|returning to Pokémon GO|is back)\b", re.I)),
+    ("costume",  re.compile(r"\b(costumed?|wearing (a|an|its|the|[A-Z]))\b", re.I)),
+    ("only",     re.compile(r"\b(only[^.]{0,50}during (the|this) event|will not be available"
+                            r"|exclusive to this event|event[- ]exclusive)\b", re.I)),
+    ("window",   re.compile(r"\bbonus will be active from\b|\bwhile most bonuses\b", re.I)),
+]
+
+# Pointers, footnotes and shop copy. These match the caveat patterns and none of them is a
+# caveat about catching something.
+DROP = re.compile(r"^(leek duck|menu|shiny raids|please note)"
+                  r"|check out|for more information|\bblog\b|US\$|web store|\bpricing tier\b"
+                  r"|\bsubscri|\bticket|at no cost", re.I)
+
+BLOCK = re.compile(r"</(p|li|h[1-6]|div|td|tr|section|ul|ol)>|<br\s*/?>", re.I)
+
+
+
+def text_blocks(frag):
+    """Split on block boundaries FIRST. Stripping tags without this glues a heading onto the
+    sentence after it — "Shiny Shiny Debut For the first time…" — and the result reads broken."""
+    for chunk in BLOCK.split(frag):
+        if not chunk or chunk.lower() in ("p", "li", "div", "td", "tr", "section", "ul", "ol") \
+                or re.fullmatch(r"h[1-6]", chunk or "", re.I):
+            continue
+        t = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", chunk))).strip()
+        t = re.sub(r"\s+([.,!?;:])", r"\1", t)
+        if t:
+            yield t
+
+
+def _cav_sentences(t):
+    for a, b in (("a.m.", "a․m․"), ("p.m.", "p․m․")):
+        t = t.replace(a, b)
+    for s in re.split(r"(?<=[.!?])\s+", t):
+        for a, b in (("a.m.", "a․m․"), ("p.m.", "p․m․")):
+            s = s.replace(b, a)
+        yield s.strip()
+
+
+# Shop sections and the site chrome. Not caveats, and the page promises no shop copy.
+STOP_AT = ('<h2 id="sales"', '<h2 id="graphic"', '<h2 id="pokémon-go-web-store', '</main>', '<footer')
+
+
+def cav_body(page):
+    """From the description to the first section we don't read. A raid page has neither
+    </main> nor a sales heading, so every terminator has to be optional — requiring one
+    silently returned an empty body and dropped every caveat on those pages."""
+    i = page.find('<div class="event-description">')
+    if i < 0:
+        return ""
+    seg = page[i:]
+    for stop in STOP_AT:
+        j = seg.find(stop)
+        if j > 0:
+            seg = seg[:j]
+    return seg
+
+
+def caveats(page, limit=4):
+    out, seen = [], set()
+    for block in text_blocks(cav_body(page)):
+        for s in _cav_sentences(block):
+            # A real sentence, not a stray label or a fragment of a table.
+            if len(s) < 30 or len(s) > 260 or not s[:1].isupper() or s[-1] not in ".!?":
+                continue
+            if DROP.search(s):
+                continue
+            for kind, pat in RULES:
+                if kind in seen:
+                    continue
+                if pat.search(s):
+                    out.append((kind, s))
+                    seen.add(kind)
+                    break
+    return out[:limit]
+
+
 def page_html(url):
     return subprocess.run(
         ["curl", "-sL", "-A", UA, "--max-time", "30", url],
@@ -228,7 +323,7 @@ def main():
     kept.sort(key=lambda e: e["start"])
 
     # One page fetch per event, in order, with a pause between — this is somebody's site.
-    described = structured = eligible = 0
+    described = structured = eligible = flagged = 0
     for e in kept:
         if e.get("type") not in BLURB_TYPES or not e.get("link"):
             continue
@@ -249,6 +344,10 @@ def main():
         has = toc_of(page)
         if has:
             e["has"] = has
+        found = caveats(page)
+        if found:
+            e["caveats"] = [{"k": k, "t": t} for k, t in found]
+            flagged += 1
         time.sleep(0.4)
 
     if not kept:
@@ -263,6 +362,7 @@ def main():
     for e in live:
         print(f"    {e['type']:22} {e['name'][:60]}")
     print(f"  by type: {dict(counts)}")
+    print(f"  caveats: {flagged} events flagged something easy to miss")
     print(f"  blurbs: {described} written, {structured}/{eligible} pages had a description "
           f"block (the rest are placeholders with no details yet)")
     if eligible and structured < eligible * 0.6:
@@ -285,6 +385,10 @@ def main():
  * EVENTS ARE LIVE DATA. events.js fetches the feed above on every page load and renders
  * that; this file is only what it shows while the fetch is in flight or if it fails, and
  * the page says so on screen. Refreshing this file is not how the page stays current.
+ *
+ * caveats quote sentences from the event's page verbatim — the exclusive-move deadline, a
+ * regional split, boosted Shiny odds, a debut, a bonus window that differs from the event's.
+ * They are never composed here, only selected and labelled.
  *
  * blurb/has are scraped from each event's LeekDuck page — what the event actually is, and
  * what it contains. Events announced after this file was generated simply have neither, and

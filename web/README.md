@@ -34,6 +34,11 @@ live data — a file baked at build time would be wrong within days — so `even
 the fallback shown while the request is in flight or if it fails, and the footer line says
 which of the two you are reading.
 
+Events also carry **caveats** — up to four flagged notes for the things that are easy to miss:
+the exclusive-move deadline (often a different time from the end of the event), a regional
+split, a debut, boosted Shiny odds, a bonus running on its own hours. Each one quotes a
+sentence from the event's own page; the generator selects and labels, it never writes.
+
 Times without a trailing `Z` are **local wall-clock**: a Community Day at 14:00 starts at 14:00
 wherever you are. Times with a `Z` are a real worldwide instant, which is how GO Battle League
 rotations are published; those are tagged `global` and converted into the reader's zone.

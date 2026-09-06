@@ -42,6 +42,7 @@ between them. Expected output shape:
 feed: 59 entries, kept 58 current/upcoming
   live right now: 7
   by type: {'season': 2, 'event': 7, 'raid-battles': 14, ...}
+  caveats: 10 events flagged something easy to miss
   blurbs: 20 written, 34/34 pages had a description block (the rest are placeholders...)
   global (UTC-stamped) entries: 12
 wrote .../web/events-data.js: 58 events
@@ -77,6 +78,46 @@ If what survives is a short greeting, the page's own `meta description` is used 
 trimmed back to the last complete clause rather than LeekDuck's mid-word `...`.
 
 If a blurb reads badly, fix the filter — do not hand-edit `events-data.js`, it is generated.
+
+## Caveats — the part that has to be right
+
+Each event can carry up to four **caveats**: the things that are easy to miss and expensive to
+miss. Kinds, in `CAVEAT` in `events.js`:
+
+| Kind | Label | What it catches |
+|---|---|---|
+| `move` | Evolve in time | The exclusive-move deadline — **often a different time from the end of the event** |
+| `window` | Different window | A bonus that runs on its own hours |
+| `only` | Event only | Available only during this event, or explicitly *not* available |
+| `rare` | Rarely available | "Last seen in 2020", first time since… |
+| `regional` | Region-locked | Split across Asia-Pacific / Europe / Americas |
+| `debut` | Debut | First appearance in Pokémon GO |
+| `costume` | Costume | Costumed or otherwise special form |
+| `shiny` | Shiny boosted | Increased Shiny odds, or a Shiny debut |
+
+**Every caveat quotes a sentence from the event's own page, verbatim.** The patterns in
+`update_events.py` only choose which sentence to surface and what to label it. Never
+paraphrase one, never write one by hand, and never infer a caveat that the source does not
+state. This is the highest-stakes text on the site: an evolution made after the deadline
+cannot be redone, and "this one is regional" is exactly the kind of claim that sounds
+plausible and is wrong.
+
+Two bugs to know about, because both silently produced *nothing* rather than an error:
+
+- **`[^.]*` cannot cross a dot.** The Community Day sentence reads "…until September 12, 2026,
+  at 9:00 p.m. local time to get a Garchomp that knows Earth Power", and `\bEvolve\b[^.]*to get`
+  dies on the dots in "p.m.". Use a bounded `.{0,200}?` instead. This hid the single most
+  important caveat on every Community Day page.
+- **Not every page has a `</main>` or a sales section.** A raid page has neither, so requiring
+  a terminator made the scanned body empty and dropped every caveat on those pages. Each
+  terminator in `STOP_AT` must be optional.
+
+Also: split on block boundaries *before* stripping tags. Strip first and a heading glues onto
+the sentence after it — "Shiny Shiny Debut For the first time…" — which reads broken.
+
+If a caveat comes out noisy, add the pattern to `DROP` (it already filters pointers, footnotes
+and shop copy: "Check out…", "Please note…", "US$…", "at no cost"). Do not hand-edit
+`events-data.js`; it is generated.
 
 ## Adding a catch tracker link
 
@@ -119,4 +160,6 @@ Use the `verify-site` skill, which covers this page. The events-specific asserti
 - every one of the six filters returns something and narrows the list,
 - GO Battle League rows carry the `global` tag,
 - the weekly rhythm box has rows,
+- caveats render with a label **and** a quoted sentence, the label is not glued to the text,
+  and the Community Day exclusive-move deadline is among them,
 - there is **no sign-in gate** — this page has no `data-tracker` attribute and nothing to tick.
