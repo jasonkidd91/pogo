@@ -135,18 +135,40 @@ other page loads it.
   register new pages in `buildNav()`, and the events page's reminders and ntfy topic, which
   are separate top-level fields in the same document.
 
-- **`remind.js` — event reminders, and the panel that sets them up.** A signed-in trainer can
-  arm two push notifications, 15 minutes before something starts and at the start, delivered
-  by ntfy.sh. Loaded by `index.html` (each upcoming event) and `mega-finale.html` (each
-  habitat window that has not opened). Read the `event-reminders` skill before touching it;
-  the one thing to know up front is that **ntfy refuses a schedule more than three days
-  ahead**, so a reminder is *armed* on the account and only handed over once it comes inside
-  that window. The page says which of the two states each reminder is in.
+- **`remind.js` — event reminders.** A signed-in trainer can arm up to three push
+  notifications — the day before (only when the event is more than two days out), 15 minutes
+  before, and at the start — delivered by ntfy.sh. Loaded by `notifications.html` (the setup
+  page), `index.html` (each upcoming event) and `mega-finale.html` (each habitat window that
+  has not opened). Read the `event-reminders` skill before touching it; three things to know
+  up front:
 
-  The **panel** lives in `remind.js`, not in a page script, because two pages render it — the
-  exception that proves the rule below. What each page still owns is its button's *shape*:
-  `Remind.buttonState()` hands over the states and their wording, and a link-row button and a
-  tappable time pill draw them differently.
+  **ntfy refuses a schedule more than three days ahead**, so a reminder is *armed* on the
+  account and only handed over once it comes inside that window. The page says which of the
+  two states each reminder is in.
+
+  **Setting a reminder is not the same as receiving one.** ntfy has no accounts: it delivers
+  to a *subscription*, so nothing arrives anywhere until the trainer installs the app and
+  subscribes to their own topic. Shipping the button without saying so made a feature that
+  silently did nothing.
+
+  **The how-to is a page, not a banner.** `notifications.html` is the setup: the topic with a
+  Copy button, the three steps, the app links, a test, and every reminder on the account with
+  a Cancel. It is deliberately *not* attached to the events page — reminders are armed from
+  any page with something time-boxed on it, and pinning the instructions to whichever list
+  grew buttons first makes every other page's button look self-explanatory when it is not.
+
+  Both renderings live in `remind.js`, not in a page script — the exception that proves the
+  rule below. `Remind.setup()` is the page; `Remind.panel()` is the strip a page with buttons
+  gets (what a reminder is, how many are set, the topic, a link to setup). What each page
+  still owns is its button's *shape*: `Remind.buttonState()` hands over the states and their
+  wording, and a link-row button and a tappable time pill draw them differently.
+
+  Two things there that look like omissions and are not. **The ntfy topic is fixed for the
+  life of the account** — `rotate()` exists in the API but is not a button, because it sits
+  next to the one string the trainer just pasted into the app and pressing it silently ends
+  every future notification. And **"Open in ntfy app" only renders on Android**: `ntfy://` is
+  documented as an Android deep link, and everywhere else it is a control that does nothing
+  at all, with no error and no clue why.
 
 - **`auth.js` — Google sign-in and the Firestore backend.** It imports the Firebase modular SDK
   with dynamic `import()` from a classic script, so the site stays module-free and build-free.
@@ -173,6 +195,12 @@ other page loads it.
   `caveatBlock`) are built from `UI.el`/`UI.tag` — the standing line is that `ui.js` owns the
   generic components and a page owns its domain-specific ones, built from UI primitives.
   See "The events page is live data" below.
+
+- **`notifications.js`** — the setup page. It renders `Remind.setup()` plus the one thing
+  that lives nowhere else: **every reminder on the account, with a Cancel**. The events feed
+  rotates, so an event that drops out of it takes its Remind button with it and would
+  otherwise leave a notification nobody can stop; `Remind.clearKey()` cancels by the stored
+  key rather than by a feed id this list does not have.
 
 - **Only `<body data-tracker>` pages get the sign-in gate.** `auth.js` returns early without it.
   The events page has nothing to tick, so it has no gate; a tracker page that forgets the

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notifications — Pokémon GO</title>
+<meta name="description" content="Set up push reminders for Pokémon GO events: subscribe to your ntfy topic once, and every reminder you set on this site arrives on your phone.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27%235b8cff%27/%3E%3Cpath d=%27M2 16h28%27 stroke=%27%230f1219%27 stroke-width=%273%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%230f1219%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%23e8ecf4%27/%3E%3C/svg%3E">
+<!-- auth.js pulls the Firebase SDK from here; warm the connection during parse. -->
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<!-- where reminders are published, cancelled and tested -->
+<link rel="preconnect" href="https://ntfy.sh">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Setup</p>
+    <h1>Notifications</h1>
+    <p class="sub">
+      Reminders you set anywhere on this site — an event on <a href="index.html">What's on</a>,
+      a habitat window on <a href="mega-finale.html">Mega Finale</a> — are delivered here.
+      Subscribe once and they all arrive; skip this and they are armed on your account and
+      delivered nowhere.
+    </p>
+  </header>
+
+  <div class="summary"></div>
+
+  <main>
+    <!-- Filled by Remind.setup(). This page has no sign-in gate: signed out the block does
+         the asking itself, because signing in is the first step of the setup. -->
+    <div id="setup" class="remindbox"></div>
+    <div id="list"></div>
+  </main>
+
+  <footer>
+    <p>
+      <strong>What a reminder sends.</strong> A push the day before, for anything more than two
+      days out; another 15 minutes before it starts; and one as it begins. A message that is
+      already in the past is skipped rather than sent late, so an event you arm an hour before
+      it starts gets the last two and an event you arm five minutes before gets only the last.
+    </p>
+    <p>
+      <strong>The three-day limit.</strong> <a href="https://ntfy.sh/">ntfy.sh</a> will not
+      accept a scheduled notification more than three days ahead, and there is no server in
+      this project. A reminder further out than that is held on your account and handed to
+      ntfy the first time you open the page it was set on inside that window. The button says
+      which of the two states it is in: solid green is scheduled, amber and dashed is waiting.
+    </p>
+    <p>
+      <strong>Your topic is a credential.</strong> ntfy has no accounts, so the topic is the
+      only thing standing between your reminders and anyone else — treat it like a password.
+      It is generated from your browser's cryptographic random source when you first sign in,
+      stored on your account, and does not change.
+    </p>
+  </footer>
+
+</div>
+<script src="ui.js"></script>
+<script src="store.js"></script>
+<script src="auth.js"></script>
+<script src="remind.js"></script>
+<script src="notifications.js"></script>
+</body>
+</html>

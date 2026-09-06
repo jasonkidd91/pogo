@@ -1,20 +1,47 @@
 /**
- * remind.js — "Remind me" on the events page, delivered by ntfy.sh.
+ * remind.js — "Remind me", delivered by ntfy.sh.
  *
- * Signed in, any event that has not started yet can be armed for two push notifications:
- * one 15 minutes before it starts, one as it starts. State lives on the account, in the
- * same Firestore document as the catch list, so a reminder set on a phone shows as set on
- * a laptop and cannot be armed twice.
+ * Signed in, any event that has not started yet can be armed for push notifications: a
+ * heads-up the day before, another 15 minutes before, and one as it starts. State lives on
+ * the account, in the same Firestore document as the catch list, so a reminder set on a
+ * phone shows as set on a laptop and cannot be armed twice.
  *
- * This file owns the whole feature: the protocol, the state machine, and the setup panel —
- * which two pages now render, so it lives here rather than being copied into each. What a
- * page still owns is its own *button*, because a Remind me on an event row and one on a
- * habitat time slot are different shapes of the same state; `buttonState()` hands a page
- * that state and the page decides what it looks like.
+ * ## What arrives, and when
+ *
+ * Up to three messages per reminder, and each one is included only if it is still genuinely
+ * ahead — ntfy REJECTS a delay in the past (40004) rather than delivering it late, so a shot
+ * that has already passed is dropped here rather than sent at the wrong time:
+ *
+ *     start - 24h   "Tomorrow: X"      only when the event is more than 2 days away
+ *     start - 15m   "In 15 minutes: X" only when the start is more than 15 minutes away
+ *     start         "Starting now: X"
+ *
+ * The two-day floor on the day-before message is what keeps it from being noise: an event 30
+ * hours out would otherwise get a "tomorrow" push six hours from now, on top of the other
+ * two, all inside the same afternoon. Below that floor the 15-minute heads-up is the whole
+ * warning, which is what it is for.
+ *
+ * This file owns the whole feature: the protocol, the state machine, and both of its
+ * renderings. What a page still owns is its own *button*, because a Remind me on an event
+ * row and one on a habitat time slot are different shapes of the same state;
+ * `buttonState()` hands a page that state and the page decides what it looks like.
  *
  *     ui.js -> store.js -> auth.js -> remind.js -> data file -> page script
  *
- * Loaded by index.html (the events list) and mega-finale.html (habitat windows).
+ * Loaded by notifications.html (the setup page), index.html (the events list) and
+ * mega-finale.html (habitat windows).
+ *
+ * ## Setting a reminder is not receiving one
+ *
+ * ntfy has no accounts and no address book: it delivers to a TOPIC that the trainer has
+ * subscribed to in the app. Until they have, every reminder on the account is armed, correct,
+ * and delivered nowhere.
+ *
+ * So the how-to has a page of its own — `notifications.html`, which calls `setup()`. It is
+ * not attached to the events page: reminders can be armed from any page with something
+ * time-boxed on it, and pinning the instructions to whichever list happened to grow buttons
+ * first makes the other pages' buttons look self-explanatory when they are not. A page with
+ * reminder buttons gets `panel()` instead — the count, the topic, and a link to setup().
  *
  * ## The topic is the password
  *
@@ -26,6 +53,12 @@
  * is printed in the Auth console, and once it has leaked — a screenshot, a shared device —
  * the user is stuck with a topic strangers can publish to for the life of the account. A
  * generated topic can be replaced, which is what rotate() does.
+ *
+ * But rotate() is NOT offered as a button. The topic is fixed for the life of the account,
+ * because the whole setup is "paste this one string into the app": a New topic control sitting
+ * next to it silently ends every future notification for anyone who presses it to see what it
+ * does, and there is nothing on screen afterwards to say so. It stays in the API as the
+ * break-glass path for a topic that actually leaks.
  *
  * ## Three server limits that shape everything here
  *
@@ -75,20 +108,30 @@ const Remind = (() => {
    *  own clock and a browser running fast would be rejected right at the boundary. */
   const WINDOW_MS = 71 * 3600 * 1000;
 
-  /** The heads-up. The second notification goes at the start itself. */
+  const DAY = 86400000;
+
+  /** The last heads-up. A third notification goes at the start itself. */
   const LEAD_MS = 15 * 60 * 1000;
+
+  /** How far out an event has to be to also get a "tomorrow" push a day before it. Two days,
+   *  so that message is always at least a day clear of the 15-minute one — see the top. */
+  const DAY_BEFORE_MIN = 2 * DAY;
 
   /** Server minimum is 10s; below this there is no point in a "starts soon" push anyway. */
   const MIN_DELAY_MS = 60 * 1000;
 
-  /** Reminders scheduled per page load, to stay well inside the 60-request burst. The rest
-   *  wait for the next load — anything in the window has up to three days of them. */
-  const PER_LOAD = 8;
+  /** Reminders scheduled per page load, to stay well inside the 60-request burst. Each one
+   *  costs up to THREE publishes, so this is 18 requests at worst, not 6. The rest wait for
+   *  the next load — anything inside the window has up to three days of them. */
+  const PER_LOAD = 6;
 
   /** Guard against a runaway document, not a product limit anyone should reach. */
   const MAX = 50;
 
-  const DAY = 86400000;
+  /** The sequence-ID suffixes of one reminder's messages: day-before, 15-minute, start.
+   *  One list so cancelling and rotating can never fall out of step with scheduling — a
+   *  fourth shot added to schedule() and forgotten in clear() is an uncancellable push. */
+  const SHOTS = ['-d', '-p', '-a'];
 
   let running = false;
   let lastRun = 0;
@@ -156,7 +199,7 @@ const Remind = (() => {
   const fmtTime = (d) => d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 
   /**
-   * Hand both messages for one reminder to ntfy.
+   * Hand one reminder's messages to ntfy — see "What arrives, and when" at the top.
    *
    * The delay goes over as epoch SECONDS, never a wall-clock string. Half the event stamps
    * in the feed are local wall-clock and half are UTC instants (the trailing Z), `new Date`
@@ -176,6 +219,18 @@ const Remind = (() => {
     const note = r.x ? ' ' + r.x : '';
 
     const shots = [];
+
+    // The day-before heads-up, and only for something genuinely far enough out that
+    // "tomorrow" is news. Exactly 24h before a start is always the previous calendar day —
+    // a DST change makes it 23 or 25 wall-clock hours, never enough to land on the same
+    // day — so the wording holds without a date calculation.
+    if (start - now > DAY_BEFORE_MIN) {
+      shots.push({
+        sid: r.k + '-d', at: start - DAY, priority: 3, tags: ['calendar'],
+        title: 'Tomorrow: ' + r.n,
+        message: `${label}starts at ${when} tomorrow.` + note,
+      });
+    }
     // Skipped rather than sent late when the event is already inside 15 minutes: ntfy
     // rejects a delay in the past outright (40004) instead of delivering immediately.
     if (start - LEAD_MS - now > MIN_DELAY_MS) {
@@ -249,16 +304,23 @@ const Remind = (() => {
   }
 
   /** Cancel a reminder. Firestore first — see the ordering note at the top. */
-  async function clear(eventId) {
+  const clear = (eventId) => clearKey(key(eventId));
+
+  /**
+   * Cancel by stored key rather than by event id, which is what the notifications page has:
+   * it lists what is on the account, and an event that has dropped out of the feed no longer
+   * has a button anywhere. Without this, a reminder for something that stopped being listed
+   * could never be cancelled — it would just fire.
+   */
+  async function clearKey(k) {
     if (Store.locked) return;
-    const k = key(eventId);
     if (!Store.reminders.some((r) => r.k === k)) return;
     await Store.setReminders(Store.reminders.filter((r) => r.k !== k));
     const topic = Store.ntfyTopic;
     if (!topic) return;
     // Unconditional, not just when it was scheduled: dropping is idempotent and free, and a
     // stale flag must not be what stands between the user and a push they cancelled.
-    await Promise.all([drop(topic, k + '-p'), drop(topic, k + '-a')]);
+    await Promise.all(SHOTS.map((suffix) => drop(topic, k + suffix)));
   }
 
   /**
@@ -322,7 +384,7 @@ const Remind = (() => {
     const old = Store.ntfyTopic;
     const list = Store.reminders;
     if (old) {
-      await Promise.all(list.flatMap((r) => [drop(old, r.k + '-p'), drop(old, r.k + '-a')]));
+      await Promise.all(list.flatMap((r) => SHOTS.map((sfx) => drop(old, r.k + sfx))));
     }
     await Store.setTopic(newTopic());
     if (list.length) await Store.setReminders(list.map((r) => ({ ...r, d: 0 })));
@@ -353,11 +415,12 @@ const Remind = (() => {
       busy: false,
       label: state === 'off' ? 'Remind me' : 'Reminder set',
       title: {
-        off: 'A push 15 minutes before this starts, and again as it begins.',
+        off: 'A push the day before if it is more than two days away, another 15 minutes '
+           + 'before it starts, and one as it begins.',
         armed: 'Saved to your account. It is handed to ntfy once the event is under three '
              + 'days away — open this page some time in that window. Click to cancel.',
-        scheduled: 'Scheduled: one push 15 minutes before it starts, one as it begins. '
-                 + 'Click to cancel.',
+        scheduled: 'Scheduled — the day before where that applies, 15 minutes before, and '
+                 + 'as it begins. Click to cancel.',
       }[state],
     };
   }
@@ -386,18 +449,30 @@ const Remind = (() => {
     }
   }
 
-  /* ---------- the panel ---------- */
+  /* ---------- the setup page, and the strip that points at it ---------- */
   //
-  // Where the ntfy topic lives and the one place that explains what a reminder promises.
-  // Two pages render it, which is why it is here and not in a page script: the tracker
-  // pages already have a sign-in gate and the events page deliberately does not, so the
-  // only difference between them is who does the asking — see `reveal` below.
+  // Two renderings of the same feature, because they answer different questions.
+  //
+  //   setup()   notifications.html — the whole how-to: the topic, the three steps, the app
+  //             links, the test. Reminders can be armed from any page that has something
+  //             time-boxed on it, and every one of those needs this, so it belongs on a page
+  //             of its own rather than pinned to the top of whichever list came first.
+  //   panel()   the strip on a page that HAS reminder buttons: what a reminder is, how many
+  //             are set, the topic with a Copy button, and a link to setup(). No steps —
+  //             they are 300px of instructions above the thing the trainer came for.
+  //
+  // Both live here rather than in a page script because both are the feature, not a page.
 
-  let revealed = false;      // the events page shows the sign-in ask only on demand
+  const SETUP_URL = 'notifications.html';
+
+  const WHAT = 'A push the day before — for anything more than two days out — another 15 '
+             + 'minutes before it starts, and one as it begins.';
+
+  let revealed = false;      // a page with no sign-in gate shows the ask only on demand
   let notice = '';
   let tone = '';
   let noticeTimer = null;
-  let mount = null;          // { target, reveal } from the last panel() call
+  let mount = null;          // { fn, target, opts } — whichever of the two rendered last
 
   /** A line under the panel saying what just happened. It clears itself — these pages
    *  re-render every minute, and a stale "Reminder cancelled" an hour later is noise. */
@@ -409,6 +484,10 @@ const Remind = (() => {
     paint();
   }
 
+  /** Redraw whichever rendering is on this page — used by say(), prompt() and primeTopic(),
+   *  which change what the block says but not the page around it. */
+  const paint = () => mount && mount.fn(mount.target, mount.opts);
+
   /** A locked control was pressed on a page with no sign-in gate — reveal the panel and
    *  point at it. On a page that has a gate, that gate is the right thing to point at. */
   function prompt() {
@@ -419,10 +498,49 @@ const Remind = (() => {
   }
 
   /**
-   * Render the panel.
+   * Empty a container and hand back a function that puts keyboard focus where it was.
+   *
+   * Every page here re-renders on a timer and after every reminder change, which rebuilds
+   * this block out from under whoever is using it: a keyboard user tabbed onto Send a test,
+   * or pointed here by prompt(), is dumped back at the top of the document a moment later.
+   */
+  function keepFocus(box) {
+    const controls = () => [...box.querySelectorAll('button, a')];
+    const at = box.contains(document.activeElement)
+      ? controls().indexOf(document.activeElement) : -1;
+    box.textContent = '';
+    return () => {
+      if (at < 0) return;
+      const next = controls();
+      (next[at] || next[0])?.focus({ preventScroll: true });
+    };
+  }
+
+  /** Signed out, both renderings say the same thing, so they say it in the same words. */
+  const askBlock = () => [
+    UI.el('div', { class: 'rb-body' },
+      UI.el('strong', { text: 'Sign in to get event reminders' }),
+      UI.el('p', { class: 'rb-note', text:
+        'A reminder is saved to your Google account so it follows you between devices, and '
+        + 'is delivered as a push notification by ntfy.sh — a free app you subscribe to once. '
+        + 'Everything else on this site works signed out.' })),
+    UI.el('div', { class: 'rb-acts' }, Auth.googleButton('signin', 'Sign in with Google')),
+  ];
+
+  function counts() {
+    const n = Store.reminders.length;
+    const waiting = Store.reminders.filter((r) => !r.d).length;
+    return n
+      ? `${n} reminder${n === 1 ? '' : 's'} set`
+        + (waiting ? ` · ${waiting} waiting for the three-day window` : '')
+      : 'No reminders set yet.';
+  }
+
+  /**
+   * The strip on a page that has reminder buttons.
    *
    * @param target  selector for the container, which must already be in the HTML
-   * @param opts    reveal  true on a page with no sign-in gate: signed out the panel is
+   * @param opts    reveal  true on a page with no sign-in gate: signed out the strip is
    *                        hidden until prompt() reveals it, and then it does the asking.
    *                        false where the page's own gate already covers that.
    *                hidden  true to render nothing at all — the Mega Finale page uses this
@@ -430,24 +548,10 @@ const Remind = (() => {
    *                hint    one extra line of page-specific instruction
    */
   function panel(target, opts = {}) {
-    mount = { target, opts };
+    mount = { fn: panel, target, opts };
     const box = document.querySelector(target);
     if (!box) return;
-
-    // Both pages re-render on a timer and after every reminder change, which rebuilds this
-    // panel out from under whoever is using it. Losing focus mid-interaction is the visible
-    // symptom — a keyboard user tabbed onto Send a test, or pointed here by prompt(), is put
-    // back at the top of the document a moment later. Put them back where they were.
-    const controls = () => [...box.querySelectorAll('button, a')];
-    const focused = box.contains(document.activeElement)
-      ? controls().indexOf(document.activeElement) : -1;
-
-    box.textContent = '';
-    const restore = () => {
-      if (focused < 0) return;
-      const next = controls();
-      (next[focused] || next[0])?.focus({ preventScroll: true });
-    };
+    const restore = keepFocus(box);
 
     if (opts.hidden) { box.hidden = true; return; }
 
@@ -456,55 +560,172 @@ const Remind = (() => {
       // second banner saying the same thing.
       box.hidden = !opts.reveal || !revealed;
       if (box.hidden) return;
-      box.append(
-        UI.el('div', { class: 'rb-body' },
-          UI.el('strong', { text: 'Sign in to get event reminders' }),
-          UI.el('p', { class: 'rb-note', text:
-            'A reminder is saved to your Google account so it follows you between devices, '
-            + 'and is delivered as a push notification by ntfy.sh. Everything else on this '
-            + 'page works signed out.' })),
-        UI.el('div', { class: 'rb-acts' }, Auth.googleButton('signin', 'Sign in with Google')));
+      box.append(...askBlock());
       restore();
       return;
     }
 
     box.hidden = false;
-    const topic = Store.ntfyTopic;
-    const n = Store.reminders.length;
-    const waiting = Store.reminders.filter((r) => !r.d).length;
-    const counts = n
-      ? `${n} reminder${n === 1 ? '' : 's'} set`
-        + (waiting ? ` · ${waiting} waiting for the three-day window` : '')
-      : 'No reminders set yet.';
-
+    primeTopic();
     box.append(
       UI.el('div', { class: 'rb-body' },
         UI.el('strong', { text: 'Event reminders' }),
-        UI.el('p', { class: 'rb-note', text:
-          'A push 15 minutes before something starts, and another as it begins. Delivered by '
-          + 'ntfy.sh: install the free ntfy app and subscribe to the topic below, or nothing '
-          + 'arrives.' }),
+        UI.el('p', { class: 'rb-note', text: WHAT }),
         opts.hint && UI.el('p', { class: 'rb-note', text: opts.hint }),
-        UI.el('p', { class: 'rb-note', text: counts }),
-        topic && UI.el('code', { class: 'rb-topic', text: topic,
-          title: 'Anyone who knows this can read and send your reminders — treat it like a '
-               + 'password. New topic replaces it.' })),
+        UI.el('p', { class: 'rb-note', text: counts() }),
+        // The one line that has to be here rather than on the setup page: an armed reminder
+        // with no subscription behind it looks exactly like a working one until it silently
+        // fails to arrive.
+        UI.el('p', { class: 'rb-note', text:
+          'Nothing is delivered until you subscribe to your topic in the ntfy app — that is '
+          + 'a one-time setup.' }),
+        topicRow(Store.ntfyTopic)),
       UI.el('div', { class: 'rb-acts' },
-        topic && UI.el('a', { class: 'elink', href: appLink(topic), text: 'Open in ntfy app' }),
-        topic && UI.el('a', { class: 'elink', href: webLink(topic), target: '_blank',
-                              rel: 'noopener', text: 'Open in browser' }),
-        UI.el('button', { class: 'elink', text: 'Send a test',
-                          on: { click: (ev) => act(ev.currentTarget, runTest) } }),
-        topic && UI.el('button', { class: 'elink', text: 'New topic',
-                          on: { click: (ev) => act(ev.currentTarget, runRotate) } })),
+        UI.el('a', { class: 'elink track', href: SETUP_URL, text: 'Set up notifications' })),
       notice && UI.el('p', { class: 'rb-status ' + tone, text: notice }));
     restore();
   }
 
-  /** Redraw in place — used by say() and prompt(), which change the panel but not the page. */
-  const paint = () => mount && panel(mount.target, mount.opts);
+  /**
+   * The whole how-to, for notifications.html.
+   *
+   * The gap this closes: a reminder that is SET and a reminder that ARRIVES are different
+   * things, because ntfy has no accounts and no address book — it delivers to a
+   * *subscription*. Ship the button without these steps and the feature silently does
+   * nothing for everyone who has not already installed the app.
+   */
+  function setup(target) {
+    mount = { fn: setup, target, opts: {} };
+    const box = document.querySelector(target);
+    if (!box) return;
+    const restore = keepFocus(box);
 
-  /** Every panel button is a network call: disable it while it runs, report what happened. */
+    if (Store.locked) { box.append(...askBlock()); restore(); return; }
+
+    primeTopic();
+    const topic = Store.ntfyTopic;
+    box.append(
+      UI.el('div', { class: 'rb-body' },
+        UI.el('strong', { text: 'Get your notifications' }),
+        UI.el('p', { class: 'rb-note', text:
+          'Reminders are delivered by ntfy.sh, which has no accounts and no address book — it '
+          + 'delivers to a topic that you subscribe to. Do this once and every reminder you '
+          + 'set anywhere on this site arrives on this device.' }),
+        topicRow(topic),
+        steps(topic),
+        UI.el('p', { class: 'rb-note rb-warn', text:
+          'Treat the topic like a password. Anyone who knows it can read your reminders and '
+          + 'send you notifications, so it is the one thing on this page not to paste '
+          + 'anywhere public. It stays the same for the life of your account.' })),
+      UI.el('div', { class: 'rb-acts' }, actions(topic)),
+      notice && UI.el('p', { class: 'rb-status ' + tone, text: notice }));
+    restore();
+  }
+
+  /* ---------- the pieces both of them use ---------- */
+
+  const APPS = [
+    ['iPhone', 'https://apps.apple.com/us/app/ntfy/id1625396347'],
+    ['Android', 'https://play.google.com/store/apps/details?id=io.heckel.ntfy'],
+    ['F-Droid', 'https://f-droid.org/en/packages/io.heckel.ntfy/'],
+  ];
+
+  /** ntfy:// is documented as ANDROID ONLY. Offered anywhere else it is a button that does
+   *  nothing at all — no error, no app, no clue why — which is how it shipped once. */
+  const isAndroid = () => /Android/i.test(navigator.userAgent);
+
+  const appLink = (t) => `ntfy://ntfy.sh/${t}?display=${encodeURIComponent('Pokémon GO')}`;
+  const webLink = (t) => `${NTFY}/${t}`;
+
+  function actions(topic) {
+    return [
+      topic && isAndroid() && UI.el('a', { class: 'elink', href: appLink(topic),
+        text: 'Open in ntfy app',
+        title: 'Opens the ntfy Android app on this device and subscribes to your topic.' }),
+      topic && UI.el('a', { class: 'elink', href: webLink(topic), target: '_blank',
+        rel: 'noopener', text: 'Open in browser',
+        title: 'The ntfy web app, subscribed to your topic. It only delivers while that tab '
+             + 'stays open — the phone app is the one that wakes you up.' }),
+      UI.el('button', { class: 'elink track', text: 'Send a test',
+                        on: { click: (ev) => act(ev.currentTarget, runTest) } }),
+    ];
+  }
+
+  /** The topic, once, where it is easy to see and to copy. It is a credential, so it gets
+   *  its own labelled row rather than being woven into a sentence — and Copy sits beside it
+   *  because pasting it into the app is the entire setup. */
+  function topicRow(topic) {
+    if (!topic) return null;
+    return UI.el('div', { class: 'rb-topicrow' },
+      UI.el('span', { class: 'rb-label', text: 'Your topic' }),
+      UI.el('code', { class: 'rb-topic', text: topic }),
+      UI.el('button', { class: 'elink', text: 'Copy',
+                        on: { click: () => copyTopic(topic) } }));
+  }
+
+  function steps(topic) {
+    const link = (label, href) =>
+      UI.el('a', { class: 'rb-link', href, target: '_blank', rel: 'noopener', text: label });
+
+    return UI.el('ol', { class: 'rb-steps' },
+      UI.el('li', {},
+        UI.el('strong', { text: 'Install ntfy.' }),
+        ' Free and open source, and it needs no account: ',
+        APPS.map(([label, href], i) => [i ? ' · ' : '', link(label, href)]),
+        UI.el('span', { class: 'rb-sub', text:
+          'On a desktop you can skip the install and use Open in browser instead — but it '
+          + 'only delivers while that tab stays open.' })),
+      UI.el('li', {},
+        UI.el('strong', { text: 'Subscribe to your topic.' }),
+        topic
+          ? ' In the app, tap + → Subscribe to topic, paste the topic above, leave the '
+            + 'server as ntfy.sh, and tap Subscribe.'
+          : ' A topic is created for you the moment you sign in — it will appear above.',
+        topic && isAndroid() && UI.el('span', { class: 'rb-sub', text:
+          'On this Android device, Open in ntfy app does both of those in one tap.' })),
+      UI.el('li', {},
+        UI.el('strong', { text: 'Send a test.' }),
+        ' That button publishes one straight away. If it does not arrive in a few seconds '
+        + 'the subscription is not live yet — step 2 is where it went wrong, not your '
+        + 'reminders.'));
+  }
+
+  /** Copy, with a fallback that leaves the topic selected — the clipboard API is refused
+   *  outright in some browsers and on any non-secure origin, and a step 2 that cannot be
+   *  completed is worse than one extra keystroke. */
+  async function copyTopic(topic) {
+    try {
+      await navigator.clipboard.writeText(topic);
+      say('Topic copied. Paste it into the ntfy app to subscribe.', 'ok');
+    } catch {
+      say('Could not reach the clipboard — the topic is selected, press Ctrl-C or ⌘C.');
+      // say() has just rebuilt the block, so select in the NEW node, not the one clicked.
+      const code = document.querySelector((mount ? mount.target : '#reminders') + ' .rb-topic');
+      if (!code) return;
+      const range = document.createRange();
+      range.selectNodeContents(code);
+      const sel = getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+  }
+
+  /**
+   * A trainer who has signed in but never set a reminder has no topic yet — and the setup
+   * page is read BEFORE the first reminder, so step 2 cannot be blank. Mint it on first
+   * sight of either rendering: one Firestore write, once in the life of an account.
+   */
+  let topicPending = false;
+  function primeTopic() {
+    if (topicPending || Store.locked || !Store.loaded || Store.ntfyTopic) return;
+    topicPending = true;
+    ensureTopic()
+      .then(paint)
+      .catch((err) => console.warn('[remind] could not create a topic', err))
+      .finally(() => { topicPending = false; });
+  }
+
+  /** Every action here is a network call: disable it while it runs, report what happened. */
   async function act(btn, fn) {
     btn.disabled = true;
     try {
@@ -518,23 +739,18 @@ const Remind = (() => {
 
   async function runTest() {
     await test();
-    say('Test sent. If nothing arrives, subscribe to the topic in the ntfy app first.', 'ok');
+    say('Test sent. If nothing arrives within a few seconds, the topic is not subscribed to '
+      + 'in the ntfy app yet — see the three steps above.', 'ok');
   }
-
-  async function runRotate() {
-    if (!confirm('Replace your reminder topic? Anything already scheduled on the old one is '
-               + 'cancelled and re-scheduled, and you will need to subscribe to the new topic '
-               + 'in the ntfy app.')) return;
-    await rotate();
-    say('New topic. Subscribe to it in the ntfy app — the old one no longer delivers.', 'ok');
-  }
-
-  const appLink = (t) => `ntfy://ntfy.sh/${t}?display=${encodeURIComponent('Pokémon GO')}`;
-  const webLink = (t) => `${NTFY}/${t}`;
 
   return {
-    status, set, clear, reconcile, test, rotate, ensureTopic,
-    buttonState, toggle, panel, say, prompt,
+    status, set, clear, clearKey, reconcile, test, ensureTopic,
+    buttonState, toggle, panel, setup, say, prompt,
+    /** Deliberately NOT a button anywhere. The topic is fixed for the life of the account:
+     *  a New topic control sat next to the one string the trainer had just pasted into the
+     *  ntfy app, and pressing it silently stops every future notification until they redo
+     *  the setup. This stays exported as the break-glass path if one ever leaks. */
+    rotate,
     /** Armed but not yet handed to ntfy. */
     get waiting() { return Store.reminders.filter((r) => !r.d).length; },
     get topic() { return Store.ntfyTopic; },

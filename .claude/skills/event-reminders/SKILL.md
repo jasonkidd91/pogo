@@ -1,27 +1,61 @@
 ---
 name: event-reminders
-description: Remind me on the events page and the Mega Finale habitat windows — scheduled push notifications via ntfy.sh, the topic that acts as the user's password, and the three-day scheduling limit that shapes the whole design. Use when a reminder does not arrive, when changing what a notification says or when it fires, when working on web/remind.js or a page's reminder button, or when extending reminders to another page.
+description: Remind me on the events page and the Mega Finale habitat windows, and the notifications.html setup page behind them — scheduled push via ntfy.sh, the subscription the whole feature depends on, the topic that acts as the user's password, and the three-day scheduling limit that shapes the design. Use when a reminder does not arrive, when changing what a notification says or when it fires, when working on web/remind.js, web/notifications.js or a page's reminder button, or when extending reminders to another page.
 ---
 
 # Event reminders
 
 Signed in, every event on the front page that has not started carries a **Remind me** button.
-It arms two push notifications — one 15 minutes before the event starts, one as it begins —
-delivered by [ntfy.sh](https://ntfy.sh).
+It arms up to three push notifications delivered by [ntfy.sh](https://ntfy.sh).
 
 | File | Owns |
 |---|---|
-| `web/remind.js` | The whole feature: protocol, state machine, **and the setup panel**. Its header is the spec. |
+| `web/remind.js` | The whole feature: protocol, state machine, **and both renderings**. Its header is the spec. |
+| `web/notifications.html` / `.js` | The setup page, and the list of every reminder on the account |
 | `web/events.js` | The event-row button's shape |
 | `web/app.js` | The Mega Finale habitat-window pill's shape, and the finished-event state |
 | `web/store.js` | `reminders` and `ntfyTopic` on the account, and the immediate-write path |
 | `web/auth.js` | `saveNow()` — an awaited, merging Firestore write |
 
-**The panel lives in `remind.js`, not in a page.** Two pages render it, and copying it into
-each is exactly the drift the design system exists to stop. What a page *does* own is its
-button: `Remind.buttonState(id)` hands over the three states and their wording, and the page
-decides the shape — a link-row button on the events page, a tappable time pill on Mega
-Finale. Add a third caller the same way; do not re-derive the wording.
+**Both renderings live in `remind.js`, not in a page.** Copying either into a page is exactly
+the drift the design system exists to stop:
+
+- `Remind.setup(target)` — the whole how-to, on `notifications.html`.
+- `Remind.panel(target, opts)` — the strip on a page that *has* reminder buttons: what a
+  reminder is, how many are set, the topic with a Copy button, a link to the setup page. **No
+  steps.** They were there once and they are 300px of instructions above the thing the trainer
+  came for.
+
+What a page *does* own is its button: `Remind.buttonState(id)` hands over the three states and
+their wording, and the page decides the shape — a link-row button on the events page, a
+tappable time pill on Mega Finale. Add a third caller the same way; do not re-derive the
+wording.
+
+## What arrives, and when
+
+Each message is included only if it is still genuinely ahead. ntfy **rejects** a delay in the
+past (40004) rather than delivering it late, so a shot that has already passed is dropped in
+`schedule()` rather than sent at the wrong time:
+
+| Fires | Title | Included when |
+|---|---|---|
+| `start - 24h` | *Tomorrow: X* | the event is more than **2 days** away |
+| `start - 15m` | *In 15 minutes: X* | the start is more than 15 minutes away |
+| `start` | *Starting now: X* | always (a past event cannot be armed at all) |
+
+**The two-day floor on the day-before message is what keeps it from being noise.** An event 30
+hours out would otherwise get a "tomorrow" push six hours from now on top of the other two,
+all inside the same afternoon; below that floor the 15-minute heads-up is the whole warning,
+which is what it is for. It also makes the wording safe: exactly 24h before a start is always
+the previous calendar day — a DST change makes it 23 or 25 wall-clock hours, never enough to
+land on the same day.
+
+Habitat windows on `mega-finale.html` are never more than a day or so out, so in practice only
+the events page ever sends the day-before message. That is not a special case in the code.
+
+`SHOTS` is the list of sequence-ID suffixes (`-d`, `-p`, `-a`), and `clear()` and `rotate()`
+iterate it. **A fourth message added to `schedule()` and forgotten there is a push nobody can
+cancel** — add it to `SHOTS` in the same edit.
 
 ## The one fact that shapes everything
 
@@ -51,7 +85,7 @@ rather than as a wrong delivery time:
 | A past delay is **rejected**, not clamped (40004) | The 15-minute message is *skipped* when the event is already closer than that, never sent late |
 | `GET /<topic>/<sid>/delete` returns 200 whether or not anything was pending | Cancelling twice, or cancelling something never scheduled, needs no special case |
 | Re-publishing a sequence ID **replaces** the pending message | A double tap cannot produce two notifications |
-| Rate limit: 60 requests burst, 1 per 5s refill, 250 messages/day | `reconcile()` schedules at most `PER_LOAD` (8) per page load |
+| Rate limit: 60 requests burst, 1 per 5s refill, 250 messages/day | `reconcile()` schedules at most `PER_LOAD` (6) per page load — **each reminder costs up to three publishes**, so that is 18 requests, not 6 |
 | A publish is not visible to `?poll=1&sched=1` for a second or two | Only matters when testing — see Verify |
 
 ## CORS: why the calls look the way they do
@@ -70,6 +104,46 @@ perfectly by curl and adds an OPTIONS round-trip here. **Do not "tidy" this into
 do not add a `Content-Type`.**
 
 `Access-Control-Allow-Origin: *` is returned on all of it, so failures are readable.
+
+## Setting a reminder is not the same as receiving one
+
+ntfy has no accounts and no address book: it delivers to a **subscription**. Nothing arrives
+anywhere until the trainer installs the app and subscribes to *their* topic. The feature
+shipped without saying that once, and the result was a button that silently did nothing.
+
+**The how-to is `notifications.html`, and it is in the nav.** It was briefly folded into the
+events page's panel, which is wrong for one reason: reminders are armed from any page with
+something time-boxed on it, and instructions pinned to whichever list grew buttons first make
+every other page's button look self-explanatory when it is not. A page with buttons links to
+the setup page; it does not restate it.
+
+The page carries: the topic in its own labelled row with a **Copy** button, three numbered
+steps (install · subscribe · test), app links for iPhone, Android and F-Droid, `Send a test`,
+and **every reminder on the account with a Cancel**.
+
+Four things that follow and should not be undone:
+
+- **A signed-in trainer gets a topic minted on sight of either rendering** (`primeTopic()`),
+  not on first use. The setup is read *before* the first reminder, so step 2 cannot be blank.
+  One Firestore write, once in the life of an account.
+- **The topic is fixed for the life of the account.** `rotate()` is in the API and is
+  deliberately **not** a button: it would sit beside the one string the trainer just pasted
+  into the ntfy app, and pressing it to see what it does silently ends every future
+  notification with nothing on screen to say so. Break glass only for a topic that leaked.
+- **`Open in ntfy app` renders on Android only.** `ntfy://<host>/<topic>?display=<name>` is
+  documented as an *Android* deep link. It shipped unconditionally once; on iOS and on every
+  desktop it is a control that does nothing at all — no error, no app, no clue why. Guard it
+  with `isAndroid()`, and let step 2 mention the one-tap path only where it exists.
+- **Nothing refers to a button "below".** The actions column sits to the right on a desktop
+  and underneath on a phone, and half of those sentences were wrong on one of them.
+
+**The reminder list is not decoration.** A reminder is otherwise only cancellable from the
+page that set it, and the events feed rotates — an event that drops out takes its button with
+it and leaves a notification nobody can stop. `Remind.clearKey(k)` cancels by the stored key,
+which is all this list has; `clear(eventId)` is now a one-line wrapper over it.
+
+`Send a test` is the diagnostic everything points at: it publishes immediately, so a missing
+subscription is found before an event depends on it.
 
 ## The topic is the password
 
@@ -108,6 +182,7 @@ at the top of `events.js`.
 |---|---|---|
 | `index.html` | a button in each upcoming event's link row | that event starting |
 | `mega-finale.html` | the habitat **time pill**, when that window is still ahead | that habitat window opening |
+| `notifications.html` | no arming here — the setup, and a **Cancel** per reminder | — |
 
 The Mega Finale pills carry the habitat's Pokémon into the notification (`note` on
 `Remind.set`). A push is read on a lock screen, away from the page, and "Jungle habitat" on
@@ -143,8 +218,9 @@ than sit there looking like a list you could still go and complete. `app.js` der
 
 In this order — the first two are almost always it:
 
-1. **Is the topic subscribed to in the ntfy app?** Nothing arrives otherwise. This is what
-   *Send a test* in the panel is for; use it first.
+1. **Is the topic subscribed to in the ntfy app?** Nothing arrives otherwise, and this is by
+   far the most common answer. *Send a test* on `notifications.html` is exactly this check;
+   use it first, and read the three steps beside it.
 2. **Was it still `armed`?** An amber dashed button means ntfy never had it. If the page was
    not opened inside the last three days, that is working as designed.
 3. Poll the topic for what is actually pending:
@@ -164,16 +240,28 @@ const Remind = new Function('Store', 'console', src + '\n;return Remind;')(fakeS
 ```
 
 Worth asserting, all of which have a real failure mode behind them: the heads-up lands
-exactly 900s before the start; an event 5 minutes out gets the start message *only*; an event
-10 days out is armed with nothing on the server; `reconcile()` promotes it once the stored
-start moves inside the window; cancelling removes both messages; cancelling twice is not an
-error; `rotate()` drains the old topic. **Wait for the server** before asserting a poll —
+exactly 900s before the start; a 6-hour event gets **no** `-d` message; an event 60 hours out
+(inside ntfy's window *and* past the two-day floor) gets all three, with the day-before one
+exactly 86400s before the start; an event 5 minutes out gets the start message *only*; an
+event 10 days out is armed with nothing on the server; `reconcile()` promotes it once the
+stored start moves inside the window; cancelling removes **every** message; cancelling twice
+is not an error; `rotate()` drains the old topic. **Wait for the server** before asserting a poll —
 a publish is not visible for a second or two, and polling immediately reads an empty topic
 and fails every assertion for a reason unrelated to the code.
 
-In a browser, signed out, assert the page did not grow a gate, that Remind me reveals and
-flashes the panel, and that nothing was published. Stub the account to check the signed-in
-panel and **measure the contrast** of every button state — see `verify-site`.
+In a browser, signed out, assert the events page did not grow a gate, that Remind me reveals
+and flashes the strip, and that nothing was published. Stub the account for the signed-in
+states and **measure the contrast** of every button state — see `verify-site`.
+
+The strip's own assertions: it links to `notifications.html`, it still says a reminder with no
+subscription behind it arrives nowhere, it shows the topic and a Copy button, and it does
+**not** repeat the three steps.
+
+The setup page's: three steps, three https app links, a topic row with a Copy button, a test
+button, the credential warning in plain text, no *New topic* button, **no `ntfy://` link on a
+desktop and exactly one under an Android user-agent** in the documented form, the reminder
+list sorted soonest-first with Scheduled/Waiting states, Cancel calling `clearKey`, the empty
+state, and `Store.setTopic` called once when a signed-in account has no topic yet.
 
 Three traps in testing this, all of which produced a confident wrong answer here first:
 

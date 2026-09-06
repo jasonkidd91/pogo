@@ -46,7 +46,8 @@ paints before any script runs.
 | `store.js` | Collection state + canonical keys + site nav. **Single source of truth for identity.** |
 | `auth.js` | Google sign-in, the Firestore backend, the sign-in gate. Loads the Firebase SDK from the CDN. |
 | `events.js` | The events page: fetches the live feed, groups by now / next 7 days / later |
-| `remind.js` | Event reminders over ntfy.sh — the protocol, the state machine and the setup panel. Events page and Mega Finale. |
+| `remind.js` | Event reminders over ntfy.sh — the protocol, the state machine, and both renderings (`setup()` and `panel()`) |
+| `notifications.js` | The setup page: `Remind.setup()` plus every reminder on the account, with a Cancel |
 | `app.js` | The Mega Finale tracker: the flat raid list and the live-habitat clock |
 | `styles.css` | All styling |
 | `data.js` / `mega-data.js` / `max-data.js` | Data, each with its sources in the header comment |
@@ -60,10 +61,29 @@ live data — a file baked at build time would be wrong within days — so `even
 the fallback shown while the request is in flight or if it fails, and the footer line says
 which of the two you are reading.
 
-Signed in, every upcoming event carries a **Remind me** button: two push notifications, one
-15 minutes before it starts and one as it begins, sent by [ntfy.sh](https://ntfy.sh) to a
-random topic generated for the account. Install the ntfy app and subscribe to that topic, or
-nothing arrives — the panel's *Send a test* is there to find that out early.
+Signed in, every upcoming event carries a **Remind me** button. It arms up to three push
+notifications, sent by [ntfy.sh](https://ntfy.sh) to a random topic generated for the account:
+
+| Fires | Included when |
+|---|---|
+| the day before | the event is more than **two days** away |
+| 15 minutes before | the start is more than 15 minutes away |
+| as it starts | always |
+
+Setting one is not enough on its own. ntfy has no accounts — it delivers to a *subscription* —
+so nothing arrives anywhere until you install the free ntfy app and subscribe to your topic.
+That is what **`notifications.html`** is for, and it is in the nav: three numbered steps, your
+topic with a **Copy** button, app links, a *Send a test* that proves the pipe before an event
+depends on it, and every reminder on your account with a Cancel.
+
+It is a page rather than a banner on the events page because reminders are armed from more
+than one place, and each of those pages' buttons is useless until the setup is done once. A
+page with buttons gets a short strip instead: what a reminder is, how many are set, your topic,
+and a link here.
+
+Your topic does not change — it is the one string you paste into the app, so there is no *New
+topic* button beside it. And *Open in ntfy app* only appears on Android, because `ntfy://` is
+an Android deep link and does nothing anywhere else.
 
 ntfy accepts a scheduled notification at most **three days** ahead, and there is no server in
 this project, so a reminder for anything further out is held on the account and handed over
@@ -72,7 +92,8 @@ solid green means scheduled with ntfy, amber and dashed means recorded but not y
 `event-reminders` skill for the rest.
 
 The **Mega Finale** tracker has the same reminders on its habitat windows: tap any window that
-has not opened yet. It also knows when its event is over — a past window is struck through, a
+has not opened yet. (Those windows are never more than a day or so out, so the day-before push
+does not apply there.) It also knows when its event is over — a past window is struck through, a
 banner says when it finished, and the reminders disappear, while your ticks stay as the record
 of what you caught.
 

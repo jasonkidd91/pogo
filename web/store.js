@@ -208,6 +208,7 @@ function buildNav(active) {
     ['finale', 'mega-finale.html', 'Mega Finale'],
     ['megas', 'megas.html', 'Mega Pokémon'],
     ['dynamax', 'dynamax.html', 'Dynamax'],
+    ['notify', 'notifications.html', 'Notifications'],
   ];
   document.body.prepend(el('nav', { class: 'sitenav' },
     el('span', { class: 'brand', text: 'PoGO' }),

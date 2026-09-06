@@ -15,6 +15,8 @@
  *   source links       .srcs                       UI.sources()
  *   attention pulse    .flash                      UI.flash()
  *   reminders panel    .remindbox .rb-*            Remind.panel()      (remind.js)
+ *   ntfy setup steps   .rb-steps .rb-sub           Remind.setup()      (remind.js)
+ *   reminder list      .rlist .rrow .rstate        render()            (notifications.js)
  *
  * A page owns its domain-specific components and builds them from the primitives above —
  * the events page's .ecard/.erow/.ecaveat in events.js, and .remindbox/.rb-* in remind.js,
@@ -673,8 +675,10 @@ body.event-over .habitat-head h3 { color: var(--muted); }
    one — browsing is the whole point of it — so signed out this panel is not rendered at all
    until a Remind me button is pressed, and then it is the thing UI.flash() points at. */
 
+/* flex-start, not center: with the setup guide open the body runs several times the height
+   of the actions column, and centring strands those buttons halfway down an empty gutter. */
 .remindbox {
-  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4) 20px;
+  display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--sp-4) 20px;
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius); padding: var(--sp-4) var(--sp-6); margin-bottom: 28px;
 }
@@ -683,14 +687,44 @@ body.event-over .habitat-head h3 { color: var(--muted); }
 .rb-note { margin: 0; font-size: var(--fs-ui); color: var(--muted); max-width: 72ch; }
 .rb-note + .rb-note { margin-top: var(--sp-2); }
 
-/* The topic is a credential, so it is shown in a monospace box that reads as one and is
-   easy to copy — not woven into a sentence. */
+/* The topic is a credential, so it gets a labelled row of its own and a monospace box that
+   reads as one — not a phrase woven into a sentence. It is also the single thing someone has
+   to carry into the ntfy app, so Copy sits next to it rather than in the actions row. */
+.rb-topicrow {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--sp-2) var(--sp-3); margin-top: var(--sp-3);
+}
+.rb-label {
+  font-size: var(--fs-sub); color: var(--muted);
+  text-transform: uppercase; letter-spacing: .05em;
+}
 .rb-topic {
-  display: inline-block; margin-top: var(--sp-3); padding: 3px var(--sp-3);
+  display: inline-block; padding: 3px var(--sp-3);
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: var(--fs-sub); color: var(--text);
   background: var(--surface-2); border: 1px solid var(--border-bright);
   border-radius: var(--r-md); user-select: all; word-break: break-all;
+}
+
+/* The setup steps, on notifications.html. Setting a reminder and receiving one are different
+   things — ntfy delivers to a subscription, not to a person — so the how-to gets a page, and
+   a page with reminder buttons gets the strip above and a link to it. */
+.rb-steps {
+  margin: var(--sp-4) 0 0; padding-left: 1.4em;
+  font-size: var(--fs-ui); color: var(--muted); max-width: 72ch;
+}
+.rb-steps li { margin-bottom: var(--sp-3); line-height: 1.6; }
+.rb-steps li:last-child { margin-bottom: 0; }
+/* Beats `.remindbox strong`, which is the panel's heading and would turn each step number
+   into a block-level title. Same specificity, later in the file. */
+.rb-steps strong { display: inline; font-size: inherit; margin: 0; color: var(--text); }
+.rb-sub { display: block; margin-top: 3px; font-size: var(--fs-sub); color: var(--muted); }
+.rb-link { color: var(--accent); text-decoration: none; }
+.rb-link:hover { text-decoration: underline; }
+/* No opacity here, deliberately: a dimmed aside on this surface measured 2:1 last time. */
+.rb-warn {
+  margin-top: var(--sp-4); padding-left: var(--sp-3);
+  border-left: 2px solid var(--border-bright);
 }
 .rb-acts { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; }
 .rb-status { font-size: var(--fs-sub); color: var(--muted); width: 100%; margin: 0; }
@@ -709,7 +743,33 @@ button.elink[disabled] { opacity: .5; cursor: default; }
    because it is a weaker promise than the solid one, and the tooltip says why. */
 .elink.on.armed { color: var(--e200); border-color: var(--e200); border-style: dashed; }
 
+/* ---------- the reminder list (notifications.js) ---------- */
+/* A reminder is otherwise only cancellable from the page that set it, and the events feed
+   rotates — so this is the one place that lists what is actually on the account. */
+
+.rlist { display: flex; flex-direction: column; gap: var(--sp-2); }
+.rrow {
+  display: flex; align-items: center; gap: var(--sp-2) var(--sp-4); flex-wrap: wrap;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: var(--sp-3) var(--sp-4);
+}
+.rmain { flex: 1; min-width: 200px; }
+.rname { display: block; color: var(--text); font-size: var(--fs-name); font-weight: 600;
+         text-decoration: none; }
+a.rname:hover { color: var(--accent); }
+.rmeta { font-size: var(--fs-sub); color: var(--muted); margin-top: 2px; }
+/* Same two states as the buttons, same colours, same dashed-vs-solid distinction — a state
+   that reads one way on an event row and another way in this list is worse than no list. */
+.rstate {
+  font-size: var(--fs-sub); font-weight: 600; color: var(--done);
+  border: 1px solid var(--done); border-radius: var(--r-lg); padding: 2px var(--sp-3);
+}
+.rstate.armed { color: var(--e200); border-color: var(--e200); border-style: dashed; }
+
 @media (max-width: 560px) {
   .remindbox { padding: var(--sp-4); }
   .rb-acts { width: 100%; }
+  /* The label takes its own line so the topic and its Copy button stay on one — the topic is
+     25 monospace characters and the pair does not fit beside a label on a phone. */
+  .rb-label { flex-basis: 100%; }
 }

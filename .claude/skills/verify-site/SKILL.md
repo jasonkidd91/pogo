@@ -117,6 +117,23 @@ that this page does *not* become a tracker page:
   (`Store.reminders.length === 0 && Store.ntfyTopic === null`)
 - every `.erow` has a Remind me button and no `.ecard` does
 
+Signed in (stubbed), the strip must **point at** the setup page rather than be it: a
+`notifications.html` link, the topic with a Copy button, no `.rb-steps`, and no *New topic*.
+
+`notifications.html` is its own suite, because the setup is what makes the feature work at all
+— ntfy delivers to a subscription, not to a person. Assert three `.rb-steps > li`, three https
+app links, a `.rb-topicrow` with a Copy button, a test, the credential warning in plain text,
+the reminder list (soonest first, Scheduled vs Waiting, Cancel, empty state), and
+`Store.setTopic` called once when a signed-in account has no topic yet. Measure the contrast
+of every line — step text, `.rb-sub`, `.rb-link`, `.rb-warn`, `.rname`, `.rmeta`, `.rstate` —
+not just the buttons.
+
+**The Android deep link needs a second browser context.** `ntfy://` is documented for the
+Android app only, and it shipped unconditionally once — dead everywhere else. Assert zero
+`a[href^="ntfy://"]` on the default user-agent and exactly one under an Android one
+(`browser.newContext({ userAgent: … Android … })`), in the
+`ntfy://ntfy.sh/<topic>?display=<name>` form.
+
 Google sign-in is unreachable headlessly, so stub the account to see the rest — and
 **measure the two "set" states' contrast** rather than trusting the colours:
 
