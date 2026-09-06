@@ -106,6 +106,31 @@ with a `MAX SPIRIT` badge — combat power and Max role are separate on purpose.
 
 Has no tracker and must have **no gate**. See the `update-events` skill for its assertions.
 
+Its reminders feature adds a signed-out contract worth asserting, because the whole point is
+that this page does *not* become a tracker page:
+
+- **no `#authgate`, and no `data-tracker` attribute** — the reminders panel does the asking
+- the panel is `hidden` until Remind me is pressed, then visible, flashed, and focused
+- nothing is published and no topic is generated while signed out
+  (`Store.reminders.length === 0 && Store.ntfyTopic === null`)
+- every `.erow` has a Remind me button and no `.ecard` does
+
+Google sign-in is unreachable headlessly, so stub the account to see the rest — and
+**measure the two "set" states' contrast** rather than trusting the colours:
+
+```js
+Object.defineProperty(Store, 'locked',    { get: () => false });
+Object.defineProperty(Store, 'reminders', { get: () => [...] });
+Remind.status = () => 'scheduled';   // then 'armed'
+render();
+```
+
+Both must clear 4.5:1, and the armed variant must be **dashed** — "recorded but not yet
+handed to ntfy" is a weaker promise than "scheduled", and it must not rest on colour alone.
+
+The scheduling state machine itself is tested without a browser, against the real ntfy.sh —
+see the `event-reminders` skill.
+
 ### Mobile, at 390x844
 
 - the sticky summary collapses to a ~50px strip once scrolled, and is pinned to the top

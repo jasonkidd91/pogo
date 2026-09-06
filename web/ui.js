@@ -273,6 +273,23 @@ function empty(text) {
   return el('p', { class: 'empty', text });
 }
 
+/**
+ * Draw the eye to a panel that answers what was just clicked — the sign-in gate when a
+ * locked card is ticked, the reminders panel when a signed-out "Remind me" is pressed.
+ * Scrolls it into view, pulses its border, and focuses its first control.
+ *
+ * Generic on purpose: it is an interaction, not an auth thing, and the second caller is
+ * what proved that. `.flash` respects prefers-reduced-motion in styles.css.
+ */
+function flash(node) {
+  if (!node) return;
+  node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  node.classList.remove('flash');
+  void node.offsetWidth;                 // restart the animation
+  node.classList.add('flash');
+  node.querySelector('button, a')?.focus({ preventScroll: true });
+}
+
 /** Footer source links — where the numbers on this page came from. */
 function sources(intro, links, note) {
   return el('div', { class: 'srcs' },
@@ -408,7 +425,7 @@ function setBar(done, total) {
 
 const UI = {
   el, tag, typePills, raidPill, rankChip, powerLine, energyPill, sprite, checkMark,
-  monCard, sectionHead, grid, empty, sources,
+  monCard, sectionHead, grid, empty, sources, flash,
   summary, setupControls, activeFilter, searchText, statusMatch, STATUS_FILTER,
   setStat, setBar, ART_BASE,
 };

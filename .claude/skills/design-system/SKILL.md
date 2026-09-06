@@ -57,6 +57,8 @@ UI.grid(kind, kids)              'default' | 'wide' | 'events'
 UI.empty(text)
 UI.sources(intro, links, note)
 
+UI.flash(node)                   pulse a panel that answers what was just clicked
+
 UI.summary(target, cfg)          stats + bar + search + Reset + filter chips
 UI.setupControls({onChange, prefix, resetPrompt})
 UI.activeFilter(group) · UI.searchText() · UI.statusMatch(key, mode) · UI.STATUS_FILTER
@@ -104,6 +106,12 @@ first chip row — giving it a row of its own leaves a visibly empty strip.
    the two files and is the first thing a future session reads.
 4. Add an assertion to the design-system check in `verify-site` if it has an invariant.
 
+A component that is *generic* goes in `ui.js`; one that belongs to a single page is built in
+that page's script **from `UI.el`/`UI.tag`**, which is why `.ecard`, `.erow` and `.remindbox`
+live in `events.js`. `UI.flash()` moved the other way and is the example to follow: it started
+as auth.js's "flash the sign-in gate", and the moment a second page needed to point at a
+different panel it became a primitive rather than being copied.
+
 ## Traps
 
 - **`list.length && el(…)` renders a literal `0`.** An empty array's `.length` is the number
@@ -122,6 +130,11 @@ first chip row — giving it a row of its own leaves a visibly empty strip.
   rank chips were translucent or hollow for B, C and D and became unreadable once ticked. Every
   grade is a filled chip clearing **4.5:1**, and the chip barely dims — a browser check measures
   the ratio rather than trusting the eye.
+- **`[hidden]` loses to any class that sets `display`.** The UA rule is `display: none` at
+  the lowest possible specificity, so `.remindbox { display: flex }` silently beat it and a
+  panel that had set `el.hidden = true` stayed on screen. `[hidden] { display: none
+  !important }` sits with the reset at the top of `styles.css` for exactly this. Toggling
+  `el.hidden` is the right way to show and hide a panel; that line is what makes it work.
 - **Card text costs more than it looks.** Anything on a card is read on every card. The rank
   line used to carry a placing and a price — "#2 of 4 Bug Megas, behind Mega Heracross · 100
   energy" — and it was noise. It is now the number and the moveset, nothing else.

@@ -13,11 +13,15 @@
  *   Pokemon card       .card .card.mon .super      UI.monCard()
  *   empty state        .empty                      UI.empty()
  *   source links       .srcs                       UI.sources()
+ *   attention pulse    .flash                      UI.flash()
+ *
+ * A page owns its domain-specific components and builds them from the primitives above —
+ * the events page's .ecard/.erow/.ecaveat in events.js, and its .remindbox in the same file.
  *
  * THE PILL FAMILY. Small labels share geometry but not size, on purpose — a raid pill has to
  * fit "LEGENDARY MEGA" on one line in a narrow card, so it runs smaller than a type badge:
  *
- *   .type      10px   species typing            .rank      18px box  worth-investing grade
+ *   .type      10px   species typing            .rank      18px box  combat-power grade
  *   .raid      9.5px  battle class + stars      .energy    11px      Mega Energy cost
  *   .tag-new / .tag-attack / .tag-weather / .tag-role      10px      card badges
  *   .etype / .gtag / .ctag                                 events page labels
@@ -72,6 +76,12 @@
 }
 
 * { box-sizing: border-box; }
+
+/* The UA's rule for [hidden] is `display: none` at the lowest possible specificity, so ANY
+   class that sets display — `.remindbox { display: flex }` — silently beats it and the
+   element stays on screen. Toggling `el.hidden` is the readable way to show and hide a
+   panel; this is what makes it actually work. */
+[hidden] { display: none !important; }
 
 body {
   margin: 0;
@@ -425,13 +435,15 @@ footer .srcs { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 6px; }
 .authgate.bad { border-color: #f87171; }
 .authgate.bad strong { color: #f87171; }
 
-/* Fired by Auth.prompt() when a locked card is clicked. */
-@keyframes gate-flash {
+/* UI.flash() — "the answer to what you just clicked is here". The sign-in gate when a locked
+   card is ticked, the reminders panel when a signed-out Remind me is pressed. Generic
+   because it is an interaction, not an auth thing. */
+@keyframes flash {
   0%, 100% { border-color: var(--border-bright); }
   30%      { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(91,140,255,.18); }
 }
-.authgate.flash { animation: gate-flash .9s ease 2; }
-@media (prefers-reduced-motion: reduce) { .authgate.flash { animation: none; } }
+.flash { animation: flash .9s ease 2; }
+@media (prefers-reduced-motion: reduce) { .flash { animation: none; } }
 
 /* Signed out the lists still read fine, but nothing looks tickable. */
 body.signed-out .card,
@@ -623,3 +635,49 @@ body.signed-out #reset { opacity: .4; }
 .ecaveat[data-k="costume"] .ctag,
 .ecaveat[data-k="shiny"] .ctag { color: var(--super); }
 .erow .ecaveat { font-size: 11.5px; }
+
+/* ---------- reminders (events page) ---------- */
+/* Deliberately a strip, not a banner. The events page has no sign-in gate and must not grow
+   one — browsing is the whole point of it — so signed out this panel is not rendered at all
+   until a Remind me button is pressed, and then it is the thing UI.flash() points at. */
+
+.remindbox {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4) 20px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: var(--sp-4) var(--sp-6); margin-bottom: 28px;
+}
+.remindbox .rb-body { flex: 1; min-width: 260px; }
+.remindbox strong { display: block; font-size: var(--fs-name); margin-bottom: var(--sp-1); }
+.rb-note { margin: 0; font-size: var(--fs-ui); color: var(--muted); max-width: 72ch; }
+.rb-note + .rb-note { margin-top: var(--sp-2); }
+
+/* The topic is a credential, so it is shown in a monospace box that reads as one and is
+   easy to copy — not woven into a sentence. */
+.rb-topic {
+  display: inline-block; margin-top: var(--sp-3); padding: 3px var(--sp-3);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: var(--fs-sub); color: var(--text);
+  background: var(--surface-2); border: 1px solid var(--border-bright);
+  border-radius: var(--r-md); user-select: all; word-break: break-all;
+}
+.rb-acts { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; }
+.rb-status { font-size: var(--fs-sub); color: var(--muted); width: 100%; margin: 0; }
+.rb-status.bad { color: #f87171; }
+.rb-status.ok { color: var(--done); }
+
+/* Remind me, on an upcoming event's row. Sits in .elinks beside Details, so it takes the
+   .elink shape — button, not link, because it performs an action. */
+button.elink {
+  font: inherit; font-size: var(--fs-sub); background: none; cursor: pointer;
+  line-height: 1.55;
+}
+button.elink[disabled] { opacity: .5; cursor: default; }
+.elink.on { color: var(--done); border-color: var(--done); font-weight: 600; }
+/* Recorded, but the event is still further out than ntfy accepts a schedule for. Dashed
+   because it is a weaker promise than the solid one, and the tooltip says why. */
+.elink.on.armed { color: var(--e200); border-color: var(--e200); border-style: dashed; }
+
+@media (max-width: 560px) {
+  .remindbox { padding: var(--sp-4); }
+  .rb-acts { width: 100%; }
+}

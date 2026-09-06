@@ -13,6 +13,11 @@
  * not the browser. This file holds the in-memory set and the identity rules only; auth.js
  * owns Firebase and installs itself as the backend via Store._install().
  *
+ * The same document also carries the events page's reminders and its ntfy topic (see
+ * remind.js). They are separate top-level fields written separately, and every write is a
+ * merge, so a reminder and a tick never overwrite one another. Same free-tier reasoning as
+ * the catch list: one document, one read, arrays rewritten whole.
+ *
  * SIGNED OUT THERE IS NO STORE. The set stays empty, `locked` is true, and every toggle is
  * refused — the lists still render, but nothing can be ticked. That is deliberate: a
  * browser-local fallback would silently diverge from the account and then have to be
@@ -37,9 +42,11 @@ const Store = (() => {
   };
 
   let set = new Set();
-  let user = null;     // { uid, name, email, photo } once signed in
-  let loaded = false;  // the first Firestore snapshot has landed
-  let backend = null;  // { save(keys) } — installed by auth.js
+  let user = null;      // { uid, name, email, photo } once signed in
+  let loaded = false;   // the first Firestore snapshot has landed
+  let backend = null;   // { save(keys), saveNow(patch) } — installed by auth.js
+  let reminders = [];   // events-page reminders; shape is remind.js's business
+  let ntfy = null;      // the ntfy topic this account publishes its reminders to
 
   const emit = () => listeners.forEach((fn) => fn());
 
@@ -56,6 +63,10 @@ const Store = (() => {
     get locked() { return !user; },
     /** True once this account's saved progress has actually arrived. */
     get loaded() { return loaded; },
+    /** Event reminders on this account. Read-only here — set them via setReminders. */
+    get reminders() { return reminders; },
+    /** The ntfy topic reminders are published to, or null until the first one is set. */
+    get ntfyTopic() { return ntfy; },
 
     has: (k) => set.has(k),
     count: (keys) => keys.reduce((n, k) => n + (set.has(k) ? 1 : 0), 0),
@@ -89,13 +100,54 @@ const Store = (() => {
 
     onChange(fn) { listeners.add(fn); },
 
+    /* ---------- reminders (events page) ---------- */
+    //
+    // Unlike a tick, setting a reminder is paired with a call to an outside service, so it
+    // is written immediately rather than through the 1.5s debounce — the caller has to know
+    // it landed. Both apply optimistically and roll back if the write is refused, so the
+    // button never settles on a state the account does not actually hold.
+
+    async setReminders(list) {
+      const before = reminders;
+      reminders = list;
+      emit();
+      try {
+        await backend?.saveNow({ reminders: list });
+      } catch (err) {
+        reminders = before;
+        emit();
+        throw err;
+      }
+    },
+
+    async setTopic(topic) {
+      const before = ntfy;
+      ntfy = topic;
+      emit();
+      try {
+        await backend?.saveNow({ ntfy: { topic } });
+      } catch (err) {
+        ntfy = before;
+        emit();
+        throw err;
+      }
+    },
+
     /* ---------- wiring, for auth.js only ---------- */
 
     _install(b) { backend = b; },
     /** Called on every auth transition. Progress arrives separately, via _receive. */
-    _setUser(u) { user = u; loaded = false; set = new Set(); emit(); },
-    /** A Firestore snapshot landed. */
-    _receive(keys) { set = new Set(keys); loaded = true; emit(); },
+    _setUser(u) {
+      user = u; loaded = false; set = new Set(); reminders = []; ntfy = null; emit();
+    },
+    /** A Firestore snapshot landed. `doc` is the whole document, or null for a new account. */
+    _receive(keys, doc) {
+      set = new Set(keys);
+      reminders = (doc && doc.reminders) || [];
+      ntfy = (doc && doc.ntfy && doc.ntfy.topic) || null;
+      loaded = true;
+      emit();
+    },
     /** Everything ticked before sign-in existed, for the one-time upgrade. */
     _legacy() {
       try { return JSON.parse(localStorage.getItem(LEGACY_KEY) || '[]'); } catch { return []; }

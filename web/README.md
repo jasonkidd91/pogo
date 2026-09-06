@@ -46,6 +46,7 @@ paints before any script runs.
 | `store.js` | Collection state + canonical keys + site nav. **Single source of truth for identity.** |
 | `auth.js` | Google sign-in, the Firestore backend, the sign-in gate. Loads the Firebase SDK from the CDN. |
 | `events.js` | The events page: fetches the live feed, groups by now / next 7 days / later |
+| `remind.js` | Event reminders over ntfy.sh — the protocol and the state machine, no DOM. Events page only. |
 | `app.js` | The Mega Finale tracker: the flat raid list and the live-habitat clock |
 | `styles.css` | All styling |
 | `data.js` / `mega-data.js` / `max-data.js` | Data, each with its sources in the header comment |
@@ -58,6 +59,17 @@ paints before any script runs.
 live data — a file baked at build time would be wrong within days — so `events-data.js` is only
 the fallback shown while the request is in flight or if it fails, and the footer line says
 which of the two you are reading.
+
+Signed in, every upcoming event carries a **Remind me** button: two push notifications, one
+15 minutes before it starts and one as it begins, sent by [ntfy.sh](https://ntfy.sh) to a
+random topic generated for the account. Install the ntfy app and subscribe to that topic, or
+nothing arrives — the panel's *Send a test* is there to find that out early.
+
+ntfy accepts a scheduled notification at most **three days** ahead, and there is no server in
+this project, so a reminder for anything further out is held on the account and handed over
+the first time you open the page inside that window. The button shows which state it is in:
+solid green means scheduled with ntfy, amber and dashed means recorded but not yet. See the
+`event-reminders` skill for the rest.
 
 Events also carry **caveats** — up to four flagged notes for the things that are easy to miss:
 the exclusive-move deadline (often a different time from the end of the event), a regional

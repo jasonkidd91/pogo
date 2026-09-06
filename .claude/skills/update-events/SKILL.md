@@ -1,6 +1,6 @@
 ---
 name: update-events
-description: Refresh or fix the "What's on" events page on the pogo site (web/index.html, web/events.js, web/events-data.js). Use when the events page shows stale, wrong or missing events, when an event has no description, when the live feed breaks or its shape changes, when a new event type appears, or when the user asks to add a catch tracker link for an event. Runs scripts/update_events.py and verifies in a browser.
+description: Refresh or fix the "What's on" events page on the pogo site (web/index.html, web/events.js, web/events-data.js). Use when the events page shows stale, wrong or missing events, when an event has no description, when the live feed breaks or its shape changes, when a new event type appears, when the user asks to add a catch tracker link for an event, or when something on the page other than a reminder misbehaves (reminders have their own skill, event-reminders). Runs scripts/update_events.py and verifies in a browser.
 ---
 
 # Update the events page
@@ -133,6 +133,18 @@ const TRACKERS = {
 
 An event appearing on this page is not a request for a tracker.
 
+## Reminders live here too
+
+Every upcoming row carries a **Remind me** button, backed by `web/remind.js`. That is a
+feature with its own failure modes and its own server limits — see the **`event-reminders`**
+skill before touching it. Two things about it constrain this page:
+
+- **This page still has no sign-in gate, and must not grow one.** Signing in is required for
+  a reminder and for nothing else here. The reminders panel does the asking, and signed out
+  it is not rendered at all until someone presses the button.
+- **`remind.js` loads only on `index.html`**, between `auth.js` and the data file. `events.js`
+  requires it.
+
 ## Rendering
 
 `events.js` builds nothing by hand — cards, rows, pills, headings and empty states all come
@@ -172,5 +184,7 @@ Use the `verify-site` skill, which covers this page. The events-specific asserti
 - caveats render with a label **and** a quoted sentence, the label is not glued to the text,
   and the Community Day exclusive-move deadline is among them,
 - there is **no sign-in gate** — this page has no `data-tracker` attribute and nothing to tick,
+- signed out, Remind me reveals and flashes the reminders panel and publishes nothing, and
+  every upcoming row has a button while no live card does,
 - the design-system checks pass: five layout landmarks, every chip carries `data-group` and
   `aria-pressed`, one pressed per group, every chip row labelled.

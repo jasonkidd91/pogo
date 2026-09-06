@@ -80,13 +80,28 @@ const Auth = (() => {
     }
   }
 
+  /**
+   * An immediate, awaited write of one or more top-level fields — used by the events page's
+   * reminders, where the caller has to know the state landed before it tells the user so,
+   * and where the change is paired with a call to ntfy.
+   *
+   * Every write here merges, so `caught` and `reminders` are written independently and a
+   * tick in flight never overwrites a reminder. Still one document and one read: this does
+   * not reopen the "split it into a subcollection" question the budget note above settles.
+   */
+  async function saveNow(patch) {
+    if (!ref) throw new Error('Not signed in');
+    await fb.setDoc(ref, { ...patch, updatedAt: fb.serverTimestamp() }, { merge: true });
+  }
+
   function watch(uid) {
     ref = fb.doc(fb.db, 'users', uid);
     let seeded = false;
     unsub = fb.onSnapshot(
       ref,
       (snap) => {
-        const keys = snap.exists() ? (snap.data().caught || []) : [];
+        const data = snap.exists() ? snap.data() : null;
+        const keys = (data && data.caught) || [];
         // First answer from the server (not the offline cache) for a brand-new account:
         // adopt whatever this browser had ticked before sign-in existed, once, then let
         // the legacy key go so a second account here doesn't inherit it too.
@@ -95,12 +110,12 @@ const Auth = (() => {
           const legacy = Store._legacy();
           Store._dropLegacy();
           if (!snap.exists() && legacy.length) {
-            Store._receive(legacy);
+            Store._receive(legacy, null);
             queue(legacy);
             return;
           }
         }
-        Store._receive(keys);
+        Store._receive(keys, data);
       },
       (err) => {
         // Almost always firestore.rules denying the read, or Firestore not enabled yet.
@@ -149,7 +164,7 @@ const Auth = (() => {
     // Always let the account be chosen — shared devices are common for this.
     fb.provider.setCustomParameters({ prompt: 'select_account' });
 
-    Store._install({ save: queue });
+    Store._install({ save: queue, saveNow });
 
     auth.onAuthStateChanged(fb.auth, (user) => {
       if (unsub) { unsub(); unsub = null; }
@@ -339,13 +354,10 @@ const Auth = (() => {
     /** A locked card was clicked — draw the eye to the gate. */
     prompt() {
       paintGate();
-      const gate = document.getElementById('authgate');
-      if (!gate) return;
-      gate.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      gate.classList.remove('flash');
-      void gate.offsetWidth; // restart the animation
-      gate.classList.add('flash');
-      gate.querySelector('button')?.focus({ preventScroll: true });
+      UI.flash(document.getElementById('authgate'));
     },
+    /** The Google button, for pages that gate a feature without a full sign-in gate — the
+     *  events page has nothing to tick, so it must not grow one. */
+    googleButton,
   };
 })();
