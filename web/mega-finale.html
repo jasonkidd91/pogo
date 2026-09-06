@@ -8,6 +8,8 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27%235b8cff%27/%3E%3Cpath d=%27M2 16h28%27 stroke=%27%230f1219%27 stroke-width=%273%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%230f1219%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%23e8ecf4%27/%3E%3C/svg%3E">
 <!-- auth.js pulls the Firebase SDK from here; warm the connection during parse. -->
 <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<!-- where habitat-window reminders are published and cancelled -->
+<link rel="preconnect" href="https://ntfy.sh">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body data-tracker>
@@ -27,11 +29,23 @@
 
   <div class="summary"></div>
 
+  <!-- Filled by Remind.panel() from app.js. This page has its own sign-in gate, so the
+       panel never has to ask; it disappears entirely once the event is over. -->
+  <div id="reminders" class="remindbox" hidden></div>
+
   <main id="days"></main>
 
   <footer>
     <strong>Event:</strong> Sat 5 – Sun 6 September 2026, 10:00 – 18:00 local time each day.
     Four habitats per day, each running twice. One raid pass counted per Pokémon.
+    <p>
+      <strong>Reminders.</strong> Signed in, tap any habitat window that has not opened yet to
+      get a push 15 minutes before it does, and another as it opens — delivered by
+      <a href="https://ntfy.sh/">ntfy.sh</a>, which needs its free app installed and your topic
+      subscribed to. A window that is open now, or already past, is not tappable. Once the last
+      window closes the page says so and stops offering reminders; your ticks stay as a record
+      of what you caught.
+    </p>
     <div class="srcs">
       <span>Verified against</span>
       <a id="ev-official" href="https://pokemongo.com/gofest/megafinale">pokemongo.com (official)</a>
@@ -51,6 +65,7 @@
 <script src="ui.js"></script>
 <script src="store.js"></script>
 <script src="auth.js"></script>
+<script src="remind.js"></script>
 <script src="data.js"></script>
 <script src="app.js"></script>
 </body>

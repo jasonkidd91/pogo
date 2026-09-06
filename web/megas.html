@@ -42,6 +42,11 @@
       Megas tagged <strong>GO ORIGINAL</strong> have no mainline counterpart, so they show
       base-species artwork.
     </p>
+    <p>
+      <strong>Match: Whole family</strong> widens the search to a Pokémon's whole evolution
+      line, so searching <em>Weedle</em> finds Mega Beedrill. The families come from the
+      game's own data file, not from a list typed out here.
+    </p>
     <div class="srcs">
       <span>Parsed from</span>
       <a href="https://bulbapedia.bulbagarden.net/wiki/Mega_Evolution_(GO)">Bulbapedia — Mega Evolution (GO)</a>
@@ -66,6 +71,7 @@ UI.summary('.summary', {
   reset: true,
   filters: [
     UI.STATUS_FILTER,
+    UI.FAMILY_FILTER,
     { label: 'Raid', group: 'raid', options: [
       ['all', 'Any'], ['mega', 'Mega ★4'], ['primal', 'Primal ★5'], ['legendary', 'Legendary ★6']] },
     { label: 'Power', group: 'rank', options: [
@@ -99,11 +105,8 @@ function visible(m) {
   const raid = UI.activeFilter('raid');
   if (raid !== 'all' && m.raid !== RAID_FILTER[raid]) return false;
   if (!UI.statusMatch(m.key, UI.activeFilter('status'))) return false;
-  const q = UI.searchText();
-  if (q && !(m.name.toLowerCase().includes(q) ||
-             (m.raid || '').toLowerCase().includes(q) ||
-             (m.moves || '').toLowerCase().includes(q) ||
-             (m.types || []).some((t) => t.toLowerCase().includes(q)))) return false;
+  // Whole family match is opt-in via the Match chips — see UI.searchMatch.
+  if (!UI.searchMatch(m, [m.name, m.raid, m.moves, ...(m.types || [])])) return false;
   return true;
 }
 

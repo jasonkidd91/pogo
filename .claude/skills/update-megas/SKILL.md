@@ -118,3 +118,10 @@ percentile of every fully evolved Pokémon and Mega in the game — plus the num
 the moveset it assumes. It says nothing about Mega Energy cost or type coverage; that was
 tried and removed. It has its own skill: **`update-ranks`**. Go there before changing a band,
 the damage model, or what the card prints.
+
+## The `fam` field
+
+Each entry carries its evolution family, so the page can offer "search the whole family".
+It is computed by `gamemaster.families()` and is absent for a species that is its own whole
+family. See the **`family-search`** skill before changing it — the guard that a family never
+exceeds 12 species is what stops a merged evolution graph from quietly poisoning the search.

@@ -46,7 +46,7 @@ paints before any script runs.
 | `store.js` | Collection state + canonical keys + site nav. **Single source of truth for identity.** |
 | `auth.js` | Google sign-in, the Firestore backend, the sign-in gate. Loads the Firebase SDK from the CDN. |
 | `events.js` | The events page: fetches the live feed, groups by now / next 7 days / later |
-| `remind.js` | Event reminders over ntfy.sh — the protocol and the state machine, no DOM. Events page only. |
+| `remind.js` | Event reminders over ntfy.sh — the protocol, the state machine and the setup panel. Events page and Mega Finale. |
 | `app.js` | The Mega Finale tracker: the flat raid list and the live-habitat clock |
 | `styles.css` | All styling |
 | `data.js` / `mega-data.js` / `max-data.js` | Data, each with its sources in the header comment |
@@ -70,6 +70,18 @@ this project, so a reminder for anything further out is held on the account and 
 the first time you open the page inside that window. The button shows which state it is in:
 solid green means scheduled with ntfy, amber and dashed means recorded but not yet. See the
 `event-reminders` skill for the rest.
+
+The **Mega Finale** tracker has the same reminders on its habitat windows: tap any window that
+has not opened yet. It also knows when its event is over — a past window is struck through, a
+banner says when it finished, and the reminders disappear, while your ticks stay as the record
+of what you caught.
+
+## Searching a whole evolution family
+
+`megas.html` and `dynamax.html` have a **Match** chip: *Exact*, or *Whole family*. On Whole
+family, searching one name also finds its evolution line — `weedle` finds Mega Beedrill,
+`pichu` finds Mega Raichu. The families are read out of the game's own data file, not typed
+out here.
 
 Events also carry **caveats** — up to four flagged notes for the things that are easy to miss:
 the exclusive-move deadline (often a different time from the end of the event), a regional

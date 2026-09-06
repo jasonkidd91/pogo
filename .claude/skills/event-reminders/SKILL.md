@@ -1,6 +1,6 @@
 ---
 name: event-reminders
-description: The events page's Remind me button — scheduled push notifications via ntfy.sh, the topic that acts as the user's password, and the three-day scheduling limit that shapes the whole design. Use when a reminder does not arrive, when changing what a notification says or when it fires, when working on web/remind.js or the reminders panel in events.js, or when extending reminders to another page.
+description: Remind me on the events page and the Mega Finale habitat windows — scheduled push notifications via ntfy.sh, the topic that acts as the user's password, and the three-day scheduling limit that shapes the whole design. Use when a reminder does not arrive, when changing what a notification says or when it fires, when working on web/remind.js or a page's reminder button, or when extending reminders to another page.
 ---
 
 # Event reminders
@@ -11,10 +11,17 @@ delivered by [ntfy.sh](https://ntfy.sh).
 
 | File | Owns |
 |---|---|
-| `web/remind.js` | The protocol and the state machine. No DOM. Its header is the spec. |
-| `web/events.js` | The button, the panel and every word the user reads. |
+| `web/remind.js` | The whole feature: protocol, state machine, **and the setup panel**. Its header is the spec. |
+| `web/events.js` | The event-row button's shape |
+| `web/app.js` | The Mega Finale habitat-window pill's shape, and the finished-event state |
 | `web/store.js` | `reminders` and `ntfyTopic` on the account, and the immediate-write path |
 | `web/auth.js` | `saveNow()` — an awaited, merging Firestore write |
+
+**The panel lives in `remind.js`, not in a page.** Two pages render it, and copying it into
+each is exactly the drift the design system exists to stop. What a page *does* own is its
+button: `Remind.buttonState(id)` hands over the three states and their wording, and the page
+decides the shape — a link-row button on the events page, a tappable time pill on Mega
+Finale. Add a third caller the same way; do not re-derive the wording.
 
 ## The one fact that shapes everything
 
@@ -95,6 +102,30 @@ resolves both correctly, and turning that moment back into text for ntfy's natur
 parser to re-read is how a Community Day reminder would land an hour out. See the TIME note
 at the top of `events.js`.
 
+## Where the buttons are
+
+| Page | Control | What is reminded |
+|---|---|---|
+| `index.html` | a button in each upcoming event's link row | that event starting |
+| `mega-finale.html` | the habitat **time pill**, when that window is still ahead | that habitat window opening |
+
+The Mega Finale pills carry the habitat's Pokémon into the notification (`note` on
+`Remind.set`). A push is read on a lock screen, away from the page, and "Jungle habitat" on
+its own is not something you can act on.
+
+## A tracker outlives its event
+
+The Mega Finale page keeps working long after the event ends, and it has to say so rather
+than sit there looking like a list you could still go and complete. `app.js` derives
+`EVENT_END` from the habitat windows themselves — nothing is hard-coded — and:
+
+- a **past** window is drawn struck through and unfilled; a window that is **open now** is
+  green and *not* a button, because there is nothing left to be reminded about;
+- once the last window closes, a banner says when it finished and points at What's on, no
+  window is tappable, and the reminders panel is hidden entirely (`Remind.panel(..., { hidden })`);
+- **the ticks stay.** Past the event this page is the record of what you caught, and wiping
+  it would be the wrong answer to "it's over". Reset is still there for anyone who wants it.
+
 ## Things that look like omissions but aren't
 
 - **The events page has no sign-in gate and must not grow one.** Browsing is the whole point
@@ -102,7 +133,9 @@ at the top of `events.js`.
   all until someone presses Remind me — then `UI.flash()` points at it.
 - **Live events get no button.** A reminder for something already running is nothing to act
   on.
-- **Reminders are not on the tracker pages.** `remind.js` loads only on `index.html`.
+- **Reminders are not on the collection pages.** `megas.html` and `dynamax.html` list species,
+  not scheduled things — there is no time to be reminded about. `remind.js` loads on
+  `index.html` and `mega-finale.html` only.
 - **A finished event's reminder is pruned** by `reconcile()` after a day, or the account
   document grows forever.
 
@@ -140,6 +173,22 @@ and fails every assertion for a reason unrelated to the code.
 
 In a browser, signed out, assert the page did not grow a gate, that Remind me reveals and
 flashes the panel, and that nothing was published. Stub the account to check the signed-in
-panel and **measure the contrast** of both button states — see `verify-site`.
+panel and **measure the contrast** of every button state — see `verify-site`.
+
+Three traps in testing this, all of which produced a confident wrong answer here first:
+
+- **Stub `Remind.buttonState`, not `Remind.status`.** A page renders from the former, and it
+  calls the module-private `status()` directly — replacing the exported one is not observed.
+- **Faking the page clock does not fake ntfy's.** Shifting `Date` to reach a habitat window
+  that has already passed in real time gets the publish rejected (40004) and the reminder
+  silently never records. Anything that arms a *real* reminder needs a genuinely future time;
+  use the shifted clock only for what the page renders.
+- **Let the style settle.** Adding a state class and reading `getComputedStyle` in the same
+  breath returned the pre-class colour here and made three passing states look like failures.
 
 Clean up after a test run: leave nothing scheduled on a test topic.
+
+**Space out the suites that touch ntfy.** ntfy allows 60 requests of burst per visitor and
+refills one per five seconds. Running the protocol suite and the browser suite back to back
+exhausts it, and the failure surfaces as a Playwright timeout rather than as a 429 — which
+reads like a code bug and is not one. Run them a minute apart, or one at a time.

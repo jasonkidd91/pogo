@@ -6,10 +6,15 @@
  * same Firestore document as the catch list, so a reminder set on a phone shows as set on
  * a laptop and cannot be armed twice.
  *
- * This file is the protocol and the state machine only — no DOM. events.js owns the button
- * and the panel. Load order on the events page:
+ * This file owns the whole feature: the protocol, the state machine, and the setup panel —
+ * which two pages now render, so it lives here rather than being copied into each. What a
+ * page still owns is its own *button*, because a Remind me on an event row and one on a
+ * habitat time slot are different shapes of the same state; `buttonState()` hands a page
+ * that state and the page decides what it looks like.
  *
- *     ui.js -> store.js -> auth.js -> remind.js -> events-data.js -> events.js
+ *     ui.js -> store.js -> auth.js -> remind.js -> data file -> page script
+ *
+ * Loaded by index.html (the events list) and mega-finale.html (habitat windows).
  *
  * ## The topic is the password
  *
@@ -165,6 +170,11 @@ const Remind = (() => {
     const label = r.t ? r.t + ' · ' : '';
     const when = fmtTime(new Date(start));
 
+    // Whatever the page thought was worth carrying into the notification — the Pokémon in a
+    // habitat, say. The reminder is read on a lock screen, away from the page, so "Jungle
+    // habitat" alone often is not enough to act on.
+    const note = r.x ? ' ' + r.x : '';
+
     const shots = [];
     // Skipped rather than sent late when the event is already inside 15 minutes: ntfy
     // rejects a delay in the past outright (40004) instead of delivering immediately.
@@ -172,14 +182,14 @@ const Remind = (() => {
       shots.push({
         sid: r.k + '-p', at: start - LEAD_MS, priority: 4, tags: ['alarm_clock'],
         title: 'In 15 minutes: ' + r.n,
-        message: `${label}starts at ${when}.`,
+        message: `${label}starts at ${when}.` + note,
       });
     }
     if (start - now > MIN_DELAY_MS) {
       shots.push({
         sid: r.k + '-a', at: start, priority: 3, tags: ['bell'],
         title: 'Starting now: ' + r.n,
-        message: label + (end ? `runs until ${fmtTime(end)}.` : 'has started.'),
+        message: label + (end ? `runs until ${fmtTime(end)}.` : 'has started.') + note,
       });
     }
     if (!shots.length) return false;
@@ -214,8 +224,8 @@ const Remind = (() => {
   }
 
   /**
-   * Arm a reminder. `e` is { id, name, start, end, link, label } — events.js supplies the
-   * display strings, this file never reaches into the feed's shape.
+   * Arm a reminder. `e` is { id, name, start, end, link, label, note } — the page supplies
+   * the display strings, this file never reaches into any feed's shape.
    */
   async function set(e) {
     if (Store.locked) throw new Error('Sign in first — reminders are saved to your account.');
@@ -228,7 +238,7 @@ const Remind = (() => {
 
     const topic = await ensureTopic();
     const r = { k: key(e.id), n: e.name, s: e.start, e: e.end || null,
-                l: e.link || null, t: e.label || null, d: 0 };
+                l: e.link || null, t: e.label || null, x: e.note || null, d: 0 };
 
     // ntfy first: a failure here must leave the UI saying "not set", because that is true.
     if (start - Date.now() <= WINDOW_MS) {
@@ -320,14 +330,214 @@ const Remind = (() => {
     await reconcile();
   }
 
+  /* ---------- what a page needs to draw a button ---------- */
+
+  /**
+   * The state of one event's reminder, and the words for it. A page decides what the
+   * control looks like — an event row's button and a habitat's time pill are the same
+   * three states in different shapes — but not what they mean, or the two would drift.
+   *
+   * `busy` is true while the sign-in state is still unknown: offering "sign in" to someone
+   * who already is would be a lie, so the control disables itself and says so, the way the
+   * tracker pages' gate sits in a muted "checking" state rather than hiding.
+   */
+  function buttonState(eventId) {
+    if (document.body.classList.contains('auth-busy')) {
+      return { state: 'busy', on: false, busy: true, label: 'Remind me',
+               title: 'Checking your sign-in…' };
+    }
+    const state = Store.locked ? 'off' : status(eventId);
+    return {
+      state,
+      on: state !== 'off',
+      busy: false,
+      label: state === 'off' ? 'Remind me' : 'Reminder set',
+      title: {
+        off: 'A push 15 minutes before this starts, and again as it begins.',
+        armed: 'Saved to your account. It is handed to ntfy once the event is under three '
+             + 'days away — open this page some time in that window. Click to cancel.',
+        scheduled: 'Scheduled: one push 15 minutes before it starts, one as it begins. '
+                 + 'Click to cancel.',
+      }[state],
+    };
+  }
+
+  /**
+   * Toggle one reminder and report what happened into the panel. Returns nothing; the page
+   * re-renders off Store's change event.
+   *
+   * @param e  the same shape set() takes
+   */
+  async function toggle(e) {
+    if (Store.locked) return prompt();
+    try {
+      if (status(e.id) === 'off') {
+        await set(e);
+        say(status(e.id) === 'scheduled'
+          ? `Reminder scheduled for ${e.name}.`
+          : `Reminder saved for ${e.name} — it is scheduled once the event is three days away.`,
+          'ok');
+      } else {
+        await clear(e.id);
+        say(`Reminder cancelled for ${e.name}.`);
+      }
+    } catch (err) {
+      say('Could not change that reminder: ' + err.message, 'bad');
+    }
+  }
+
+  /* ---------- the panel ---------- */
+  //
+  // Where the ntfy topic lives and the one place that explains what a reminder promises.
+  // Two pages render it, which is why it is here and not in a page script: the tracker
+  // pages already have a sign-in gate and the events page deliberately does not, so the
+  // only difference between them is who does the asking — see `reveal` below.
+
+  let revealed = false;      // the events page shows the sign-in ask only on demand
+  let notice = '';
+  let tone = '';
+  let noticeTimer = null;
+  let mount = null;          // { target, reveal } from the last panel() call
+
+  /** A line under the panel saying what just happened. It clears itself — these pages
+   *  re-render every minute, and a stale "Reminder cancelled" an hour later is noise. */
+  function say(text, kind) {
+    notice = text;
+    tone = kind || '';
+    clearTimeout(noticeTimer);
+    noticeTimer = setTimeout(() => { notice = ''; paint(); }, 20000);
+    paint();
+  }
+
+  /** A locked control was pressed on a page with no sign-in gate — reveal the panel and
+   *  point at it. On a page that has a gate, that gate is the right thing to point at. */
+  function prompt() {
+    if (document.body.hasAttribute('data-tracker')) return Auth.prompt();
+    revealed = true;
+    paint();
+    UI.flash(document.querySelector(mount ? mount.target : '#reminders'));
+  }
+
+  /**
+   * Render the panel.
+   *
+   * @param target  selector for the container, which must already be in the HTML
+   * @param opts    reveal  true on a page with no sign-in gate: signed out the panel is
+   *                        hidden until prompt() reveals it, and then it does the asking.
+   *                        false where the page's own gate already covers that.
+   *                hidden  true to render nothing at all — the Mega Finale page uses this
+   *                        once the event is over, when there is nothing left to remind about
+   *                hint    one extra line of page-specific instruction
+   */
+  function panel(target, opts = {}) {
+    mount = { target, opts };
+    const box = document.querySelector(target);
+    if (!box) return;
+
+    // Both pages re-render on a timer and after every reminder change, which rebuilds this
+    // panel out from under whoever is using it. Losing focus mid-interaction is the visible
+    // symptom — a keyboard user tabbed onto Send a test, or pointed here by prompt(), is put
+    // back at the top of the document a moment later. Put them back where they were.
+    const controls = () => [...box.querySelectorAll('button, a')];
+    const focused = box.contains(document.activeElement)
+      ? controls().indexOf(document.activeElement) : -1;
+
+    box.textContent = '';
+    const restore = () => {
+      if (focused < 0) return;
+      const next = controls();
+      (next[focused] || next[0])?.focus({ preventScroll: true });
+    };
+
+    if (opts.hidden) { box.hidden = true; return; }
+
+    if (Store.locked) {
+      // Signed out with a gate on the page, the gate says it better and this would be a
+      // second banner saying the same thing.
+      box.hidden = !opts.reveal || !revealed;
+      if (box.hidden) return;
+      box.append(
+        UI.el('div', { class: 'rb-body' },
+          UI.el('strong', { text: 'Sign in to get event reminders' }),
+          UI.el('p', { class: 'rb-note', text:
+            'A reminder is saved to your Google account so it follows you between devices, '
+            + 'and is delivered as a push notification by ntfy.sh. Everything else on this '
+            + 'page works signed out.' })),
+        UI.el('div', { class: 'rb-acts' }, Auth.googleButton('signin', 'Sign in with Google')));
+      restore();
+      return;
+    }
+
+    box.hidden = false;
+    const topic = Store.ntfyTopic;
+    const n = Store.reminders.length;
+    const waiting = Store.reminders.filter((r) => !r.d).length;
+    const counts = n
+      ? `${n} reminder${n === 1 ? '' : 's'} set`
+        + (waiting ? ` · ${waiting} waiting for the three-day window` : '')
+      : 'No reminders set yet.';
+
+    box.append(
+      UI.el('div', { class: 'rb-body' },
+        UI.el('strong', { text: 'Event reminders' }),
+        UI.el('p', { class: 'rb-note', text:
+          'A push 15 minutes before something starts, and another as it begins. Delivered by '
+          + 'ntfy.sh: install the free ntfy app and subscribe to the topic below, or nothing '
+          + 'arrives.' }),
+        opts.hint && UI.el('p', { class: 'rb-note', text: opts.hint }),
+        UI.el('p', { class: 'rb-note', text: counts }),
+        topic && UI.el('code', { class: 'rb-topic', text: topic,
+          title: 'Anyone who knows this can read and send your reminders — treat it like a '
+               + 'password. New topic replaces it.' })),
+      UI.el('div', { class: 'rb-acts' },
+        topic && UI.el('a', { class: 'elink', href: appLink(topic), text: 'Open in ntfy app' }),
+        topic && UI.el('a', { class: 'elink', href: webLink(topic), target: '_blank',
+                              rel: 'noopener', text: 'Open in browser' }),
+        UI.el('button', { class: 'elink', text: 'Send a test',
+                          on: { click: (ev) => act(ev.currentTarget, runTest) } }),
+        topic && UI.el('button', { class: 'elink', text: 'New topic',
+                          on: { click: (ev) => act(ev.currentTarget, runRotate) } })),
+      notice && UI.el('p', { class: 'rb-status ' + tone, text: notice }));
+    restore();
+  }
+
+  /** Redraw in place — used by say() and prompt(), which change the panel but not the page. */
+  const paint = () => mount && panel(mount.target, mount.opts);
+
+  /** Every panel button is a network call: disable it while it runs, report what happened. */
+  async function act(btn, fn) {
+    btn.disabled = true;
+    try {
+      await fn();
+    } catch (err) {
+      say(err.message, 'bad');
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  async function runTest() {
+    await test();
+    say('Test sent. If nothing arrives, subscribe to the topic in the ntfy app first.', 'ok');
+  }
+
+  async function runRotate() {
+    if (!confirm('Replace your reminder topic? Anything already scheduled on the old one is '
+               + 'cancelled and re-scheduled, and you will need to subscribe to the new topic '
+               + 'in the ntfy app.')) return;
+    await rotate();
+    say('New topic. Subscribe to it in the ntfy app — the old one no longer delivers.', 'ok');
+  }
+
+  const appLink = (t) => `ntfy://ntfy.sh/${t}?display=${encodeURIComponent('Pokémon GO')}`;
+  const webLink = (t) => `${NTFY}/${t}`;
+
   return {
     status, set, clear, reconcile, test, rotate, ensureTopic,
-    /** For the panel: how many are armed but not yet handed over. */
+    buttonState, toggle, panel, say, prompt,
+    /** Armed but not yet handed to ntfy. */
     get waiting() { return Store.reminders.filter((r) => !r.d).length; },
     get topic() { return Store.ntfyTopic; },
-    /** Where the user subscribes. The app deep-links; the https url is the web reader. */
-    appLink: (t) => `ntfy://ntfy.sh/${t}?display=${encodeURIComponent('Pokémon GO')}`,
-    webLink: (t) => `${NTFY}/${t}`,
     LEAD_MS, WINDOW_MS, MAX,
   };
 })();

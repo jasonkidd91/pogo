@@ -174,6 +174,74 @@ def mega_forms(gm):
     return out
 
 
+def name_slug(pid):
+    """'HO_OH' -> 'ho-oh'. What the site's search matches against.
+
+    Deliberately not a display name. The Game Master carries no localised names, so
+    title-casing an id would invent "Ho Oh" and "Porygon Z"; a lowercase slug is honest
+    about being a matching key and is all the family search needs.
+    """
+    return pid.lower().replace("_", "-")
+
+
+def families(gm):
+    """{pokemonId: [pokemonId, ...]} — every species in the same evolution family.
+
+    Union-find over `evolutionBranch` and `parentPokemonId`, which agree with each other
+    and are both authoritative. Used for "search the whole family": typing Weedle should
+    find Mega Beedrill.
+
+    A branch carrying only `temporaryEvolution` is a MEGA branch, not an evolution, and
+    must not link anything — it has no `evolution` key, which is the same test rank.py
+    uses to spot a fully evolved species. Linking on it would be harmless here (a Mega
+    shares its species' id) but wrong, and the next reader would copy it.
+    """
+    parent = {}
+
+    def find(x):
+        parent.setdefault(x, x)
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def union(a, b):
+        ra, rb = find(a), find(b)
+        if ra != rb:
+            parent[ra] = rb
+
+    sp = species(gm)
+    for pid, ps in sp.items():
+        find(pid)
+        if ps.get("parentPokemonId"):
+            union(pid, ps["parentPokemonId"])
+        for branch in ps.get("evolutionBranch") or []:
+            if "evolution" in branch:
+                union(pid, branch["evolution"])
+
+    groups = {}
+    for pid in parent:
+        groups.setdefault(find(pid), []).append(pid)
+
+    out = {}
+    for members in groups.values():
+        # An evolution target that is not a canonical species is a form-only id; keeping it
+        # would put a name in the search index that nothing on the site can be.
+        members = sorted(m for m in members if m in sp)
+        for pid in members:
+            out[pid] = members
+
+    # Eevee is the largest real family at nine. Anything much beyond that means the graph
+    # has welded two lines together, and family search would quietly return nonsense.
+    biggest = max(out.values(), key=len, default=[])
+    if len(biggest) > 12:
+        raise RuntimeError(
+            f"family of {len(biggest)} species ({', '.join(biggest[:6])}…) — the evolution "
+            "graph has merged unrelated lines"
+        )
+    return out
+
+
 def move_label(move_id):
     """'BLAST_BURN' -> 'Blast Burn'; '_FAST' suffix dropped."""
     name = move_id[:-5] if move_id.endswith("_FAST") else move_id

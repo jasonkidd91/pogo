@@ -56,6 +56,11 @@ Before writing any game fact into code, classify it:
   and generally should *not* be baked into a static file at all. The events page is the worked
   example: it fetches the feed at runtime and treats its baked copy as a labelled fallback.
 
+**Evolution families are STABLE and computed, not typed out.** The `fam` field behind the
+Match chips comes from the Game Master's own `evolutionBranch`/`parentPokemonId` graph. A
+hand-written table of ~500 evolution lines is exactly the plausible-and-unverifiable thing
+this file exists to prevent. See the `family-search` skill.
+
 **"How good is this Pokémon" is SLOW, not LIVE — but only if you compute it.** A scraped tier
 list is somebody's read of a rotating meta and goes stale silently. Base stats, move power and
 duration, and the Mega boost multipliers are in the game's own data file and barely move, so
@@ -130,12 +135,18 @@ other page loads it.
   register new pages in `buildNav()`, and the events page's reminders and ntfy topic, which
   are separate top-level fields in the same document.
 
-- **`remind.js` — event reminders, on the events page only.** A signed-in trainer can arm two
-  push notifications per upcoming event, 15 minutes before and at the start, delivered by
-  ntfy.sh. Read the `event-reminders` skill before touching it; the one thing to know up front
-  is that **ntfy refuses a schedule more than three days ahead**, so a reminder is *armed* on
-  the account and only handed over once the event comes inside that window. The page says
-  which of the two states each reminder is in, and the footer says what that costs you.
+- **`remind.js` — event reminders, and the panel that sets them up.** A signed-in trainer can
+  arm two push notifications, 15 minutes before something starts and at the start, delivered
+  by ntfy.sh. Loaded by `index.html` (each upcoming event) and `mega-finale.html` (each
+  habitat window that has not opened). Read the `event-reminders` skill before touching it;
+  the one thing to know up front is that **ntfy refuses a schedule more than three days
+  ahead**, so a reminder is *armed* on the account and only handed over once it comes inside
+  that window. The page says which of the two states each reminder is in.
+
+  The **panel** lives in `remind.js`, not in a page script, because two pages render it — the
+  exception that proves the rule below. What each page still owns is its button's *shape*:
+  `Remind.buttonState()` hands over the states and their wording, and a link-row button and a
+  tappable time pill draw them differently.
 
 - **`auth.js` — Google sign-in and the Firestore backend.** It imports the Firebase modular SDK
   with dynamic `import()` from a classic script, so the site stays module-free and build-free.
@@ -150,8 +161,14 @@ other page loads it.
   Progress written before sign-in existed (the old `pogo.caught.v1` localStorage key) is
   adopted once, on the first server snapshot for a brand-new account, then dropped.
 
-- **`app.js`** — Mega Finale tracker only: the flat raid list and the live-habitat clock.
-  Its cards, grids and headings come from `ui.js`.
+- **`app.js`** — Mega Finale tracker only: the flat raid list, the live-habitat clock and
+  habitat-window reminders. Its cards, grids and headings come from `ui.js`.
+
+  **A tracker outlives its event, and has to say so.** `EVENT_END` is derived from the habitat
+  windows rather than hard-coded. A past window is struck through; an open one is green and
+  deliberately not a button; once the last window closes a banner says when it finished and
+  the reminders panel disappears. **The ticks stay** — past the event this page is the record
+  of what you caught, and wiping it would be the wrong answer to "it's over".
 - **`events.js`** — the front page. Its own domain components (`liveCard`, `eventRow`,
   `caveatBlock`) are built from `UI.el`/`UI.tag` — the standing line is that `ui.js` owns the
   generic components and a page owns its domain-specific ones, built from UI primitives.
@@ -318,6 +335,7 @@ else.
 | Skill | For |
 |---|---|
 | `update-events` | The front page — refreshing or fixing the What's on list |
+| `family-search` | The Match chips — evolution families, the `fam` field, `UI.searchMatch` |
 | `event-reminders` | The Remind me button — ntfy.sh, the topic, the three-day scheduling limit |
 | `update-megas` / `update-dynamax` | Regenerating the two collection data files |
 | `update-ranks` | The S/A/B/C/D rank — the Game Master, the scoring model, the bands |

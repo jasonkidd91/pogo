@@ -14,9 +14,11 @@
  *   empty state        .empty                      UI.empty()
  *   source links       .srcs                       UI.sources()
  *   attention pulse    .flash                      UI.flash()
+ *   reminders panel    .remindbox .rb-*            Remind.panel()      (remind.js)
  *
  * A page owns its domain-specific components and builds them from the primitives above —
- * the events page's .ecard/.erow/.ecaveat in events.js, and its .remindbox in the same file.
+ * the events page's .ecard/.erow/.ecaveat in events.js, and .remindbox/.rb-* in remind.js,
+ * which owns the whole reminders feature because two pages render it.
  *
  * THE PILL FAMILY. Small labels share geometry but not size, on purpose — a raid pill has to
  * fit "LEGENDARY MEGA" on one line in a narrow card, so it runs smaller than a type badge:
@@ -167,6 +169,21 @@ h1 { font-size: clamp(26px, 4vw, 40px); line-height: 1.15; margin: 0 0 12px; let
   color: var(--muted); padding: 3px 9px; border-radius: var(--r-md);
 }
 .time.live { background: rgba(52,211,153,.14); border-color: var(--done); color: var(--done); font-weight: 600; }
+/* A window that has been and gone. Every window is past once the event ends, which is what
+   makes a finished tracker read as finished rather than as one that stopped updating.
+   De-emphasised by LOSING ITS PLATE, not by opacity: at .45 this measured 2.03:1 and the
+   time was unreadable. Struck through and unfilled it still clears 6:1 and reads as past. */
+.time.past {
+  background: transparent; border-color: var(--border);
+  text-decoration: line-through; text-decoration-color: var(--border-bright);
+}
+/* An upcoming window is a button: tapping it arms a reminder. Same green "set" and amber
+   dashed "armed" language as the Remind me buttons on the events page. */
+button.time { font: inherit; font-size: var(--fs-sub); cursor: pointer; transition: .15s; }
+button.time:hover { border-color: var(--accent); color: var(--text); }
+button.time[disabled] { opacity: .5; cursor: default; }
+button.time.on { color: var(--done); border-color: var(--done); font-weight: 600; }
+button.time.on.armed { color: var(--e200); border-color: var(--e200); border-style: dashed; }
 .live-tag {
   font-size: var(--fs-meta); font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
   color: var(--done); display: inline-flex; align-items: center; gap: 5px;
@@ -636,7 +653,22 @@ body.signed-out #reset { opacity: .4; }
 .ecaveat[data-k="shiny"] .ctag { color: var(--super); }
 .erow .ecaveat { font-size: 11.5px; }
 
-/* ---------- reminders (events page) ---------- */
+/* ---------- a finished event ---------- */
+/* The Mega Finale tracker outlives its event. Rather than quietly showing a list nobody can
+   act on, it says so — and keeps the ticks, because past the event the page is the record of
+   what you caught. Shares .rb-body/.rb-note/.rb-acts with the reminders panel: same shape,
+   same job, one set of rules. */
+
+.overbanner {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4) 20px;
+  background: var(--surface); border: 1px solid var(--border-bright);
+  border-left: 3px solid var(--muted);
+  border-radius: var(--radius); padding: var(--sp-4) var(--sp-6); margin-bottom: var(--sp-7);
+}
+/* The cards stay readable but stop looking like something to go and do. */
+body.event-over .habitat-head h3 { color: var(--muted); }
+
+/* ---------- reminders (events and Mega Finale) ---------- */
 /* Deliberately a strip, not a banner. The events page has no sign-in gate and must not grow
    one — browsing is the whole point of it — so signed out this panel is not rendered at all
    until a Remind me button is pressed, and then it is the thing UI.flash() points at. */

@@ -410,6 +410,36 @@ const STATUS_FILTER = {
   options: [['all', 'All'], ['need', 'Still needed'], ['have', 'Collected']],
 };
 
+/**
+ * The Match chips: search one name, or the whole evolution family. Both collection pages
+ * carry it, so it lives here rather than being declared twice.
+ */
+const FAMILY_FILTER = {
+  label: 'Match', group: 'match',
+  options: [['exact', 'Exact'], ['family', 'Whole family']],
+};
+
+/**
+ * Does this entry match what is in the search box?
+ *
+ * @param p       the entry; `p.fam` is its evolution family, generated from the Game Master
+ * @param fields  the page's own searchable strings — name, typing, moveset, whatever it
+ *                decided is worth finding by
+ *
+ * With the Match chip set to 'family' an entry also matches when any species in its family
+ * does, which is what makes searching "weedle" find Mega Beedrill. A page without the chip
+ * gets 'all' from activeFilter and therefore exact matching, so adding the chip is opt-in.
+ *
+ * `fam` is absent on a species that is its own whole family — a third of the Mega roster —
+ * so the `|| []` is the normal path, not a defensive one.
+ */
+function searchMatch(p, fields) {
+  const q = searchText();
+  if (!q) return true;
+  if (fields.some((f) => f && String(f).toLowerCase().includes(q))) return true;
+  return activeFilter('match') === 'family' && (p.fam || []).some((n) => n.includes(q));
+}
+
 /** Sets a stat's number. Pass `of` for the "3 / 63" form. */
 function setStat(id, value, of) {
   const node = document.getElementById(id);
@@ -426,6 +456,7 @@ function setBar(done, total) {
 const UI = {
   el, tag, typePills, raidPill, rankChip, powerLine, energyPill, sprite, checkMark,
   monCard, sectionHead, grid, empty, sources, flash,
-  summary, setupControls, activeFilter, searchText, statusMatch, STATUS_FILTER,
+  summary, setupControls, activeFilter, searchText, statusMatch, searchMatch,
+  STATUS_FILTER, FAMILY_FILTER,
   setStat, setBar, ART_BASE,
 };

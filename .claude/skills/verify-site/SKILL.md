@@ -86,7 +86,9 @@ That is correct assistive-tech semantics, not a bug: a real pointer click still 
 Every card carries an S/A/B/C/D combat-power chip and, when there is a number, a DPS line.
 Four assertions here have caught real bugs:
 
-- **measure the contrast, do not eyeball it.** Every filled grade must clear **4.5:1** against
+- **measure the contrast, do not eyeball it**, and give the style a frame to settle first —
+  adding a state class and reading `getComputedStyle` in the same breath returns the *previous*
+  colour and makes passing states look like failures. Every filled grade must clear **4.5:1** against
   its own background, and a collected card must keep the chip at ≥0.8 opacity. B, C and D
   shipped translucent once and vanished on ticked cards. Compute the WCAG ratio from
   `getComputedStyle` in the check.
@@ -130,6 +132,35 @@ handed to ntfy" is a weaker promise than "scheduled", and it must not rest on co
 
 The scheduling state machine itself is tested without a browser, against the real ntfy.sh —
 see the `event-reminders` skill.
+
+### The Mega Finale tracker (`mega-finale.html`)
+
+It outlives its event, so **the interesting states are unreachable in real time**. Shift the
+page's clock with `addInitScript` and assert all three:
+
+```js
+const shift = (page, ms) => page.addInitScript((d) => {
+  const R = Date;
+  function F(...a) { return a.length ? new R(...a) : new R(R.now() + d); }
+  F.prototype = R.prototype; F.now = () => R.now() + d;
+  F.parse = R.parse; F.UTC = R.UTC; window.Date = F;
+}, ms);
+```
+
+- before it starts: all 16 habitat windows are tappable buttons
+- during: every window is in exactly one state — live, past, or a button — and the open one
+  is **not** a button
+- after: the finished banner is there and names when it ended, no window is tappable, every
+  window reads as past, the reminders panel is gone, and **the cards are still there**
+
+**Faking the page clock does not fake ntfy's.** A test that arms a *real* reminder must use a
+window that is genuinely still in the future, or the publish is rejected as a past delay and
+the reminder silently never records — which reads as a code bug and is not one.
+
+### Family search (`megas.html`, `dynamax.html`)
+
+The load-bearing assertion is negative: `weedle` with **Exact** must return **nothing**. A
+family search wired on permanently passes every positive test. See the `family-search` skill.
 
 ### Mobile, at 390x844
 

@@ -17,9 +17,11 @@
  * as global. Do not "fix" the parsing by appending a Z.
  *
  * REMINDERS. Every event that has not started carries a Remind me button, backed by
- * remind.js — which this file requires. The protocol, the ntfy topic and the three-day
- * scheduling limit live there; the button, the panel and the wording live here, which is the
- * standing split: ui.js owns the generic components, a page owns its domain-specific ones.
+ * remind.js — which this file requires. The protocol, the setup panel and the three-day
+ * scheduling limit all live there, because the Mega Finale page renders the same panel; what
+ * lives here is the button's shape, since a link-row button and a habitat time pill are the
+ * same three states drawn differently.
+ *
  * Signing in is required for a reminder and for nothing else on this page, so the panel does
  * the asking and the page still has no sign-in gate.
  */
@@ -305,169 +307,27 @@ function linkRow(e, opts = {}) {
  * The per-event button. Only on events that have not started — a reminder for something
  * already running is nothing to act on.
  *
- * Three states, because "recorded" and "scheduled at ntfy" are different promises and the
- * user is entitled to know which one they have. See the header of remind.js: ntfy will not
- * accept a delay more than three days out, so a reminder for anything further away sits
- * armed until this page is opened inside that window.
+ * The three states and their wording come from Remind.buttonState, shared with the Mega
+ * Finale page; what this function owns is the shape, which here is a link-row button.
  */
 function remindButton(e) {
-  // Until Firebase has answered we do not know whether they are signed in, and offering
-  // "sign in" to someone who already is would be a lie. Same reasoning as the tracker
-  // pages' gate, which sits in a muted "checking" state rather than hiding.
-  if (document.body.classList.contains('auth-busy')) {
-    return UI.el('button', { class: 'elink', text: 'Remind me', disabled: true,
-                             title: 'Checking your sign-in…' });
-  }
-  const state = Store.locked ? 'off' : Remind.status(e.id);
-  const on = state !== 'off';
-  const label = { off: 'Remind me', armed: 'Reminder set', scheduled: 'Reminder set' }[state];
-  const title = {
-    off: 'A push 15 minutes before this starts, and again as it begins.',
-    armed: 'Saved to your account. It is handed to ntfy once the event is under three days '
-         + 'away — open this page some time in that window. Click to cancel.',
-    scheduled: 'Scheduled: one push 15 minutes before it starts, one as it begins. '
-             + 'Click to cancel.',
-  }[state];
-
+  const st = Remind.buttonState(e.id);
   const btn = UI.el('button', {
-    class: 'elink' + (on ? ' on' : '') + (state === 'armed' ? ' armed' : ''),
-    text: (on ? '✓ ' : '') + label,
-    title,
-    'aria-pressed': String(on),
-    on: { click: () => toggleRemind(e, btn) },
-  });
-  return btn;
-}
-
-async function toggleRemind(e, btn) {
-  // The events page deliberately has no sign-in gate — there is nothing on it to tick — so
-  // the reminders panel is what asks, and only once someone reaches for the feature.
-  if (Store.locked) {
-    revealReminders = true;
-    renderReminders();
-    return UI.flash(document.getElementById('reminders'));
-  }
-  btn.disabled = true;                     // in-flight: no double publish, no double write
-  try {
-    if (Remind.status(e.id) === 'off') {
-      await Remind.set({
+    class: 'elink' + (st.on ? ' on' : '') + (st.state === 'armed' ? ' armed' : ''),
+    text: (st.on ? '\u2713 ' : '') + st.label,
+    title: st.title,
+    disabled: st.busy,
+    'aria-pressed': String(st.on),
+    on: { click: async () => {
+      btn.disabled = true;
+      await Remind.toggle({
         id: e.id, name: e.name, start: e.start, end: e.end, link: e.link,
         label: typeInfo(e).label,
       });
-      say(Remind.status(e.id) === 'scheduled'
-        ? `Reminder scheduled for ${e.name}.`
-        : `Reminder saved for ${e.name} — it is scheduled once the event is three days away.`,
-        'ok');
-    } else {
-      await Remind.clear(e.id);
-      say(`Reminder cancelled for ${e.name}.`);
-    }
-  } catch (err) {
-    say('Could not change that reminder: ' + err.message, 'bad');
-  } finally {
-    btn.disabled = false;
-    render();
-  }
-}
-
-/** Whether the signed-out panel has been asked for. See toggleRemind. */
-let revealReminders = false;
-let noticeText = '';
-let noticeTone = '';
-
-let noticeTimer = null;
-
-/** A line under the panel saying what just happened. It clears itself — the page re-renders
- *  every minute, and "Reminder cancelled for X" still sitting there an hour later is noise. */
-function say(text, tone) {
-  noticeText = text;
-  noticeTone = tone || '';
-  clearTimeout(noticeTimer);
-  noticeTimer = setTimeout(() => { noticeText = ''; renderReminders(); }, 20000);
-  renderReminders();
-}
-
-/**
- * The reminders panel: where the ntfy topic lives, and the one place that explains what a
- * reminder actually promises. Signed in it is always there — a reminder is worthless until
- * the topic is subscribed to in the ntfy app, so the setup has to be visible, and Send a
- * test is how you find that out now rather than by missing a Community Day.
- */
-function renderReminders() {
-  const box = document.getElementById('reminders');
-  if (!box) return;
-  box.textContent = '';
-
-  if (Store.locked) {
-    box.hidden = !revealReminders;
-    if (!revealReminders) return;
-    box.append(
-      UI.el('div', { class: 'rb-body' },
-        UI.el('strong', { text: 'Sign in to get event reminders' }),
-        UI.el('p', { class: 'rb-note', text:
-          'A reminder is saved to your Google account so it follows you between devices, and '
-          + 'is delivered as a push notification by ntfy.sh. Everything else on this page '
-          + 'works signed out.' })),
-      UI.el('div', { class: 'rb-acts' }, Auth.googleButton('signin', 'Sign in with Google')));
-    return;
-  }
-
-  box.hidden = false;
-  const topic = Remind.topic;
-  const set = Store.reminders.length;
-  const waiting = Remind.waiting;
-
-  const counts = set
-    ? `${set} reminder${set === 1 ? '' : 's'} set`
-      + (waiting ? ` · ${waiting} waiting for the three-day window` : '')
-    : 'No reminders set yet — use Remind me on any event below.';
-
-  box.append(
-    UI.el('div', { class: 'rb-body' },
-      UI.el('strong', { text: 'Event reminders' }),
-      UI.el('p', { class: 'rb-note', text:
-        'A push 15 minutes before an event starts, and another as it begins. Delivered by '
-        + 'ntfy.sh: install the free ntfy app and subscribe to the topic below, or nothing '
-        + 'arrives.' }),
-      UI.el('p', { class: 'rb-note', text: counts }),
-      topic && UI.el('code', { class: 'rb-topic', text: topic,
-        title: 'Anyone who knows this can read and send your reminders — treat it like a '
-             + 'password. New topic replaces it.' })),
-    UI.el('div', { class: 'rb-acts' },
-      topic && UI.el('a', { class: 'elink', href: Remind.appLink(topic),
-                            text: 'Open in ntfy app' }),
-      topic && UI.el('a', { class: 'elink', href: Remind.webLink(topic),
-                            target: '_blank', rel: 'noopener', text: 'Open in browser' }),
-      UI.el('button', { class: 'elink', text: 'Send a test',
-                        on: { click: (ev) => runAction(ev.currentTarget, testReminder) } }),
-      topic && UI.el('button', { class: 'elink', text: 'New topic',
-                        on: { click: (ev) => runAction(ev.currentTarget, rotateTopic) } })),
-    noticeText && UI.el('p', { class: 'rb-status ' + noticeTone, text: noticeText }));
-}
-
-/** Every panel button is a network call: disable it while it runs, report what happened. */
-async function runAction(btn, fn) {
-  btn.disabled = true;
-  try {
-    await fn();
-  } catch (err) {
-    say(err.message, 'bad');
-  } finally {
-    btn.disabled = false;
-  }
-}
-
-async function testReminder() {
-  await Remind.test();
-  say('Test sent. If nothing arrives, subscribe to the topic in the ntfy app first.', 'ok');
-}
-
-async function rotateTopic() {
-  if (!confirm('Replace your reminder topic? Anything already scheduled on the old one is '
-             + 'cancelled and re-scheduled, and you will need to subscribe to the new topic '
-             + 'in the ntfy app.')) return;
-  await Remind.rotate();
-  say('New topic. Subscribe to it in the ntfy app — the old one no longer delivers.', 'ok');
+      render();
+    } },
+  });
+  return btn;
 }
 
 /** How much of it is left, and whether that is urgent. */
@@ -632,7 +492,9 @@ function render() {
   UI.setStat('c-soon', buckets.soon.length);
   UI.setStat('c-later', buckets.later.length);
   paintSource();
-  renderReminders();
+  // No sign-in gate on this page, so signed out the panel stays hidden until someone
+  // reaches for Remind me — see Remind.prompt().
+  Remind.panel('#reminders', { reveal: true });
 
   // Hand ntfy anything that has come inside its three-day window. Cheap to call — it rate-
   // limits itself and returns immediately when there is nothing waiting or nobody signed in.

@@ -35,8 +35,12 @@
       Gigantamax carries a ★6 pill because a Gigantamax encounter is always a six-star Max
       Battle. Plain Dynamax Pokémon carry no tier on purpose: theirs belongs to the current
       Power Spot rotation rather than the species, changes weekly, and would be wrong within
-      days — check the in-game Power Spot or a live tracker. Types are left out for the same
-      reason they always have been.
+      days — check the in-game Power Spot or a live tracker.
+    </p>
+    <p>
+      <strong>Match: Whole family</strong> widens the search to a Pokémon's whole evolution
+      line, so searching <em>Pichu</em> also finds Pikachu and Raichu. The families come from
+      the game's own data file, not from a list typed out here.
     </p>
     <div class="srcs">
       <span>Parsed from</span>
@@ -63,6 +67,7 @@ UI.summary('.summary', {
   reset: true,
   filters: [
     UI.STATUS_FILTER,
+    UI.FAMILY_FILTER,
     { label: 'Power', group: 'rank', options: [
       ['all', 'Any'], ['AB', 'A & B'], ['A', 'A only'], ['CD', 'Weak']] },
     { label: 'Role', group: 'role', options: [
@@ -91,12 +96,8 @@ function visible(p) {
   const role = UI.activeFilter('role');
   if (role !== 'all' && p.role !== role) return false;
   if (!UI.statusMatch(p.key, UI.activeFilter('status'))) return false;
-  const q = UI.searchText();
-  if (q && !p.name.toLowerCase().includes(q) &&
-      !(p.moves || '').toLowerCase().includes(q) &&
-      !(p.role || '').toLowerCase().includes(q) &&
-      !(p.gmaxMove || '').toLowerCase().includes(q) &&
-      !(p.types || []).some((t) => t.toLowerCase().includes(q))) return false;
+  // Whole family match is opt-in via the Match chips — see UI.searchMatch.
+  if (!UI.searchMatch(p, [p.name, p.moves, p.role, p.gmaxMove, ...(p.types || [])])) return false;
   return true;
 }
 

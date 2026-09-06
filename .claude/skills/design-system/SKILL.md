@@ -60,6 +60,8 @@ UI.sources(intro, links, note)
 UI.flash(node)                   pulse a panel that answers what was just clicked
 
 UI.summary(target, cfg)          stats + bar + search + Reset + filter chips
+UI.searchMatch(p, fields)        the search box, with optional whole-family widening
+UI.STATUS_FILTER · UI.FAMILY_FILTER    the two chip rows shared across pages
 UI.setupControls({onChange, prefix, resetPrompt})
 UI.activeFilter(group) · UI.searchText() · UI.statusMatch(key, mode) · UI.STATUS_FILTER
 UI.setStat(id, value, of) · UI.setBar(done, total)
@@ -135,6 +137,11 @@ different panel it became a primitive rather than being copied.
   panel that had set `el.hidden = true` stayed on screen. `[hidden] { display: none
   !important }` sits with the reset at the top of `styles.css` for exactly this. Toggling
   `el.hidden` is the right way to show and hide a panel; that line is what makes it work.
+- **Rebuilding a panel steals focus from whoever is using it.** Both reminder pages
+  re-render on a timer, which wipes and rebuilds `.remindbox` — a keyboard user tabbed onto a
+  button inside it was thrown back to the top of the document a second later. `Remind.panel()`
+  records the focused control's index and restores it. Any component a page re-renders wholesale
+  needs the same.
 - **Card text costs more than it looks.** Anything on a card is read on every card. The rank
   line used to carry a placing and a price — "#2 of 4 Bug Megas, behind Mega Heracross · 100
   energy" — and it was noise. It is now the number and the moveset, nothing else.

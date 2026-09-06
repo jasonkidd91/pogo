@@ -117,3 +117,10 @@ python3 -m http.server 8777 --directory web
 Open `http://localhost:8777/dynamax.html`: section counts match the script, no broken images,
 the Gigantamax-only / Dynamax-only filters work, every card shows its typing and its DPS, and
 the Power / Role chips narrow the list correctly.
+
+## The `fam` field
+
+Each entry carries its evolution family, so the page can offer "search the whole family".
+It is computed by `gamemaster.families()` and is absent for a species that is its own whole
+family. See the **`family-search`** skill before changing it — the guard that a family never
+exceeds 12 species is what stops a merged evolution graph from quietly poisoning the search.

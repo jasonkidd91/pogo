@@ -97,6 +97,7 @@ def add_ranks(gmax, dyn):
     gm, (gm_sha, gm_date) = gamemaster.fetch()
     species = gamemaster.species(gm)
     moves = gamemaster.moves(gm)
+    fams = gamemaster.families(gm)
 
     roster, missing = [], []
     for e in gmax + dyn:
@@ -109,6 +110,11 @@ def add_ranks(gmax, dyn):
         # Typing was previously left out of this file entirely, which made a Dynamax card
         # carry noticeably less than a Mega one. The Game Master has it.
         e["types"] = gamemaster.types_of(ps)
+        # See update_megas.py: the evolution family, for family search. Only when there is
+        # more than the species itself in it.
+        fam = fams.get(gm_id(e["name"])) or []
+        if len(fam) > 1:
+            e["fam"] = [gamemaster.name_slug(x) for x in fam]
         got = power_of(ps["stats"], e["types"], ps, moves)
         if got:
             e["dps"] = got["dps"]
@@ -177,6 +183,8 @@ HEADER = """/**
  * dps    sustained cycle DPS at level 40, 15/15/15, vs a neutral 200-defense target
  * moves  the moveset that DPS assumes; legacy marks one needing an Elite TM or a
  *        Community Day move
+ * fam    every species in this Pokemon's evolution family, lowercase, for the page's
+ *        "search the whole family" toggle. Absent when the species is its own whole family.
  */
 """
 

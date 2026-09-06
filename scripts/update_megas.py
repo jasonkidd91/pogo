@@ -133,6 +133,7 @@ def main():
     gm_moves = gamemaster.moves(gm)
     gm_megas = gamemaster.mega_forms(gm)
     gm_species = gamemaster.species(gm)
+    gm_families = gamemaster.families(gm)
 
     entries = []
     for m in out:
@@ -147,6 +148,13 @@ def main():
              "released": m["released"]}
         if m["name"] in WEATHER_BOOSTED:
             e["weatherBoost"] = True
+        # The evolution family, for "search the whole family" on the page: typing Weedle
+        # should find Mega Beedrill. Omitted for a species that is its own whole family —
+        # the search already matches its own name, and the field would be dead weight on
+        # a third of the roster.
+        fam = gm_families.get(gm_key(m["name"])[0]) or []
+        if len(fam) > 1:
+            e["fam"] = [gamemaster.name_slug(x) for x in fam]
         if form:
             got = power_of(form["stats"], e["types"], gm_species[gm_key(m["name"])[0]], gm_moves)
             if got:
@@ -260,6 +268,11 @@ HEADER = """/**
  * dps     sustained cycle DPS at level 40, 15/15/15, vs a neutral 200-defense target
  * moves   the moveset that DPS assumes; legacy marks one needing an Elite TM or a
  *         Community Day move, so the rank is unreachable without it
+ * fam     every species in this Pokemon's evolution family, lowercase, so the page can
+ *         offer "search the whole family" — typing Weedle finds Mega Beedrill. Absent when
+ *         the species is its own whole family. Matching keys, not display names: the Game
+ *         Master carries no localised names.
+
  * isNew   GO-original Mega with no mainline artwork; artFallback is base-species art
  */
 """
