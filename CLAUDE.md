@@ -204,8 +204,17 @@ of `auth.js` follows from that and should not be "simplified" away:
 
 ## Project skills
 
-`.claude/skills/` holds `new-event-tracker`, `update-megas` and `update-dynamax`. Prefer them
-over improvising — they encode the verification steps and the failure modes above.
+`.claude/skills/` holds:
+
+| Skill | For |
+|---|---|
+| `update-events` | The front page — refreshing or fixing the What's on list |
+| `update-megas` / `update-dynamax` | Regenerating the two collection data files from Bulbapedia |
+| `new-event-tracker` | Building a catch-list page for an event **when asked** |
+| `verify-site` | Browser verification, including getting Chromium up without root |
+| `deploy-site` | Shipping to GitHub Pages and confirming it is actually live |
+
+Prefer them over improvising — they encode the verification steps and the failure modes above.
 
 Per the user's global convention, mirror any change to files under `.claude/` into
 `~/Documents/claude backup/pogo/` before editing.
