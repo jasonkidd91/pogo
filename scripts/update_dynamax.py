@@ -5,6 +5,8 @@ import os, re, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from bulbapedia import (fetch_wikitext, section, rows, cells, find_date,
                         slug, check_sprites, write_js)
+import gamemaster
+from rank import rank_max
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "web", "max-data.js")
 
@@ -75,7 +77,61 @@ def main():
     orphan = [g["name"] for g in gmax if g["name"] not in {d["name"] for d in dyn}]
     print(f"  Gigantamax with no plain-Dynamax entry (expected, not a bug): {orphan}")
 
-    write_js(OUT, HEADER, {"GIGANTAMAX": gmax, "DYNAMAX": dyn})
+    gm_sha, gm_date = add_ranks(gmax, dyn)
+
+    write_js(OUT, header(gm_sha, gm_date), {"GIGANTAMAX": gmax, "DYNAMAX": dyn})
+
+
+def gm_id(name):
+    """Site name -> Game Master pokemonId. 'Ho-Oh' -> 'HO_OH'."""
+    return re.sub(r"[^A-Z0-9]+", "_", name.upper())
+
+
+def add_ranks(gmax, dyn):
+    """Rank the whole Max roster in place, and return the Game Master's (sha, date).
+
+    Gigantamax and Dynamax are ranked together because they are one pool: a Max Battle
+    team is picked from everything you own, not from one list or the other.
+    """
+    gm, (gm_sha, gm_date) = gamemaster.fetch()
+    species = gamemaster.species(gm)
+    costs = gamemaster.max_move_costs(gm)
+
+    roster, missing = [], []
+    for e in gmax + dyn:
+        ps = species.get(gm_id(e["name"]))
+        if not ps or "breadTierGroup" not in ps:
+            missing.append(e["name"])
+            continue
+        e["stats"] = ps["stats"]
+        e["cost"] = costs[ps["breadTierGroup"]]
+        roster.append(e)
+
+    # Trap 1 in gamemaster.py: a species too new for the Game Master gets no rank rather
+    # than a guessed one. A handful is normal; the whole roster means gm_id stopped
+    # matching, which would silently blank every card.
+    if missing:
+        print(f"  no Game Master entry, left unranked ({len(missing)}): {missing}")
+    if len(missing) > 10:
+        raise RuntimeError(
+            f"{len(missing)} of {len(gmax) + len(dyn)} have no Game Master entry — gm_id is "
+            "probably no longer matching the pokemonId naming"
+        )
+
+    rank_max(roster)
+    for e in roster:
+        del e["stats"], e["cost"]          # working values, not site data
+
+    from collections import Counter
+    print(f"  ranks: {dict(sorted(Counter(e.get('rank', '?') for e in roster).items()))}")
+    print(f"  roles: {dict(Counter(e['role'] for e in roster if e.get('role')))}")
+    print("    " + "; ".join(f"{e['name']} — {e['why'].split(' · ')[0]}"
+                             for e in roster if e.get("rank") == "S"))
+    return gm_sha, gm_date
+
+
+def header(gm_sha, gm_date):
+    return HEADER.replace("{GM}", f"{gm_sha} ({gm_date})")
 
 
 HEADER = """/**
@@ -84,6 +140,7 @@ HEADER = """/**
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_dynamax.py
  * Sources: https://bulbapedia.bulbagarden.net/wiki/Dynamax_(GO)
  *          https://bulbapedia.bulbagarden.net/wiki/Gigantamax_(GO)
+ *          PokeMiners game_master {GM} — base stats and Max move upgrade costs
  *
  * A Gigantamax form is tracked separately from its Dynamax entry — they are different
  * catches. hasGmax marks a Dynamax entry whose species also has a Gigantamax form.
@@ -92,6 +149,14 @@ HEADER = """/**
  * Gigantamax Max Battle (https://bulbapedia.bulbagarden.net/wiki/Max_Battle). The tier of a
  * plain Dynamax Pokemon belongs to the current Power Spot rotation rather than the species,
  * rotates weekly, and is deliberately NOT stored — it would be stale within days.
+ *
+ * rank/role  is this worth candy and Max Particles? Every Dynamax Pokemon has all three
+ *            Max moves, so the rank is the best ROLE its base stats suit — Attacker,
+ *            Guard or Spirit — as a placing across the whole Max roster. See
+ *            scripts/rank.py. A Gigantamax entry ranks on its species' stats: its G-Max
+ *            move hits harder, but that damage is not in the Game Master and is not
+ *            invented here.
+ * why        where it places, and what levelling one Max move costs
  */
 """
 

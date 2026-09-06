@@ -1,6 +1,6 @@
 ---
 name: update-megas
-description: Refresh the Mega Pokémon list on the pogo site (web/mega-data.js and megas.html) from Bulbapedia. Use when a new Mega Evolution or Primal Reversion is released, when Mega Energy costs or Super Max attacks change, or when the user says the Mega list is out of date, missing a Mega, or shows a broken image. Runs scripts/update_megas.py and verifies the result in a browser.
+description: Refresh the Mega Pokémon list on the pogo site (web/mega-data.js and megas.html) from Bulbapedia and the Game Master. Use when a new Mega Evolution or Primal Reversion is released, when Mega Energy costs or Super Max attacks change, or when the user says the Mega list is out of date, missing a Mega, or shows a broken image. Runs scripts/update_megas.py and verifies the result in a browser. For the S/A/B/C/D rank itself, see the update-ranks skill.
 ---
 
 # Update the Mega Pokémon list
@@ -21,12 +21,20 @@ It raises rather than writing bad data. Expected output shape:
 Legendary + Mythical species on Bulbapedia: 94
 parsed 63 released Megas
   rows inheriting cost via rowspan (expect only X/Y pairs): ['Mega Charizard Y', ...]
+game master 8e227be44f28 (2026-08-29) — cached
   GO-original Megas (no mainline art): 13
   with a Super Max attack: 17
   cost tiers: {100: 8, 200: 28, 300: 22, 400: 3, 7500: 2}
   raid classes: {'Mega Raid': 55, 'Legendary Mega Raid': 6, 'Primal Raid': 2}
     Mega Mewtwo X, Mega Mewtwo Y, Mega Latias, Mega Latios, Primal Kyogre, ...
+  ranks: {'?': 2, 'A': 5, 'B': 11, 'C': 22, 'D': 12, 'S': 11}
+    S: Mega Raichu Y, Mega Gengar, Mega Mewtwo X, ...
+    no Game Master entry yet (2): ['Mega Staraptor', 'Mega Chandelure']
+    ranking on a legacy move: 22
 ```
+
+Two sources now, and they fail differently: Bulbapedia gives the roster, the Game Master gives
+the battle numbers. A Mega can be on the page with no rank — see below — but never the reverse.
 
 ## Check the output before trusting it
 
@@ -46,6 +54,10 @@ Compare against the previous run. A refresh should be a small delta.
 - **Every Mega came out as `Mega Raid`** → the Legendary/Mythical category lookup silently
   returned nothing. The script raises on an empty Legendary bucket, so this should be
   impossible; if you see it, `category_members` is being bypassed.
+- **`no Game Master entry yet` lists more than a handful** → `gm_key` has stopped matching
+  `pokemonId`, which would blank the rank on every card. The script raises above 8. One or
+  two is normal and expected: PokeMiners lags a release by days, and those cards show `?`
+  rather than a guessed grade.
 
 ## Then verify in the browser
 
@@ -79,8 +91,12 @@ a Mega Raid, not a property of the species. The event page holds a hand-written,
   Dragonite, Skarmory, Staraptor, Chandelure, Chesnaught, Delphox, Greninja, Malamar, Falinks)
   have no mainline Mega form, so no Mega art exists. They are tagged `GO ORIGINAL`.
 - **Primal Kyogre, Primal Groudon and Mega Rayquaza show a ⛅ pill.** The wiki's "Boosted types"
-  column is weather-based for these three and is *not* their own typing. `ACTUAL_TYPES` in the
-  script holds their real typing; the pill shows what they boost.
+  column is weather-based for these three and is *not* their own typing. `WEATHER_BOOSTED` in
+  the script marks which entries get the pill; the typing itself comes from the Game Master's
+  `typeOverride1/2`, which is the game's own answer. That replaced a hand-written table which
+  had **Primal Groudon as pure Ground** — the Game Master says Ground/Fire, and it is right.
+  A guard prints any Mega whose typing differs from the boosted-types column and raises above
+  three, since a systemic difference means the column stopped meaning typing.
 - **Mega Mewtwo X/Y cost 7,500.** That is a real cost tier, confirmed in the page's own
   cost-tier table. It is not a typo.
 
@@ -93,3 +109,9 @@ case added there. Verify a candidate before coding it:
 ```bash
 curl -s -o /dev/null -w "%{http_code}\n" https://img.pokemondb.net/sprites/home/normal/<slug>.png
 ```
+
+## The rank
+
+Each card also carries an S/A/B/C/D "worth the energy?" grade and a one-line reason. That is
+computed in `scripts/rank.py` from the Game Master, and has its own skill: **`update-ranks`**.
+Go there before changing a band, a reason string, or the damage model.

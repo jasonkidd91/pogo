@@ -62,6 +62,24 @@ out:
 That is correct assistive-tech semantics, not a bug: a real pointer click still lands. Use
 `click({ force: true })` and say why in a comment.
 
+### Rank chips (`megas.html`, `dynamax.html`)
+
+Every card carries an S/A/B/C/D chip and a reason line. Three assertions here have caught
+real bugs:
+
+- **the rank is in the card's `aria-label`.** The chip lives inside `.name`, and `aria-label`
+  replaces card content for a screen reader — without repeating it, the rank is silently not
+  announced at all.
+- **the chip is not struck through on a collected card.** `.card.caught .name` sets
+  `line-through`, which propagates to children; `inline-flex` on the chip is what blocks it.
+  A plain `inline` chip gets a line through the letter.
+- **no card body clips or overflows at 390px.** The reason line ("#2 of 4 Bug Megas, behind
+  Mega Heracross · 100 energy") is the longest text on any card.
+
+Also check each filter narrows *and* that what survives matches: the Role chips on
+`dynamax.html` should leave only cards whose reason names that role. See the `update-ranks`
+skill for the rest.
+
 ### The events page (`index.html`)
 
 Has no tracker and must have **no gate**. See the `update-events` skill for its assertions.

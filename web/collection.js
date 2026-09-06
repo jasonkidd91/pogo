@@ -50,6 +50,24 @@ function raidPill(p) {
 }
 
 /**
+ * Is this worth spending resources on? S/A/B/C/D, or "?" when the Game Master has no entry
+ * for the species yet — new releases lag it by days and a guessed grade would be worse than
+ * none. Computed in scripts/rank.py from the game's own data, never from a tier list.
+ *
+ * The comparison pool is the page's own roster, which is the whole point and also the
+ * limit: "Best Ice Mega" is a claim about Megas, not about Ice attackers in general.
+ * `why` always spells out the placing, so the letter is never the only thing on offer.
+ */
+function rankChip(p) {
+  const el = document.createElement('span');
+  el.className = 'rank';
+  el.dataset.rank = p.rank;
+  el.textContent = p.rank;
+  if (p.why) el.title = p.why;
+  return el;
+}
+
+/**
  * @param p     entry with { name, art, key, ... }
  * @param opts  { badges: [el], sub: string }
  */
@@ -64,8 +82,11 @@ function collectionCard(p, opts = {}) {
   card.setAttribute('role', 'checkbox');
   card.setAttribute('aria-checked', String(on));
   if (locked) card.setAttribute('aria-disabled', 'true');
+  // The rank chip lives inside .name, and aria-label replaces the card's content for a
+  // screen reader — so the rank has to be repeated here or it is simply not announced.
+  const said = p.rank ? `${p.name}, rank ${p.rank}${p.why ? `, ${p.why}` : ''}` : p.name;
   card.setAttribute('aria-label',
-    locked ? `${p.name}, sign in to track` : `${p.name}, ${on ? 'caught' : 'not caught'}`);
+    locked ? `${said}, sign in to track` : `${said}, ${on ? 'caught' : 'not caught'}`);
 
   const hit = () => { trackerToggle(p.key); };
   card.addEventListener('click', hit);
@@ -80,7 +101,12 @@ function collectionCard(p, opts = {}) {
 
   const name = document.createElement('div');
   name.className = 'name';
-  name.textContent = p.name;
+  if (p.rank) {
+    name.appendChild(rankChip(p));
+    // A real space, not just the chip's margin, so copied text reads "S Mega Gengar".
+    name.appendChild(document.createTextNode(' '));
+  }
+  name.appendChild(document.createTextNode(p.name));
   body.appendChild(name);
 
   if (p.form) {
@@ -93,6 +119,13 @@ function collectionCard(p, opts = {}) {
   if (p.types) body.appendChild(typePills(p.types));
 
   if (p.raid) body.appendChild(raidPill(p));
+
+  if (p.why) {
+    const w = document.createElement('div');
+    w.className = 'why';
+    w.textContent = p.why;
+    body.appendChild(w);
+  }
 
   if (opts.badges?.length) {
     const meta = document.createElement('div');

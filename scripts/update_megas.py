@@ -5,16 +5,25 @@ import os, re, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from bulbapedia import (fetch_wikitext, section, rows, cells, cell_value,
                         find_date, slug, check_sprites, write_js, category_members)
+import gamemaster
+from rank import best_cycle, rank_megas, moveset_label
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "web", "mega-data.js")
 
 # For Primals and Mega Rayquaza the table's "Boosted types" column is WEATHER-based and is
-# not the Pokemon's own typing. Verified on the same page's Effects section.
-ACTUAL_TYPES = {
-    "Primal Kyogre": ["Water"],
-    "Primal Groudon": ["Ground"],
-    "Mega Rayquaza": ["Flying", "Dragon"],
-}
+# not the Pokemon's own typing. Verified on the same page's Effects section. The typing
+# itself now comes from the Game Master, which is the game's own data; this set only marks
+# which entries get the weather pill.
+WEATHER_BOOSTED = ("Primal Kyogre", "Primal Groudon", "Mega Rayquaza")
+
+
+def gm_key(name):
+    """Site name -> the (pokemonId, tempEvoId) pair the Game Master keys Megas by."""
+    if name.startswith("Primal "):
+        return (name[7:].upper().replace(" ", "_"), "TEMP_EVOLUTION_PRIMAL")
+    m = re.fullmatch(r"Mega (.+?)(?: ([XY]))?", name)
+    species = m.group(1).upper().replace(" ", "_").replace("-", "_")
+    return (species, "TEMP_EVOLUTION_MEGA" + (f"_{m.group(2)}" if m.group(2) else ""))
 
 
 def mega_name(c):
@@ -118,16 +127,37 @@ def main():
     if missing_both:
         raise RuntimeError(f"no working sprite for: {missing_both}")
 
+    # Battle numbers come from the Game Master, never from a tier list or memory. See
+    # scripts/rank.py for the model and scripts/gamemaster.py for the traps.
+    gm, (gm_sha, gm_date) = gamemaster.fetch()
+    gm_moves = gamemaster.moves(gm)
+    gm_megas = gamemaster.mega_forms(gm)
+
     entries = []
     for m in out:
         primary, fallback = pairs[m["name"]]
         raid, stars = raid_class(m["name"], special)
+        form = gm_megas.get(gm_key(m["name"]))
         e = {"name": m["name"], "art": primary,
-             "types": ACTUAL_TYPES.get(m["name"], m["boosts"]),
+             # Trap 3: the Mega's own typing, not the base species'. Falls back to
+             # Bulbapedia's boosted-types column when the Game Master has not caught up.
+             "types": form["types"] if form else m["boosts"],
              "boosts": m["boosts"], "energy": m["energy"], "raid": raid, "stars": stars,
              "released": m["released"]}
-        if m["name"] in ACTUAL_TYPES:
+        if m["name"] in WEATHER_BOOSTED:
             e["weatherBoost"] = True
+        if form:
+            # Elite-TM and Community Day moves are included: they are the ceiling this
+            # Pokemon can actually reach, and 22 of the roster rank on one. `legacy` says
+            # so on the card, because the rank is unreachable without that move.
+            fast = form["fast"] + form["eliteFast"]
+            charged = form["charged"] + form["eliteCharged"]
+            best = best_cycle(form["stats"]["baseAttack"], e["types"], fast, charged, gm_moves)
+            if best:
+                e["dps"] = round(best["dps"], 1)
+                e["moves"] = moveset_label(best["fast"], best["charged"])
+                if best["fast"] in form["eliteFast"] or best["charged"] in form["eliteCharged"]:
+                    e["legacy"] = True
         if not exists[primary]:
             # No mainline Mega artwork: a GO-original Mega. Fall back to base species.
             e["artFallback"] = fallback
@@ -164,7 +194,42 @@ def main():
             "before trusting the five-star classification"
         )
 
-    write_js(OUT, HEADER, {"MEGAS": entries})
+    # A Mega whose typing the Game Master and Bulbapedia disagree on puts it in the wrong
+    # comparison pool, which quietly moves everyone else's placing too.
+    disagree = [e["name"] for e in entries
+                if e.get("dps") and set(e["types"]) != set(e["boosts"])
+                and e["name"] not in WEATHER_BOOSTED]
+    if disagree:
+        print(f"  typing differs from Bulbapedia's boosted-types column: {disagree}")
+    if len(disagree) > 3:
+        raise RuntimeError(
+            f"{len(disagree)} Megas have a typing the boosted-types column does not match — "
+            "either the column stopped meaning typing or gm_key is mapping to wrong forms"
+        )
+
+    rank_megas(entries)
+    ranks = Counter(e["rank"] for e in entries)
+    print(f"  ranks: {dict(sorted(ranks.items()))}")
+    print(f"    S: {', '.join(e['name'] for e in entries if e['rank'] == 'S')}")
+    unrated = [e["name"] for e in entries if e["rank"] == "?"]
+    print(f"    no Game Master entry yet ({len(unrated)}): {unrated}")
+    print(f"    ranking on a legacy move: {sum(1 for e in entries if e.get('legacy'))}")
+
+    # Every Mega unrated means the Game Master lookup broke, not that the game shipped
+    # sixty Megas this week. Trap 1 in gamemaster.py is about the handful, not the whole.
+    if len(unrated) > 8:
+        raise RuntimeError(
+            f"{len(unrated)} of {len(entries)} Megas have no Game Master entry — gm_key is "
+            "probably no longer matching, which would blank the rank on every card"
+        )
+    if not ranks["S"]:
+        raise RuntimeError("no Mega ranked S — every type would have to be led by nothing")
+
+    write_js(OUT, header(gm_sha, gm_date), {"MEGAS": entries})
+
+
+def header(gm_sha, gm_date):
+    return HEADER.replace("{GM}", f"{gm_sha} ({gm_date})")
 
 
 HEADER = """/**
@@ -172,6 +237,7 @@ HEADER = """/**
  *
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_megas.py
  * Source: https://bulbapedia.bulbagarden.net/wiki/Mega_Evolution_(GO)
+ *         PokeMiners game_master {GM} — stats, moves and the Mega boost multipliers
  * Unreleased (HTML-commented) rows are excluded.
  *
  * energy  first-time activation cost; later activations cost far less
@@ -183,6 +249,14 @@ HEADER = """/**
  *         Super Mega Raid is an event-driven variant, so it is not derived per species.
  * boosts  party-wide type bonus; weather-based (not own typing) when weatherBoost is set
  * attack  extra Charged Attack unlocked at Super Max Mega Level
+ * rank    is this worth Mega Energy? S/A/B/C/D, or "?" when the Game Master has no entry
+ *         for it yet. Computed — see scripts/rank.py for the bands and the damage model.
+ *         The comparison pool is other MEGAS, so "Best Ice Mega" does not mean best Ice
+ *         attacker in the game; Mamoswine beats Mega Glalie without Mega Evolving.
+ * why     one line saying where it places and what beats it
+ * dps     sustained cycle DPS at level 40, 15/15/15, vs a neutral 200-defense target
+ * moves   the moveset that DPS assumes; legacy marks one needing an Elite TM or a
+ *         Community Day move, so the rank is unreachable without it
  * isNew   GO-original Mega with no mainline artwork; artFallback is base-species art
  */
 """

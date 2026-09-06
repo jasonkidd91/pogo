@@ -41,6 +41,20 @@
       <button data-group="status" data-filter="have" aria-pressed="false">Collected</button>
     </div>
     <div class="controls">
+      <span class="chip-label">Worth it</span>
+      <button data-group="rank" data-filter="all" aria-pressed="true">Any</button>
+      <button data-group="rank" data-filter="SA" aria-pressed="false">S &amp; A</button>
+      <button data-group="rank" data-filter="S" aria-pressed="false">S only</button>
+      <button data-group="rank" data-filter="C" aria-pressed="false">Collection only</button>
+    </div>
+    <div class="controls">
+      <span class="chip-label">Role</span>
+      <button data-group="role" data-filter="all" aria-pressed="true">Any</button>
+      <button data-group="role" data-filter="Attacker" aria-pressed="false">Max Attacker</button>
+      <button data-group="role" data-filter="Guard" aria-pressed="false">Max Guard</button>
+      <button data-group="role" data-filter="Spirit" aria-pressed="false">Max Spirit</button>
+    </div>
+    <div class="controls">
       <span class="chip-label">Kind</span>
       <button data-group="kind" data-filter="all" aria-pressed="true">Both</button>
       <button data-group="kind" data-filter="gmax" aria-pressed="false">Gigantamax only</button>
@@ -82,12 +96,21 @@ const G_ROWS = GIGANTAMAX.map((g) => ({ ...g, key: Store.id.gmax(g.name), kind: 
 const D_ROWS = DYNAMAX.map((d) => ({ ...d, key: Store.id.dmax(d.art), kind: 'dmax' }));
 const ALL_ROWS = [...G_ROWS, ...D_ROWS];
 
+// "C" is the whole bottom half of the roster — the ones you can transfer without thinking
+// about it. It is the most useful filter on this page, so it gets its own chip.
+const RANK_FILTER = { SA: 'SA', S: 'S', C: 'C' };
+
 function visible(p) {
   const kind = activeFilter('kind');
   if (kind !== 'all' && p.kind !== kind) return false;
+  const rank = activeFilter('rank');
+  if (rank !== 'all' && !RANK_FILTER[rank].includes(p.rank)) return false;
+  const role = activeFilter('role');
+  if (role !== 'all' && p.role !== role) return false;
   if (!statusMatch(p.key, activeFilter('status'))) return false;
   const q = searchText();
   if (q && !p.name.toLowerCase().includes(q) &&
+      !(p.why || '').toLowerCase().includes(q) &&
       !(p.gmaxMove || '').toLowerCase().includes(q)) return false;
   return true;
 }

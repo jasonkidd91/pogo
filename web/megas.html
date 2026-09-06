@@ -48,6 +48,13 @@
       <button data-group="raid" data-filter="legendary" aria-pressed="false">Legendary ★6</button>
     </div>
     <div class="controls">
+      <span class="chip-label">Worth it</span>
+      <button data-group="rank" data-filter="all" aria-pressed="true">Any</button>
+      <button data-group="rank" data-filter="SA" aria-pressed="false">S &amp; A</button>
+      <button data-group="rank" data-filter="S" aria-pressed="false">S only</button>
+      <button data-group="rank" data-filter="D" aria-pressed="false">Collection only</button>
+    </div>
+    <div class="controls">
       <span class="chip-label">Cost</span>
       <button data-group="cost" data-filter="all" aria-pressed="true">Any</button>
       <button data-group="cost" data-filter="100" aria-pressed="false">100</button>
@@ -101,7 +108,13 @@ const RAID_FILTER = {
   legendary: 'Legendary Mega Raid',
 };
 
+// Chip value -> which ranks it lets through. "SA" is the common ask ("what should I
+// actually spend energy on?"), "D" the opposite one ("what can I stop caring about?").
+const RANK_FILTER = { SA: 'SA', S: 'S', D: 'D' };
+
 function visible(m) {
+  const rank = activeFilter('rank');
+  if (rank !== 'all' && !RANK_FILTER[rank].includes(m.rank)) return false;
   const cost = activeFilter('cost');
   if (cost !== 'all' && String(m.energy) !== cost) return false;
   const raid = activeFilter('raid');
@@ -110,6 +123,8 @@ function visible(m) {
   const q = searchText();
   if (q && !(m.name.toLowerCase().includes(q) ||
              (m.raid || '').toLowerCase().includes(q) ||
+             (m.why || '').toLowerCase().includes(q) ||
+             (m.moves || '').toLowerCase().includes(q) ||
              (m.types || []).some((t) => t.toLowerCase().includes(q)))) return false;
   return true;
 }
@@ -140,6 +155,10 @@ function render() {
       if (m.weatherBoost) badges.push(badge('tag-weather', '⛅ ' + m.boosts.join('/'), 'Weather-based party boost — not this Pokémon’s own typing'));
       if (m.attack) badges.push(badge('tag-attack', '★ ' + m.attack, 'Extra Charged Attack unlocked at Super Max Mega Level'));
       if (m.isNew) badges.push(badge('tag-new', 'GO ORIGINAL', 'No mainline Mega form — base-species artwork shown'));
+      // Only shown when the rank depends on it. Knowing you need Frenzy Plant to reach the
+      // grade is the actionable half; the moveset alone would just be trivia.
+      if (m.legacy) badges.push(badge('tag-legacy', '⚑ ' + m.moves,
+        'Rank assumes this moveset, which needs an Elite TM or a Community Day move'));
       grid.appendChild(collectionCard(m, { badges, sub: 'Released ' + m.released }));
     });
     list.appendChild(grid);

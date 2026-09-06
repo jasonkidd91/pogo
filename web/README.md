@@ -11,8 +11,8 @@ origin breaks Google sign-in and Firestore:
 |---|---|
 | `index.html` | **What's on** — current and upcoming events, live from the LeekDuck feed |
 | `mega-finale.html` | GO Fest 2026: Mega Finale event tracker — habitats, times, raid passes |
-| `megas.html` | All 63 released Mega Evolutions and Primal Reversions, with raid class |
-| `dynamax.html` | All 143 Dynamax-capable Pokémon + 17 Gigantamax forms |
+| `megas.html` | All 63 released Mega Evolutions and Primal Reversions, with raid class and rank |
+| `dynamax.html` | All 143 Dynamax-capable Pokémon + 17 Gigantamax forms, with rank and Max role |
 
 ## Shared modules
 
@@ -61,6 +61,34 @@ in, with its star rating:
 It is the class of the battle, **not** a claim that the Pokémon is in the rotation today.
 Plain Dynamax Pokémon carry no tier on purpose — theirs belongs to the current Power Spot
 rotation, changes weekly, and would be stale within days.
+
+## Rank: is this worth investing in?
+
+Every Mega and Dynamax card carries an S/A/B/C/D letter and a one-line reason. It answers
+"should I spend resources on this, or is it just Pokédex filler?" — computed in
+`scripts/rank.py` from the **Game Master**, the game's own data file, never from a tier list.
+
+**Megas** are scored on sustained cycle DPS (level 40, 15/15/15, neutral target) and on how
+well their type is already covered. Every Mega of a type gives the same 1.3× party boost, so
+what actually differs is whether this is the one you would bring:
+
+| Grade | Means |
+|---|---|
+| S | Best Mega of one of its types, and a top-quartile attacker overall |
+| A | Best Mega of one of its types |
+| B | Top-quartile attacker, or the runner-up in a type, or a strong pick in a thin one |
+| C | Usable, but not the one you would bring |
+| D | Bottom quarter with nothing scarce to offer — collection only |
+| ? | Too new: no Game Master entry yet. Never a guessed grade |
+
+**Dynamax** ranks on role instead, because every Dynamax Pokémon has all three Max moves. The
+grade is the best of Max Attacker / Guard / Spirit its base stats suit, placed across the whole
+160-strong roster, and the reason line carries the candy and XL cost of levelling one Max move.
+Blissey is bottom-decile Attack and the #1 Max Spirit in the game.
+
+**The pool is the page's own roster, and the wording keeps to it.** "Best Ice Mega" is a claim
+about Megas; Mamoswine beats Mega Glalie without Mega Evolving at all. Every reason line names
+the placing and what beats it, so the letter is never the only thing on offer.
 
 ## Shared checkmarks
 
@@ -114,6 +142,12 @@ forty Pokémon costs one write, not forty. Firebase Analytics is deliberately no
 Rosters are **parsed from Bulbapedia wikitext**, not from an LLM summary of the rendered page —
 the rendered-page summaries were unreliable on large tables. Entries that are HTML-commented in
 the wikitext are unreleased/datamined and are excluded.
+
+Battle numbers — base stats, move power and duration, Mega boost multipliers, Dynamax upgrade
+costs — come from **PokeMiners' Game Master**, the game's own data file, fetched by upstream
+commit sha and recorded in each data file's header. It is authoritative enough that it
+corrected a hand-written entry here: Primal Groudon was listed as pure Ground, and the game
+says Ground/Fire.
 
 Regenerate with the parser notes in each data file's header. Two traps worth remembering:
 
