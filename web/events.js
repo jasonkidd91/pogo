@@ -37,6 +37,36 @@ const TYPES = {
 };
 
 /**
+ * What each kind of event actually is. Titles like "Mega Squads" or "Twilight Trails" are
+ * names, not descriptions, and this is the line that answers "what is this?".
+ *
+ * These are feature rules, not rotating content — checked against Bulbapedia's Community Day,
+ * Pokémon Spotlight Hour and Max Battle articles. Deliberately no weekdays or clock times in
+ * them: the cadence does move (Spotlight Hour is no longer the Tuesday it was), and the
+ * weekly rhythm box works that out from the schedule instead.
+ */
+const WHAT_IS = {
+  'pokemon-go-fest': 'GO Fest weekend — habitats rotate through the day, each with its own spawns and raids.',
+  'community-day': 'Three hours of one Pokémon everywhere, an exclusive move for evolving during it, plus bonuses.',
+  'pokemon-spotlight-hour': 'One hour, one Pokémon spawning everywhere, with a single bonus attached.',
+  'raid-hour': 'One hour when nearly every gym runs the featured raid boss.',
+  'raid-day': 'A short window when one boss takes over raids.',
+  'max-mondays': 'One featured Dynamax boss takes over Power Spots — spend Max Particles to battle and catch it.',
+  'max-battles': 'A day built around Max Battles at Power Spots.',
+  'raid-battles': 'The raid rotation — this boss is in raids for the window shown.',
+  'go-battle-league': 'The PvP rotation — which leagues and cups are open this week.',
+  'season': 'A months-long season. Spawns, eggs and bonuses shift with it.',
+  'go-pass': 'A reward track you work through by playing during the month.',
+  'event': 'A limited-time event with its own spawns, bonuses and research.',
+};
+
+/** The event page's own contents list, in plain words. */
+const HAS_LABEL = {
+  bonuses: 'Bonuses', spawns: 'Wild spawns', eggs: 'Eggs', raids: 'Raids',
+  research: 'Research', moves: 'New moves', shiny: 'New Shinies',
+};
+
+/**
  * Events that have a catch-list tracker on this site, by feed id. Deliberately sparse —
  * a tracker page is built on request, not for every event that comes along.
  */
@@ -48,6 +78,13 @@ const TRACKERS = {
 const BACKGROUND = new Set(['season', 'go-pass']);
 
 const DAY = 86400000;
+
+/**
+ * Blurbs are scraped per event by scripts/update_events.py and live in the snapshot; the feed
+ * itself carries no description. So the live list is merged with the snapshot by id, and
+ * anything announced since the snapshot was generated falls back to its WHAT_IS line.
+ */
+const described = new Map();
 
 let events = [];
 let source = 'snapshot';   // snapshot | live | stale
@@ -105,6 +142,11 @@ function windowText(e) {
 }
 
 /* ---------- classify ---------- */
+
+function describe(e) {
+  const extra = described.get(e.id);
+  return { about: extra?.blurb || null, has: extra?.has || null };
+}
 
 function typeInfo(e) {
   return TYPES[e.type] || { label: e.heading || 'Event', cls: 'event', group: 'big' };
@@ -226,6 +268,8 @@ function liveCard(e, now) {
     card.appendChild(p);
   }
 
+  card.appendChild(aboutBlock(e));
+
   const links = document.createElement('div');
   links.className = 'elinks';
   const track = trackerLink(e);
@@ -233,6 +277,36 @@ function liveCard(e, now) {
   links.appendChild(linkOut(e));
   card.appendChild(links);
   return card;
+}
+
+/**
+ * What this kind of event is, then what this particular one is, then what is in it. The first
+ * line is always there; the other two only when the snapshot has them.
+ */
+function aboutBlock(e) {
+  const wrap = document.createElement('div');
+  wrap.className = 'eabout';
+  const { about, has } = describe(e);
+
+  const kind = document.createElement('p');
+  kind.className = 'ekind';
+  kind.textContent = WHAT_IS[e.type] || 'A limited-time event.';
+  wrap.appendChild(kind);
+
+  if (about) {
+    const p = document.createElement('p');
+    p.className = 'eblurb';
+    p.textContent = about;
+    wrap.appendChild(p);
+  }
+
+  if (has?.length) {
+    const row = document.createElement('p');
+    row.className = 'ehas';
+    row.textContent = 'Includes: ' + has.map((h) => HAS_LABEL[h] || h).join(' · ');
+    wrap.appendChild(row);
+  }
+  return wrap;
 }
 
 /** Times published in UTC land at a different clock time depending on where you are. */
@@ -276,6 +350,24 @@ function eventRow(e, now, opts = {}) {
     : t ? `until ${fmtTime(t)}` : '';
   sub.textContent = [until, detail].filter(Boolean).join(' · ');
   if (sub.textContent) body.appendChild(sub);
+
+  // One line saying what it is. The blurb when we have one, the kind of event otherwise.
+  const { about, has } = describe(e);
+  const aboutLine = document.createElement('div');
+  aboutLine.className = about ? 'eabout-row' : 'eabout-row kind';
+  aboutLine.textContent = about || WHAT_IS[e.type] || '';
+  if (aboutLine.textContent) {
+    aboutLine.title = aboutLine.textContent;
+    body.appendChild(aboutLine);
+  }
+
+  // What is in it. For an event that is still a name and a date, this is the only answer.
+  if (has?.length) {
+    const inc = document.createElement('div');
+    inc.className = 'ehas';
+    inc.textContent = 'Includes: ' + has.map((h) => HAS_LABEL[h] || h).join(' · ');
+    body.appendChild(inc);
+  }
 
   row.appendChild(body);
 
@@ -519,6 +611,11 @@ async function refresh() {
 document.addEventListener('DOMContentLoaded', () => {
   buildNav('events');
 
+  if (typeof EVENTS_SNAPSHOT !== 'undefined') {
+    EVENTS_SNAPSHOT.forEach((e) => {
+      if (e.blurb || e.has) described.set(e.id, { blurb: e.blurb, has: e.has });
+    });
+  }
   events = typeof EVENTS_SNAPSHOT !== 'undefined' ? EVENTS_SNAPSHOT.slice() : [];
   render();          // paint the snapshot immediately — never an empty page while fetching
   refresh();
