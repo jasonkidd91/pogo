@@ -19,7 +19,7 @@
  *
  *   .type      10px   species typing            .rank      18px box  worth-investing grade
  *   .raid      9.5px  battle class + stars      .energy    11px      Mega Energy cost
- *   .tag-new / .tag-attack / .tag-weather / .tag-legacy    10px      card badges
+ *   .tag-new / .tag-attack / .tag-weather / .tag-role      10px      card badges
  *   .etype / .gtag / .ctag                                 events page labels
  *
  * Add a component here only together with the function in ui.js that renders it.
@@ -321,13 +321,13 @@ footer .srcs { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 6px; }
 .type[data-t="dragon"]{background:#8b7ee0} .type[data-t="dark"]{background:#9a857a}
 .type[data-t="steel"]{background:#b3b3c4} .type[data-t="fairy"]{background:#eaa2c8}
 
-.tag-attack, .tag-weather, .tag-legacy {
+.tag-attack, .tag-weather, .tag-role {
   font-size: var(--fs-pill); font-weight: 700; letter-spacing: .03em;
   padding: 2px 6px; border-radius: var(--r-xs);
 }
 .tag-attack { color: var(--e300); border: 1px solid rgba(244,114,182,.45); }
 .tag-weather { color: #7dd3fc; border: 1px solid rgba(125,211,252,.45); }
-.tag-legacy { color: var(--e200); border: 1px solid rgba(251,191,36,.45); }
+.tag-role { color: #7dd3fc; border: 1px solid rgba(125,211,252,.45); }
 
 /* Raid class pill. Colour tracks the star rating, so the ladder is readable at a glance. */
 .raid {
@@ -344,26 +344,36 @@ footer .srcs { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 6px; }
 .raid[data-stars="6"] { color: var(--super); }
 .card.caught .raid { opacity: .45; }
 
-/* Is it worth investing in? The letter is filled for the grades worth acting on and hollow
-   for the ones that are not, so "keep" vs "filler" reads without parsing the letter. */
+/* Combat power, S down to D. Every grade is a FILLED chip: the earlier build left B, C and D
+   translucent or hollow, and on a collected card — which also dims the whole body — they went
+   from low-contrast to unreadable. The rank is a fact about the species, not about your
+   progress, so it barely dims at all when a card is ticked. */
 .rank {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 18px; height: 18px; border-radius: var(--r-sm);
+  width: 19px; height: 19px; border-radius: var(--r-sm);
   font-size: var(--fs-meta); font-weight: 800; line-height: 1;
   vertical-align: 1px;
   /* inline-flex also stops .card.caught's line-through from striking the letter. */
   text-decoration: none;
 }
-.rank[data-rank="S"] { background: var(--e200); color: #0b1020; }
-.rank[data-rank="A"] { background: var(--done); color: #0b1020; }
-.rank[data-rank="B"] { background: rgba(91,140,255,.22); color: var(--accent); }
-.rank[data-rank="C"] { background: var(--surface-2); color: var(--muted); }
-.rank[data-rank="D"] { background: transparent; color: var(--muted); border: 1px dashed var(--border-bright); }
+.rank[data-rank="S"] { background: #fbbf24; color: #0b1020; }
+.rank[data-rank="A"] { background: #34d399; color: #0b1020; }
+.rank[data-rank="B"] { background: #5b8cff; color: #0b1020; }
+.rank[data-rank="C"] { background: #8b93a7; color: #0b1020; }
+.rank[data-rank="D"] { background: #333b4d; color: #c3cad9; }
 .rank[data-rank="?"] { background: transparent; color: var(--muted); border: 1px dashed var(--border-bright); }
-.card.caught .rank { opacity: .45; }
+.card.caught .rank { opacity: .85; }
 
-.why { font-size: var(--fs-meta); color: var(--muted); line-height: 1.4; margin-bottom: 5px; }
-.card.caught .why { opacity: .45; }
+/* The number behind the letter, and the moveset it assumes. */
+.power {
+  font-size: var(--fs-meta); color: var(--muted); line-height: 1.4;
+  margin-bottom: 5px; display: flex; align-items: baseline; gap: var(--sp-1); flex-wrap: wrap;
+}
+.power b { color: var(--text); font-size: var(--fs-sub); font-variant-numeric: tabular-nums; }
+.power .mv { color: var(--muted); opacity: .85; }
+.power .mv::before { content: '· '; }
+.power .lg { color: var(--e200); cursor: help; }
+.card.caught .power { opacity: .45; }
 
 .card.mon .meta { margin-top: 2px; }
 .card.mon .note { font-size: var(--fs-meta); color: var(--muted); margin-top: 5px; }

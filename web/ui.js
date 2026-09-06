@@ -79,7 +79,7 @@ function el(tag, props, ...kids) {
 
 /**
  * Every small label on the site. `kind` is the CSS class, so the stylesheet is the list of
- * what exists: type, energy, tag-new, tag-attack, tag-weather, tag-legacy, gtag, ctag, etype.
+ * what exists: type, energy, tag-new, tag-attack, tag-weather, tag-role, gtag, ctag, etype.
  */
 function tag(kind, text, title, data) {
   return el('span', { class: kind, text, title, data });
@@ -110,19 +110,47 @@ function raidPill(p) {
 }
 
 /**
- * Is this worth spending resources on? S/A/B/C/D, or "?" when the Game Master has no entry
- * for the species yet — new releases lag it by days and a guessed grade would be worse than
- * none. Computed in scripts/rank.py from the game's own data, never from a tier list.
- *
- * The comparison pool is the page's own roster, which is the whole point and also the
- * limit: "Best Ice Mega" is a claim about Megas, not about Ice attackers in general.
- * `why` always spells out the placing, so the letter is never the only thing on offer.
+ * COMBAT POWER, and nothing else. S/A/B/C/D by percentile of every fully evolved Pokemon
+ * and Mega in the game — S is the top 5%, D is below the median — so a B here means the
+ * same as a B on any other page. "?" is a species the Game Master has no entry for yet.
+ * Computed in scripts/rank.py from the game's own data, never from a tier list.
  *
  * `inline-flex` is load-bearing: `.card.caught .name` sets line-through, which propagates
  * into children, and inline-flex is what stops the letter being struck out.
  */
+const RANK_TITLE = {
+  S: 'Top 5% attacker of every fully evolved Pokémon and Mega in the game',
+  A: 'Top 12% attacker',
+  B: 'Top 25% attacker',
+  C: 'Above the median attacker',
+  D: 'Below-average attacker',
+  '?': 'No Game Master entry yet — too new to rate',
+};
+
 function rankChip(p) {
-  return el('span', { class: 'rank', data: { rank: p.rank }, title: p.why, text: p.rank });
+  return el('span', {
+    class: 'rank', data: { rank: p.rank }, text: p.rank,
+    title: RANK_TITLE[p.rank] + (p.dps ? ` · ${p.dps} DPS` : ''),
+  });
+}
+
+/**
+ * The number behind the letter, and the moveset it assumes. This is the whole explanation a
+ * card owes the reader — the previous prose line ("#2 of 4 Bug Megas, behind Mega Heracross
+ * · 100 energy") mixed a placing and a price into something nobody was asking.
+ *
+ * `legacy` means the best moveset needs an Elite TM or a Community Day move, so the grade is
+ * out of reach without it. That is worth a mark; the moveset alone would just be trivia.
+ */
+function powerLine(p) {
+  if (!p.dps) return null;
+  return el('div', { class: 'power' },
+    el('b', { text: String(p.dps) }), ' DPS',
+    p.moves && el('span', { class: 'mv' }, p.moves),
+    p.legacy && el('span', {
+      class: 'lg', text: '⚑',
+      title: 'Needs an Elite TM or a Community Day move — the grade is out of reach without it',
+    }));
 }
 
 /** Mega Energy cost. `?` where the cost is deliberately unverified, not unknown-by-accident. */
@@ -167,9 +195,10 @@ function checkMark() {
  *
  * Structure, in order, with each part skipped when its data is absent:
  *
- *     [sprite]  lead · rank + name · form · types · raid · why · badges · sub   [check]
+ *     [sprite]  lead · rank + name · form · types · raid · power · badges · sub   [check]
  *
- * @param p     the Pokemon. Renders `rank`/`why`, `form`, `types`, `raid` when present.
+ * @param p     the Pokemon. Renders `rank`, `form`, `types`, `raid` and the power line
+ *              (`dps`/`moves`/`legacy`) when present.
  * @param opts  variant  'mon' (collection grids) | 'plain' (event grids) | 'super' (banner)
  *              key      Store key; defaults to p.key ?? p.id
  *              lead     small line above the name, e.g. a Super Mega Raid's tier
@@ -186,7 +215,9 @@ function monCard(p, opts = {}) {
 
   // The rank chip lives inside .name, and aria-label replaces the card's content for a
   // screen reader — so the rank has to be repeated here or it is simply not announced.
-  const said = p.rank ? `${p.name}, rank ${p.rank}${p.why ? `, ${p.why}` : ''}` : p.name;
+  const said = p.rank
+    ? `${p.name}, rank ${p.rank}, ${RANK_TITLE[p.rank]}${p.dps ? `, ${p.dps} DPS` : ''}`
+    : p.name;
 
   const hit = () => { trackerToggle(key); };
   const card = el('div', {
@@ -214,7 +245,7 @@ function monCard(p, opts = {}) {
       p.form && el('div', { class: 'form', text: p.form }),
       typePills(p.types),
       p.raid && raidPill(p),
-      p.why && el('div', { class: 'why', text: p.why }),
+      powerLine(p),
       opts.badges?.length > 0 && el('div', { class: 'meta' }, opts.badges),
       opts.sub && el('div', { class: 'note', text: opts.sub })),
     checkMark());
@@ -376,7 +407,7 @@ function setBar(done, total) {
 }
 
 const UI = {
-  el, tag, typePills, raidPill, rankChip, energyPill, sprite, checkMark,
+  el, tag, typePills, raidPill, rankChip, powerLine, energyPill, sprite, checkMark,
   monCard, sectionHead, grid, empty, sources,
   summary, setupControls, activeFilter, searchText, statusMatch, STATUS_FILTER,
   setStat, setBar, ART_BASE,

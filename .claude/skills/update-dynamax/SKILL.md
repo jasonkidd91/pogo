@@ -20,18 +20,23 @@ Expected output shape:
 parsed 143 Dynamax + 17 Gigantamax
   Gigantamax with no plain-Dynamax entry (expected, not a bug): ['Meowth', 'Lapras', ...]
 game master 8e227be44f28 (2026-08-29) — cached
-  ranks: {'A': 23, 'B': 41, 'C': 79, 'S': 17}
+  power scale from 611 fully-evolved forms: {'S': 15.3, 'A': 13.6, 'B': 12.1, 'C': 10.2}
+  ranks: {'A': 7, 'B': 24, 'C': 29, 'D': 100}
   roles: {'Guard': 29, 'Spirit': 24, 'Attacker': 28}
-    Blissey — #1 Max Spirit of 160; Shuckle — #1 Max Guard of 160; Alakazam — #1 Max Attacker...
+    strongest: Inteleon 14.3 (A), Metagross 14.3 (A), Latios 14.2 (A), Moltres 13.9 (A)
 wrote .../web/max-data.js: GIGANTAMAX=17, DYNAMAX=143
 ```
 
 Both counts should only ever grow. A drop means the page layout changed — investigate before
 shipping.
 
-Bulbapedia gives the roster; the Game Master gives the base stats and the Max move costs the
-rank is built from. `no Game Master entry, left unranked` naming more than a handful means
+Bulbapedia gives the roster; the Game Master gives **typing, base stats and the move tables**
+the rank is built from. `no Game Master entry, left unranked` naming more than a handful means
 `gm_id` stopped matching `pokemonId` — the script raises above 10.
+
+**No S on this page is correct, not a bug.** The grade is combat power on one site-wide scale,
+and no plain Dynamax Pokémon is a top-5% attacker in its base form — that tier is Megas and
+legendaries. See the `update-ranks` skill.
 
 ## Tiers: Gigantamax yes, Dynamax no
 
@@ -71,24 +76,24 @@ curl -s -o /dev/null -w "%{http_code}\n" https://img.pokemondb.net/sprites/home/
 
 Alolan/Galarian/Hisuian forms on pokemondb use `-alolan`, `-galarian`, `-hisuian`.
 
-## The rank and the three Max roles
+## The rank, and the role badge beside it
 
-Each card carries an S/A/B/C/D grade plus a role — **Max Attacker / Max Guard / Max Spirit**.
-Every Dynamax Pokémon has all three Max moves, so the rank is not a power score: it is the
-best role its base stats suit, as a placing across the whole 160-strong Max roster. Blissey is
-bottom-decile Attack and the #1 Max Spirit in the game; that is the point of ranking by role.
+Each card carries an S/A/B/C/D grade that is **combat power only**, on the same site-wide scale
+as the Mega page, plus a separate role badge — **MAX ATTACKER / MAX GUARD / MAX SPIRIT** — for
+the top quarter of the roster in Attack, Defense or Stamina.
 
-The reason line also carries the **candy and XL cost to level one Max move**, read from the
-species' `breadTierGroup` in the Game Master ("bread" is the internal codename for Dynamax).
-That is the real price of committing to a Dynamax Pokémon and belongs next to the grade.
+Keeping those two apart is the whole design. Blissey is a **D** attacker and the **best Max
+Spirit in the game**; the grade cannot say that, so the badge does. A browser check asserts
+that exact pair, because merging them is the obvious "simplification" and it destroys the
+information.
 
-`C` is the whole bottom half of the roster and is the most useful filter on this page — it is
-the answer to "what can I transfer without thinking about it". It has its own chip.
+Cost used to sit in the card text — `120 candy + 50 XL` — and was removed. It is not combat
+power, and it was noise on every card.
 
-Model, bands and wording live in `scripts/rank.py` and the **`update-ranks`** skill. One rule
-worth repeating here: a **Gigantamax entry ranks on its species' stats**, because its G-Max
-move hits harder but that damage is not in the Game Master. The header says so. Do not invent
-a bonus to "fix" a Gigantamax and its Dynamax twin sharing a grade.
+Model and bands live in `scripts/rank.py` and the **`update-ranks`** skill. One rule worth
+repeating here: a **Gigantamax entry ranks on its species' stats**, because its G-Max move
+hits harder but that damage is not in the Game Master. The header says so. Do not invent a
+bonus to "fix" a Gigantamax and its Dynamax twin sharing a grade.
 
 ## Deliberately not stored
 
@@ -98,9 +103,10 @@ and points at the in-game Power Spot. If the user wants live tiers, that needs a
 against a live tracker, not this generator — raise it as a design change rather than adding a
 stale column.
 
-**Types are not stored either.** Bulbapedia's Dynamax table doesn't carry them. If types are
-wanted, pull them from PokéAPI in the generator (one pass, cached into the data file) rather
-than fetching 143 times at page load.
+**Types ARE stored now.** They used to be missing — Bulbapedia's Dynamax table doesn't carry
+them — which left a Dynamax card visibly thinner than a Mega one. The Game Master has them
+(`types_of()`), so the generator writes them and the cards render the same type pills as
+everywhere else. Do not remove them again.
 
 ## Verify
 
@@ -109,5 +115,5 @@ python3 -m http.server 8777 --directory web
 ```
 
 Open `http://localhost:8777/dynamax.html`: section counts match the script, no broken images,
-the Gigantamax-only / Dynamax-only filters work, and the Worth it / Role chips narrow the list
-to cards whose reason line actually names that role.
+the Gigantamax-only / Dynamax-only filters work, every card shows its typing and its DPS, and
+the Power / Role chips narrow the list correctly.

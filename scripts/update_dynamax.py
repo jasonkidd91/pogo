@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from bulbapedia import (fetch_wikitext, section, rows, cells, find_date,
                         slug, check_sprites, write_js)
 import gamemaster
-from rank import rank_max
+from rank import apply_ranks, apply_roles, power_of, power_scale
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "web", "max-data.js")
 
@@ -88,23 +88,34 @@ def gm_id(name):
 
 
 def add_ranks(gmax, dyn):
-    """Rank the whole Max roster in place, and return the Game Master's (sha, date).
+    """Add typing, combat power and the Max role in place; return the Game Master's date.
 
-    Gigantamax and Dynamax are ranked together because they are one pool: a Max Battle
-    team is picked from everything you own, not from one list or the other.
+    The rank is combat power on the same site-wide scale the Mega page uses, so a B here
+    means what a B means there. The role badge is separate and is not part of it — see
+    scripts/rank.py.
     """
     gm, (gm_sha, gm_date) = gamemaster.fetch()
     species = gamemaster.species(gm)
-    costs = gamemaster.max_move_costs(gm)
+    moves = gamemaster.moves(gm)
 
     roster, missing = [], []
     for e in gmax + dyn:
         ps = species.get(gm_id(e["name"]))
         if not ps or "breadTierGroup" not in ps:
+            # Missing data, not a weak Pokemon. apply_ranks leaves a "?" alone.
+            e["rank"] = "?"
             missing.append(e["name"])
             continue
+        # Typing was previously left out of this file entirely, which made a Dynamax card
+        # carry noticeably less than a Mega one. The Game Master has it.
+        e["types"] = gamemaster.types_of(ps)
+        got = power_of(ps["stats"], e["types"], ps, moves)
+        if got:
+            e["dps"] = got["dps"]
+            e["moves"] = got["moves"]
+            if got["legacy"]:
+                e["legacy"] = True
         e["stats"] = ps["stats"]
-        e["cost"] = costs[ps["breadTierGroup"]]
         roster.append(e)
 
     # Trap 1 in gamemaster.py: a species too new for the Game Master gets no rank rather
@@ -118,15 +129,20 @@ def add_ranks(gmax, dyn):
             "probably no longer matching the pokemonId naming"
         )
 
-    rank_max(roster)
+    scale = power_scale(gm, moves)
+    pool = scale.pop("_pool")
+    apply_ranks(roster, scale)
+    apply_roles(roster)
     for e in roster:
-        del e["stats"], e["cost"]          # working values, not site data
+        del e["stats"]                     # a working value, not site data
 
     from collections import Counter
+    print(f"  power scale from {pool} fully-evolved forms: "
+          f"{ {k: round(v, 1) for k, v in scale.items()} }")
     print(f"  ranks: {dict(sorted(Counter(e.get('rank', '?') for e in roster).items()))}")
     print(f"  roles: {dict(Counter(e['role'] for e in roster if e.get('role')))}")
-    print("    " + "; ".join(f"{e['name']} — {e['why'].split(' · ')[0]}"
-                             for e in roster if e.get("rank") == "S"))
+    best = sorted((e for e in roster if e.get("dps")), key=lambda e: -e["dps"])[:6]
+    print("    strongest: " + ", ".join(f"{e['name']} {e['dps']} ({e['rank']})" for e in best))
     return gm_sha, gm_date
 
 
@@ -140,7 +156,7 @@ HEADER = """/**
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_dynamax.py
  * Sources: https://bulbapedia.bulbagarden.net/wiki/Dynamax_(GO)
  *          https://bulbapedia.bulbagarden.net/wiki/Gigantamax_(GO)
- *          PokeMiners game_master {GM} — base stats and Max move upgrade costs
+ *          PokeMiners game_master {GM} — base stats, typing and move tables
  *
  * A Gigantamax form is tracked separately from its Dynamax entry — they are different
  * catches. hasGmax marks a Dynamax entry whose species also has a Gigantamax form.
@@ -150,13 +166,17 @@ HEADER = """/**
  * plain Dynamax Pokemon belongs to the current Power Spot rotation rather than the species,
  * rotates weekly, and is deliberately NOT stored — it would be stale within days.
  *
- * rank/role  is this worth candy and Max Particles? Every Dynamax Pokemon has all three
- *            Max moves, so the rank is the best ROLE its base stats suit — Attacker,
- *            Guard or Spirit — as a placing across the whole Max roster. See
- *            scripts/rank.py. A Gigantamax entry ranks on its species' stats: its G-Max
- *            move hits harder, but that damage is not in the Game Master and is not
- *            invented here.
- * why        where it places, and what levelling one Max move costs
+ * rank   COMBAT POWER ONLY, on the same site-wide scale as web/mega-data.js: S/A/B/C/D by
+ *        percentile of every fully evolved Pokemon and Mega in the game. A Gigantamax entry
+ *        ranks on its species' stats — its G-Max move hits harder, but that damage is not in
+ *        the Game Master and is not invented here.
+ * role   Max Attacker / Guard / Spirit, when its stats put it in the top quarter of the
+ *        roster for one. NOT part of the rank: Blissey is a D attacker and the best Max
+ *        Spirit in the game, and that is the whole reason this field exists.
+ * types  the species' own typing, from the Game Master
+ * dps    sustained cycle DPS at level 40, 15/15/15, vs a neutral 200-defense target
+ * moves  the moveset that DPS assumes; legacy marks one needing an Elite TM or a
+ *        Community Day move
  */
 """
 

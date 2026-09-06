@@ -244,45 +244,52 @@ of `auth.js` follows from that and should not be "simplified" away:
   the Legendary article, which names Ditto and Bulbasaur in prose (see trap 3 in
   `scripts/bulbapedia.py`).
 
-  What stays absent: **which** Pokémon is in the raid or Power Spot rotation today, the
-  per-encounter Max Battle tier of a plain Dynamax Pokémon, and Dynamax types. Those rotate
-  weekly and would be stale within days. **Super Mega Raid is also deliberately not derived**
+  What stays absent: **which** Pokémon is in the raid or Power Spot rotation today, and the
+  per-encounter Max Battle tier of a plain Dynamax Pokémon. Those rotate weekly and would be
+  stale within days. (Dynamax *types* used to be absent too — Bulbapedia's table lacks them —
+  which left a Dynamax card visibly thinner than a Mega one. The Game Master has them, so they
+  are stored now.) **Super Mega Raid is also deliberately not derived**
   — Bulbapedia describes it as an event-driven shielded variant of a Mega Raid, not a property
   of the species, so a per-species value would be confidently wrong. The event page's
   hand-written `tier: 'Super Mega Raid'` is verified for that one event and stays hand-written.
 
 ### The rank
 
-Every Mega and Dynamax card carries an S/A/B/C/D letter answering **"is this worth spending
-resources on, or is it Pokédex filler?"**, plus a one-line reason. It is computed in
-`scripts/rank.py` from the Game Master — never remembered, never scraped from a tier list.
-`update-ranks` is the skill; the module docstring is the spec. Four rules govern it:
+Every Mega and Dynamax card carries an S/A/B/C/D letter answering one question: **how hard
+does this hit?** It is computed in `scripts/rank.py` from the Game Master — never remembered,
+never scraped from a tier list. `update-ranks` is the skill; the module docstring is the spec.
 
-- **The comparison pool is the page's own roster, and the wording must say so.** "Best Ice
-  Mega" is true. "Best Ice attacker" is false — Mamoswine beats Mega Glalie without Mega
-  Evolving. That distinction is the whole reason the reason line exists.
-- **Every reason states the placing, at every grade** — "#2 of 4 Bug Megas, behind Mega
-  Heracross". A `D` appends "collection only" to that rather than replacing it. The letter is
-  a judgement; the placing is the evidence, and a card should never show one without the other.
-- **Missing data is `?`, never a guessed grade.** PokeMiners lags a release by days, so newly
-  shipped Megas render "Too new to rate". Both generators raise if that count gets large,
-  because *every* card unrated means the name mapping broke, not that the game shipped sixty
-  Megas this week.
-- **A Mega's party boost is 1.3× for every Mega of that type** — that number is in the Game
-  Master. So "which Fire Mega boosts best" is not a real question, and the rank turns on
-  whether this is the one you would bring and how many others already cover the type.
+**It is combat power and nothing else.** It says nothing about Mega Energy, candy, XL, Max
+Particles, or how well a type is already covered. A value-for-money version was built first
+and removed: blending a placing and a price into one letter produced card text like *"#2 of 4
+Bug Megas, behind Mega Heracross · 100 energy"*, which answers a question nobody asked. The
+card now prints the number and the moveset — `17.6 DPS · Lick + Shadow Ball` — and nothing
+else.
 
-Dynamax ranks differently on purpose: every Dynamax Pokémon has all three Max moves, so the
-grade is the best **role** its base stats suit (Max Attacker / Guard / Spirit) as a placing
-across the whole 160-strong roster. Blissey is bottom-decile Attack and the #1 Max Spirit in
-the game. A Gigantamax entry ranks on its species' stats, since its G-Max move's damage is not
-in the Game Master — that limit is stated in the data header, not papered over with an
-invented bonus.
+- **One ladder for the whole site.** Grades are percentiles of a reference pool of every fully
+  evolved species plus every Mega and Primal (611 forms): S top 5%, A top 12%, B top 25%,
+  C top 50%, D below the median. So a B on the Dynamax page means what a B means on the Mega
+  page. Half-evolved Pokémon are excluded from the denominator on purpose — leaving Caterpie
+  and Magikarp in it flatters everything above them, and `power_scale()` raises if that filter
+  breaks.
+- **Megas cluster at the top and the Dynamax roster does not.** No plain Dynamax Pokémon is a
+  top-5% attacker in its base form, so that page tops out at A. That is the honest answer, not
+  a scale problem to tune away.
+- **`?` and `D` are different.** `?` means the Game Master has no entry — missing data, and
+  PokeMiners lags a release by days. `D` includes Magikarp, which has an entry and no usable
+  attacking moveset at all: "cannot fight" is the bottom of the scale, not an unknown. Both
+  generators raise if the `?` count gets large, because *every* card unrated means the name
+  mapping broke.
+- **The Max role badge is deliberately not the rank.** `MAX SPIRIT` on a Dynamax card marks
+  the top quarter of the roster for Stamina. Blissey is a **D** attacker and the **best Max
+  Spirit in the game**; power cannot express that, so a separate badge does. Merging them is
+  the obvious simplification and it destroys the information — a browser check asserts that
+  exact pair stays true.
+- **The measured things stay measured.** The ordering was checked against community consensus
+  (Mega Mewtwo Y first, Mega Sableye last) before it shipped, and every rank chip is asserted
+  to clear 4.5:1 contrast — B, C and D shipped translucent once and became unreadable on a
+  ticked card, which dims the whole body.
 
-Two calibration failures are already guarded against and should not be reintroduced: a
-knife-edge median split that called the #2 of four Bug Megas "collection only", and per-role
-percentiles that handed an S to 48 of 160 Dynamax. Before shipping any change to the model,
-check the ordering still puts Mega Mewtwo Y first and Mega Sableye last.
 
 ## Project skills
 

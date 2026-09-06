@@ -45,7 +45,8 @@ el(tag, props, ...kids)          the primitive — see its doc comment
 UI.tag(kind, text, title, data)  any small label
 UI.typePills(types)              the coloured Grass/Poison row
 UI.raidPill(p)                   battle class + stars
-UI.rankChip(p)                   the S/A/B/C/D grade
+UI.rankChip(p)                   the S/A/B/C/D combat-power grade
+UI.powerLine(p)                  the DPS number and the moveset behind that grade
 UI.energyPill(p)                 Mega Energy cost
 UI.sprite(p)                     species art, with artFallback handling
 UI.checkMark()                   the corner tick
@@ -117,6 +118,13 @@ first chip row — giving it a row of its own leaves a visibly empty strip.
 - **Whitespace between elements is not the same as a text node you appended.** Where a label
   and a sentence sit side by side, append `' ' + text`, or copied text and screen readers run
   them together — "EVENT ONLYShiny Armored Mewtwo…".
+- **A collected card dims its own body, so anything low-contrast inside it disappears.** The
+  rank chips were translucent or hollow for B, C and D and became unreadable once ticked. Every
+  grade is a filled chip clearing **4.5:1**, and the chip barely dims — a browser check measures
+  the ratio rather than trusting the eye.
+- **Card text costs more than it looks.** Anything on a card is read on every card. The rank
+  line used to carry a placing and a price — "#2 of 4 Bug Megas, behind Mega Heracross · 100
+  energy" — and it was noise. It is now the number and the moveset, nothing else.
 
 ## Verifying a change
 

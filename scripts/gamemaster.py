@@ -106,6 +106,24 @@ def _typename(t):
     return t.replace("POKEMON_TYPE_", "").title() if t else None
 
 
+def types_of(ps):
+    """['Steel', 'Psychic'] for a species' own typing."""
+    return [t for t in (_typename(ps.get("type")), _typename(ps.get("type2"))) if t]
+
+
+def movepool(ps):
+    """(fast, charged) move ids for a species, Elite TM and Community Day moves included.
+
+    Those are the ceiling a Pokemon can actually reach, and a fifth of the roster's best
+    moveset depends on one, so they count — the caller flags which ones did.
+    """
+    fast = [str(m) for m in (ps.get("quickMoves") or [])]
+    elite_fast = [str(m) for m in (ps.get("eliteQuickMove") or [])]
+    charged = [str(m) for m in (ps.get("cinematicMoves") or [])]
+    elite_charged = [str(m) for m in (ps.get("eliteCinematicMove") or [])]
+    return fast + elite_fast, charged + elite_charged, set(elite_fast) | set(elite_charged)
+
+
 def moves(gm):
     """{move id (str): PvE move settings}. Trap 2: this is the raid table, not PvP."""
     out = {}
@@ -153,29 +171,6 @@ def mega_forms(gm):
             }
     if len(out) < 50:
         raise RuntimeError(f"only {len(out)} Mega forms — tempEvoOverrides shape changed?")
-    return out
-
-
-# Max move upgrade costs, by the species' `breadTierGroup`. "Bread" is the game's internal
-# codename for Dynamax; the three settings blocks are the Attack / Guard / Spirit Max moves.
-# What we surface is the cost to take one Max move to level 3, which is the real price of
-# committing to a Dynamax Pokemon.
-def max_move_costs(gm):
-    """{group: {'candy': n, 'xl': n}} — cost to raise one Max move from level 1 to 3."""
-    out = {}
-    for e in gm:
-        s = e.get("data", {}).get("breadMoveLevelSettings")
-        if not s:
-            continue
-        steps = s.get("aSettings") or []
-        if len(steps) < 3:
-            continue
-        out[s["group"]] = {
-            "candy": steps[1].get("candyCost", 0),
-            "xl": steps[2].get("xlCandyCost", 0),
-        }
-    if not out:
-        raise RuntimeError("no breadMoveLevelSettings — Dynamax cost tiers unavailable")
     return out
 
 

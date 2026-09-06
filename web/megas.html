@@ -68,8 +68,8 @@ UI.summary('.summary', {
     UI.STATUS_FILTER,
     { label: 'Raid', group: 'raid', options: [
       ['all', 'Any'], ['mega', 'Mega ★4'], ['primal', 'Primal ★5'], ['legendary', 'Legendary ★6']] },
-    { label: 'Worth it', group: 'rank', options: [
-      ['all', 'Any'], ['SA', 'S & A'], ['S', 'S only'], ['D', 'Collection only']] },
+    { label: 'Power', group: 'rank', options: [
+      ['all', 'Any'], ['SA', 'S & A'], ['S', 'S only'], ['CD', 'Weak']] },
     { label: 'Cost', group: 'cost', options: [
       ['all', 'Any'], ['100', '100'], ['200', '200'], ['300', '300'], ['400', '400'], ['7500', '7,500']] },
   ],
@@ -87,9 +87,9 @@ const RAID_FILTER = {
   legendary: 'Legendary Mega Raid',
 };
 
-// Chip value -> which ranks it lets through. "SA" is the common ask ("what should I
-// actually spend energy on?"), "D" the opposite one ("what can I stop caring about?").
-const RANK_FILTER = { SA: 'SA', S: 'S', D: 'D' };
+// Chip value -> which grades it lets through. "SA" is the common ask ("what actually hits
+// hard?"), "CD" the opposite one ("what can I stop caring about?").
+const RANK_FILTER = { SA: 'SA', S: 'S', CD: 'CD' };
 
 function visible(m) {
   const rank = UI.activeFilter('rank');
@@ -102,7 +102,6 @@ function visible(m) {
   const q = UI.searchText();
   if (q && !(m.name.toLowerCase().includes(q) ||
              (m.raid || '').toLowerCase().includes(q) ||
-             (m.why || '').toLowerCase().includes(q) ||
              (m.moves || '').toLowerCase().includes(q) ||
              (m.types || []).some((t) => t.toLowerCase().includes(q)))) return false;
   return true;
@@ -116,10 +115,6 @@ function badgesFor(m) {
       'Extra Charged Attack unlocked at Super Max Mega Level'),
     m.isNew && UI.tag('tag-new', 'GO ORIGINAL',
       'No mainline Mega form — base-species artwork shown'),
-    // Only shown when the rank depends on it. Knowing you need Frenzy Plant to reach the
-    // grade is the actionable half; the moveset alone would just be trivia.
-    m.legacy && UI.tag('tag-legacy', '⚑ ' + m.moves,
-      'Rank assumes this moveset, which needs an Elite TM or a Community Day move'),
   ].filter(Boolean);
 }
 

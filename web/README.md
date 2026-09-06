@@ -12,7 +12,7 @@ origin breaks Google sign-in and Firestore:
 | `index.html` | **What's on** — current and upcoming events, live from the LeekDuck feed |
 | `mega-finale.html` | GO Fest 2026: Mega Finale event tracker — habitats, times, raid passes |
 | `megas.html` | All 63 released Mega Evolutions and Primal Reversions, with raid class and rank |
-| `dynamax.html` | All 143 Dynamax-capable Pokémon + 17 Gigantamax forms, with rank and Max role |
+| `dynamax.html` | All 143 Dynamax-capable Pokémon + 17 Gigantamax forms, with typing, rank and Max role |
 
 ## The design system
 
@@ -87,33 +87,38 @@ It is the class of the battle, **not** a claim that the Pokémon is in the rotat
 Plain Dynamax Pokémon carry no tier on purpose — theirs belongs to the current Power Spot
 rotation, changes weekly, and would be stale within days.
 
-## Rank: is this worth investing in?
+## Rank: how hard does it hit?
 
-Every Mega and Dynamax card carries an S/A/B/C/D letter and a one-line reason. It answers
-"should I spend resources on this, or is it just Pokédex filler?" — computed in
-`scripts/rank.py` from the **Game Master**, the game's own data file, never from a tier list.
+Every Mega and Dynamax card carries an S/A/B/C/D letter plus the number behind it —
+`17.6 DPS · Lick + Shadow Ball`. Computed in `scripts/rank.py` from the **Game Master**, the
+game's own data file, never from a tier list.
 
-**Megas** are scored on sustained cycle DPS (level 40, 15/15/15, neutral target) and on how
-well their type is already covered. Every Mega of a type gives the same 1.3× party boost, so
-what actually differs is whether this is the one you would bring:
+**Combat power, and nothing else.** No Mega Energy cost, no candy, no type-coverage score.
+The damage model is sustained cycle DPS at level 40, 15/15/15, against a *neutral*
+200-defense target, using the best fast+charged pairing — raw attacking power, not a matchup.
+
+One ladder for the whole site, as percentiles of every fully evolved Pokémon and Mega in the
+game (611 forms), so a B here means a B there:
 
 | Grade | Means |
 |---|---|
-| S | Best Mega of one of its types, and a top-quartile attacker overall |
-| A | Best Mega of one of its types |
-| B | Top-quartile attacker, or the runner-up in a type, or a strong pick in a thin one |
-| C | Usable, but not the one you would bring |
-| D | Bottom quarter with nothing scarce to offer — collection only |
-| ? | Too new: no Game Master entry yet. Never a guessed grade |
+| S | Top 5% attacker in the game (≥15.3 DPS) |
+| A | Top 12% (≥13.6) |
+| B | Top 25% (≥12.1) |
+| C | Above the median (≥10.2) |
+| D | Below average — including Magikarp, which has no attacking moveset at all |
+| ? | No Game Master entry yet. Never a guessed grade |
 
-**Dynamax** ranks on role instead, because every Dynamax Pokémon has all three Max moves. The
-grade is the best of Max Attacker / Guard / Spirit its base stats suit, placed across the whole
-160-strong roster, and the reason line carries the candy and XL cost of levelling one Max move.
-Blissey is bottom-decile Attack and the #1 Max Spirit in the game.
+No plain Dynamax Pokémon is a top-5% attacker in its base form, so that page tops out at A.
+That is the honest answer rather than a scale tuned to flatter it.
 
-**The pool is the page's own roster, and the wording keeps to it.** "Best Ice Mega" is a claim
-about Megas; Mamoswine beats Mega Glalie without Mega Evolving at all. Every reason line names
-the placing and what beats it, so the letter is never the only thing on offer.
+A ⚑ on the moveset means the grade needs an Elite TM or a Community Day move — 22 of the 63
+Megas are in that position, and Frenzy Plant is worth 15.5% of Mega Sceptile's DPS.
+
+**The Max role badge is separate on purpose.** `MAX ATTACKER` / `MAX GUARD` / `MAX SPIRIT`
+marks the top quarter of the Max roster in Attack, Defense or Stamina. Blissey is a **D**
+attacker and the **best Max Spirit in the game** — combat power cannot say that, so the badge
+does.
 
 ## Shared checkmarks
 

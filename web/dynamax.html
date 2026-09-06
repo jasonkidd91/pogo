@@ -63,8 +63,8 @@ UI.summary('.summary', {
   reset: true,
   filters: [
     UI.STATUS_FILTER,
-    { label: 'Worth it', group: 'rank', options: [
-      ['all', 'Any'], ['SA', 'S & A'], ['S', 'S only'], ['C', 'Collection only']] },
+    { label: 'Power', group: 'rank', options: [
+      ['all', 'Any'], ['AB', 'A & B'], ['A', 'A only'], ['CD', 'Weak']] },
     { label: 'Role', group: 'role', options: [
       ['all', 'Any'], ['Attacker', 'Max Attacker'], ['Guard', 'Max Guard'], ['Spirit', 'Max Spirit']] },
     { label: 'Kind', group: 'kind', options: [
@@ -78,9 +78,10 @@ const G_ROWS = GIGANTAMAX.map((g) => ({ ...g, key: Store.id.gmax(g.name), kind: 
 const D_ROWS = DYNAMAX.map((d) => ({ ...d, key: Store.id.dmax(d.art), kind: 'dmax' }));
 const ALL_ROWS = [...G_ROWS, ...D_ROWS];
 
-// "C" is the whole bottom half of the roster — the ones you can transfer without thinking
-// about it. It is the most useful filter on this page, so it gets its own chip.
-const RANK_FILTER = { SA: 'SA', S: 'S', C: 'C' };
+// No plain Dynamax Pokemon is a top-5% attacker in its base form — the top of the game is
+// Megas and legendaries — so this page tops out at A and the chips start there. "CD" is the
+// bottom half of the roster: what you can transfer without thinking about it.
+const RANK_FILTER = { AB: 'AB', A: 'A', CD: 'CD' };
 
 function visible(p) {
   const kind = UI.activeFilter('kind');
@@ -92,13 +93,19 @@ function visible(p) {
   if (!UI.statusMatch(p.key, UI.activeFilter('status'))) return false;
   const q = UI.searchText();
   if (q && !p.name.toLowerCase().includes(q) &&
-      !(p.why || '').toLowerCase().includes(q) &&
-      !(p.gmaxMove || '').toLowerCase().includes(q)) return false;
+      !(p.moves || '').toLowerCase().includes(q) &&
+      !(p.role || '').toLowerCase().includes(q) &&
+      !(p.gmaxMove || '').toLowerCase().includes(q) &&
+      !(p.types || []).some((t) => t.toLowerCase().includes(q))) return false;
   return true;
 }
 
 function badgesFor(p) {
   return [
+    // Deliberately separate from the rank, which is pure attacking power. Blissey is a D
+    // attacker and the best Max Spirit in the game — this badge is the only thing that says so.
+    p.role && UI.tag('tag-role', 'MAX ' + p.role.toUpperCase(),
+      `Top quarter of the Max roster for ${p.role} — its stats suit that job, whatever its attacking power`),
     p.gmaxMove && UI.tag('tag-attack', '★ ' + p.gmaxMove, 'Exclusive G-Max Move'),
     p.hasGmax && UI.tag('tag-new', 'G-MAX',
       'Also has a Gigantamax form — tracked separately above'),

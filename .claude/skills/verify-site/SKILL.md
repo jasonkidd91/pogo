@@ -83,21 +83,24 @@ That is correct assistive-tech semantics, not a bug: a real pointer click still 
 
 ### Rank chips (`megas.html`, `dynamax.html`)
 
-Every card carries an S/A/B/C/D chip and a reason line. Three assertions here have caught
-real bugs:
+Every card carries an S/A/B/C/D combat-power chip and, when there is a number, a DPS line.
+Four assertions here have caught real bugs:
 
+- **measure the contrast, do not eyeball it.** Every filled grade must clear **4.5:1** against
+  its own background, and a collected card must keep the chip at ≥0.8 opacity. B, C and D
+  shipped translucent once and vanished on ticked cards. Compute the WCAG ratio from
+  `getComputedStyle` in the check.
 - **the rank is in the card's `aria-label`.** The chip lives inside `.name`, and `aria-label`
   replaces card content for a screen reader — without repeating it, the rank is silently not
   announced at all.
 - **the chip is not struck through on a collected card.** `.card.caught .name` sets
   `line-through`, which propagates to children; `inline-flex` on the chip is what blocks it.
-  A plain `inline` chip gets a line through the letter.
-- **no card body clips or overflows at 390px.** The reason line ("#2 of 4 Bug Megas, behind
-  Mega Heracross · 100 energy") is the longest text on any card.
+- **a card with no DPS line is `?` or `D`, never anything else.** `?` is missing Game Master
+  data; `D` includes species like Magikarp with no usable attacking moveset at all.
 
-Also check each filter narrows *and* that what survives matches: the Role chips on
-`dynamax.html` should leave only cards whose reason names that role. See the `update-ranks`
-skill for the rest.
+Also check each filter narrows *and* that what survives matches, and that Blissey stays rank D
+with a `MAX SPIRIT` badge — combat power and Max role are separate on purpose. See the
+`update-ranks` skill for the rest.
 
 ### The events page (`index.html`)
 

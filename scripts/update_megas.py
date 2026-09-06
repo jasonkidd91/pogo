@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from bulbapedia import (fetch_wikitext, section, rows, cells, cell_value,
                         find_date, slug, check_sprites, write_js, category_members)
 import gamemaster
-from rank import best_cycle, rank_megas, moveset_label
+from rank import apply_ranks, power_of, power_scale
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "web", "mega-data.js")
 
@@ -132,6 +132,7 @@ def main():
     gm, (gm_sha, gm_date) = gamemaster.fetch()
     gm_moves = gamemaster.moves(gm)
     gm_megas = gamemaster.mega_forms(gm)
+    gm_species = gamemaster.species(gm)
 
     entries = []
     for m in out:
@@ -147,17 +148,16 @@ def main():
         if m["name"] in WEATHER_BOOSTED:
             e["weatherBoost"] = True
         if form:
-            # Elite-TM and Community Day moves are included: they are the ceiling this
-            # Pokemon can actually reach, and 22 of the roster rank on one. `legacy` says
-            # so on the card, because the rank is unreachable without that move.
-            fast = form["fast"] + form["eliteFast"]
-            charged = form["charged"] + form["eliteCharged"]
-            best = best_cycle(form["stats"]["baseAttack"], e["types"], fast, charged, gm_moves)
-            if best:
-                e["dps"] = round(best["dps"], 1)
-                e["moves"] = moveset_label(best["fast"], best["charged"])
-                if best["fast"] in form["eliteFast"] or best["charged"] in form["eliteCharged"]:
+            got = power_of(form["stats"], e["types"], gm_species[gm_key(m["name"])[0]], gm_moves)
+            if got:
+                e["dps"] = got["dps"]
+                e["moves"] = got["moves"]
+                if got["legacy"]:
                     e["legacy"] = True
+        else:
+            # Trap 1: released too recently to be in the Game Master. Missing data, not a
+            # weak Pokemon — apply_ranks leaves this alone.
+            e["rank"] = "?"
         if not exists[primary]:
             # No mainline Mega artwork: a GO-original Mega. Fall back to base species.
             e["artFallback"] = fallback
@@ -207,8 +207,12 @@ def main():
             "either the column stopped meaning typing or gm_key is mapping to wrong forms"
         )
 
-    rank_megas(entries)
+    scale = power_scale(gm, gm_moves)
+    pool = scale.pop("_pool")
+    apply_ranks(entries, scale)
     ranks = Counter(e["rank"] for e in entries)
+    print(f"  power scale from {pool} fully-evolved forms: "
+          f"{ {k: round(v, 1) for k, v in scale.items()} }")
     print(f"  ranks: {dict(sorted(ranks.items()))}")
     print(f"    S: {', '.join(e['name'] for e in entries if e['rank'] == 'S')}")
     unrated = [e["name"] for e in entries if e["rank"] == "?"]
@@ -249,11 +253,10 @@ HEADER = """/**
  *         Super Mega Raid is an event-driven variant, so it is not derived per species.
  * boosts  party-wide type bonus; weather-based (not own typing) when weatherBoost is set
  * attack  extra Charged Attack unlocked at Super Max Mega Level
- * rank    is this worth Mega Energy? S/A/B/C/D, or "?" when the Game Master has no entry
- *         for it yet. Computed — see scripts/rank.py for the bands and the damage model.
- *         The comparison pool is other MEGAS, so "Best Ice Mega" does not mean best Ice
- *         attacker in the game; Mamoswine beats Mega Glalie without Mega Evolving.
- * why     one line saying where it places and what beats it
+ * rank    COMBAT POWER ONLY. S/A/B/C/D by percentile of every fully evolved Pokemon and
+ *         Mega in the game — S is the top 5%, D is below the median. It says nothing about
+ *         Mega Energy cost or type coverage. "?" means the Game Master has no entry yet.
+ *         See scripts/rank.py for the damage model and the bands.
  * dps     sustained cycle DPS at level 40, 15/15/15, vs a neutral 200-defense target
  * moves   the moveset that DPS assumes; legacy marks one needing an Elite TM or a
  *         Community Day move, so the rank is unreachable without it

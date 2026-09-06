@@ -27,8 +27,9 @@ game master 8e227be44f28 (2026-08-29) — cached
   cost tiers: {100: 8, 200: 28, 300: 22, 400: 3, 7500: 2}
   raid classes: {'Mega Raid': 55, 'Legendary Mega Raid': 6, 'Primal Raid': 2}
     Mega Mewtwo X, Mega Mewtwo Y, Mega Latias, Mega Latios, Primal Kyogre, ...
-  ranks: {'?': 2, 'A': 5, 'B': 11, 'C': 22, 'D': 12, 'S': 11}
-    S: Mega Raichu Y, Mega Gengar, Mega Mewtwo X, ...
+  power scale from 611 fully-evolved forms: {'S': 15.3, 'A': 13.6, 'B': 12.1, 'C': 10.2}
+  ranks: {'?': 2, 'A': 17, 'B': 7, 'C': 9, 'D': 4, 'S': 24}
+    S: Mega Charizard Y, Mega Raichu Y, Mega Alakazam, ...
     no Game Master entry yet (2): ['Mega Staraptor', 'Mega Chandelure']
     ranking on a legacy move: 22
 ```
@@ -112,6 +113,8 @@ curl -s -o /dev/null -w "%{http_code}\n" https://img.pokemondb.net/sprites/home/
 
 ## The rank
 
-Each card also carries an S/A/B/C/D "worth the energy?" grade and a one-line reason. That is
-computed in `scripts/rank.py` from the Game Master, and has its own skill: **`update-ranks`**.
-Go there before changing a band, a reason string, or the damage model.
+Each card also carries an S/A/B/C/D grade that is **combat power only** — computed DPS as a
+percentile of every fully evolved Pokémon and Mega in the game — plus the number itself and
+the moveset it assumes. It says nothing about Mega Energy cost or type coverage; that was
+tried and removed. It has its own skill: **`update-ranks`**. Go there before changing a band,
+the damage model, or what the card prints.
