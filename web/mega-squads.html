@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mega Squads Tracker — Pokémon GO</title>
+<meta name="description" content="Track Mega Beedrill and Mega Houndoom in raids during Pokémon GO's Mega Squads event.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27%235b8cff%27/%3E%3Cpath d=%27M2 16h28%27 stroke=%27%230f1219%27 stroke-width=%273%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%230f1219%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%23e8ecf4%27/%3E%3C/svg%3E">
+<!-- auth.js pulls the Firebase SDK from here; warm the connection during parse. -->
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-tracker>
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Pokémon GO event</p>
+    <h1 id="ev-name">Mega Squads</h1>
+    <p class="sub">
+      Mega Beedrill and Mega Houndoom return to raids for the week, and both can be raised to
+      Super Max Mega Level for the first time. Tick them off as you catch them — progress is
+      saved to your Google account and shared with <a href="megas.html">Mega Pokémon</a>. For
+      everything else that is on, see <a href="index.html">What's on</a>.
+    </p>
+    <ul class="bonuses" id="bonuses"></ul>
+  </header>
+
+  <div class="summary"></div>
+
+  <main id="list"></main>
+
+  <footer>
+    <strong>Event:</strong> Tuesday 8 – Monday 14 September 2026, 10:00 a.m. – 8:00 p.m. local
+    time (GO Pass: Mega Squads). Mega Beedrill and Mega Houndoom stay in raids a day longer,
+    through 15 September, per LeekDuck and GO Hub.
+    <p>
+      <strong>Also this week.</strong> Maschiff and Mabosstiff make their Pokémon GO debuts —
+      eggs, Field Research and the GO Pass; evolve Maschiff on 50 Candy. Shiny Flamigo debuts
+      for the first time, in the wild, in eggs, in Field Research and via the GO Pass, all
+      event long. Spotlight Hour is Weedle on Thursday 10 September and Houndour on Sunday 13
+      September, 6–7 p.m. local both days.
+    </p>
+    <p>
+      Starting with this event, Mega Beedrill and Mega Houndoom can increase their Mega Level
+      to Super Max for the first time. Increased Shiny Pidgey encounter rate from Sept 8 10:00
+      a.m. to Sept 11 10:00 a.m. local time; the Shiny Carvanha rate increases in the second
+      half of the event, from 11 September.
+    </p>
+    <div class="srcs">
+      <span>Verified against</span>
+      <a id="ev-official" href="https://pokemongo.com/en/news/mega-squads-2026">pokemongo.com (official)</a>
+      <a href="https://leekduck.com/events/mega-squads/">LeekDuck</a>
+      <a href="https://pokemongohub.net/post/event/pokemon-go-mega-squads-event-guide/">GO Hub</a>
+    </div>
+    <p>
+      Mega Energy figures are standing first-time activation costs from
+      <a href="megas.html">Mega Pokémon</a>; neither source publishes a separate Super Max cost.
+    </p>
+  </footer>
+
+</div>
+<script src="ui.js"></script>
+<script src="store.js"></script>
+<script src="auth.js"></script>
+<script src="mega-squads-data.js"></script>
+<script src="mega-squads.js"></script>
+</body>
+</html>

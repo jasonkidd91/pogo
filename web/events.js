@@ -99,6 +99,7 @@ const HAS_LABEL = {
  */
 const TRACKERS = {
   'pokemon-go-fest-2026-mega-finale': { href: 'mega-finale.html', label: 'Catch tracker' },
+  'mega-squads': { href: 'mega-squads.html', label: 'Catch tracker' },
 };
 
 /** Long-running background things. They matter, but not in the same list as a 3-hour event. */
