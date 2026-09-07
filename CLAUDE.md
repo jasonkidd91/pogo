@@ -356,6 +356,50 @@ else.
   ticked card, which dims the whole body.
 
 
+## Automation
+
+`.github/workflows/` runs two Claude Code Actions, both authenticated with the
+`CLAUDE_CODE_OAUTH_TOKEN` secret. Issue and push operations use the `POGO_GITHUB_PAT` secret
+instead of the default `GITHUB_TOKEN` — a `GITHUB_TOKEN`-authored push does not trigger other
+workflows, which would silently stop `pages.yml` from deploying an automated commit.
+
+- **`daily-maintenance.yml`** — scheduled `0 19 * * *` UTC (03:00 Asia/Kuala_Lumpur, no DST),
+  plus `workflow_dispatch` for a manual run. Headless (`prompt:` input, no comment trigger),
+  and pushes straight to `main`. Four jobs, in order, each skipped rather than guessed at if
+  its data source is unreachable:
+  1. Runs the `update-events` skill's `scripts/update_events.py`; commits only if
+     `web/events-data.js` actually changed.
+  2. **Archives finished trackers.** An entry in `TRACKERS` (`web/events.js`) counts as over
+     once its data file's last `DAYS[].isoDate` plus that day's end time is unambiguously
+     more than 24h in the past. Archiving removes the entry from `TRACKERS` and from
+     `buildNav()`'s `links` (`web/store.js`) and adds a row to `ARCHIVE` in
+     `web/archive-data.js` — see `web/archive.html`. **It never moves, renames or edits the
+     tracker's own `.html`/`-data.js` files.** Their URL is what an existing bookmark and any
+     outstanding ntfy reminder deep-link (`event-reminders` skill) point at; the "this event
+     has finished" state on the page itself is already handled at runtime (see `app.js`'s
+     `EVENT_END` in "Site architecture" above).
+  3. **Files an issue for events starting within the next 3 days** that aren't in `TRACKERS`
+     yet and look tracker-worthy — the same scope the `new-event-tracker` skill states (GO
+     Fest, Community Day, Max Battle Day, a raid rotation, a season), not a single-target
+     Spotlight Hour. The 3-day window is deliberate: further out, a roster usually isn't
+     settled yet, and a later run picks it up once it's close. Deduped by searching issues
+     (open and closed) for a hidden `<!-- pogo-tracker-request:<event-id>
+     -->` marker before creating a new one, labelled `tracker-request`.
+  4. **Closes stale `tracker-request` issues** whose event has since ended (or dropped out of
+     the feed entirely) without ever getting a tracker — a comment saying so, then close.
+
+- **`claude.yml`** — the `@claude`-mention responder, triggered only by `issue_comment` and
+  `pull_request_review_comment`, deliberately **not** by `issues: [opened, ...]`. The issue
+  bodies task 3 above writes contain the literal phrase "@claude implement it" as
+  instructions for a human to type; triggering on issue creation too would fire the instant
+  that body lands. Runs in the action's default tag mode with no custom prompt — the policy
+  ("check whether the event's over; if not, verify the roster with the `new-event-tracker`
+  skill and open a PR; if so, say so and close this issue") lives in the issue body itself,
+  which is already in context, plus this file, which loads automatically from the checked-out
+  repo. The tracker build opens a PR rather than pushing to `main` directly, on purpose — a
+  roster is exactly the kind of LIVE fact this file exists to keep out of an unreviewed
+  auto-commit.
+
 ## Project skills
 
 `.claude/skills/` holds:
@@ -367,7 +411,7 @@ else.
 | `event-reminders` | The Remind me button — ntfy.sh, the topic, the three-day scheduling limit |
 | `update-megas` / `update-dynamax` | Regenerating the two collection data files |
 | `update-ranks` | The S/A/B/C/D rank — the Game Master, the scoring model, the bands |
-| `new-event-tracker` | Building a catch-list page for an event **when asked** |
+| `new-event-tracker` | Building a catch-list page for an event **when asked** — including via a `tracker-request` issue comment, see "Automation" |
 | `design-system` | Anything visible — `web/ui.js` components and the `styles.css` contract |
 | `verify-site` | Browser verification, including getting Chromium up without root |
 | `deploy-site` | Shipping to GitHub Pages and confirming it is actually live |

@@ -594,6 +594,17 @@ body.signed-out #reset { opacity: .4; }
 .esub { font-size: var(--fs-sub); color: var(--muted); margin-top: 3px; }
 .erow .elinks { margin-top: 0; flex: 0 0 auto; }
 
+/* Archive page — a page-owned row, same recipe as .erow but its own classes since it is
+   archive.js's domain, not events.js's (see the design-system skill). */
+.arows { display: flex; flex-direction: column; gap: var(--sp-2); }
+.arow {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 14px;
+}
+.arow:hover { border-color: var(--border-bright); }
+.aname { font-size: var(--fs-name); }
+.asub { font-size: var(--fs-sub); color: var(--muted); margin-top: 3px; }
+
 /* Weekly rhythm */
 .rhythmbox {
   background: var(--surface); border: 1px solid var(--border);

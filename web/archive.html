@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Archived trackers — Pokémon GO</title>
+<meta name="description" content="Catch-list trackers for Pokémon GO events that have finished. Pages stay live — only their nav listing moves here.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27%235b8cff%27/%3E%3Cpath d=%27M2 16h28%27 stroke=%27%230f1219%27 stroke-width=%273%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%230f1219%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%23e8ecf4%27/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Pokémon GO</p>
+    <h1>Archive</h1>
+    <p class="sub">
+      Catch-list trackers for events that have finished. A tracker's page and your progress on
+      it never disappear — only its listing in the main nav and on <a href="index.html">What's
+      on</a> move here once the event ends.
+    </p>
+  </header>
+
+  <div class="summary"></div>
+
+  <main id="list"></main>
+
+  <footer>
+    <p>
+      Trackers are archived automatically the day after their event ends — see
+      <code>.github/workflows/daily-maintenance.yml</code>.
+    </p>
+  </footer>
+
+</div>
+<script src="ui.js"></script>
+<script src="store.js"></script>
+<script src="auth.js"></script>
+<script src="archive-data.js"></script>
+<script src="archive.js"></script>
+</body>
+</html>

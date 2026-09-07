@@ -1,0 +1,46 @@
+name: Claude Code
+
+# Comment-triggered assistant. Deliberately scoped to *comment* events only (issue_comment,
+# pull_request_review_comment) — not `issues: [opened, ...]`. Issues that
+# daily-maintenance.yml files for a candidate tracker quote the literal phrase "@claude
+# implement it" as instructional text in the issue body; triggering on issue *creation* too
+# would fire the instant that body lands, before any human has asked for anything.
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+
+jobs:
+  claude:
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Run Claude Code
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_args: |
+            --max-turns 60
+
+          # Everything else — "is this event over?", "use the new-event-tracker skill",
+          # "reply and close if it's finished" — comes from the issue body that
+          # daily-maintenance.yml wrote, plus CLAUDE.md, which is loaded automatically from
+          # the checked-out repo. No custom prompt needed for the tracker-request flow.
+          #
+          # This workflow also answers any other "@claude ..." comment on an issue or PR —
+          # that's the standard behaviour of this action and not specific to trackers.

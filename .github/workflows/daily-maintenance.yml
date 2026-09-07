@@ -1,0 +1,133 @@
+name: Daily site maintenance
+
+# 03:00 Asia/Kuala_Lumpur (MYT, UTC+8, no DST) == 19:00 UTC the day before.
+on:
+  schedule:
+    - cron: '0 19 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  actions: read
+  id-token: write
+
+jobs:
+  maintain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      # `gh`, invoked by Claude's Bash tool, reads this. A PAT rather than the default
+      # GITHUB_TOKEN for two reasons: a GITHUB_TOKEN-authored push does not trigger other
+      # workflows, which would silently stop pages.yml from deploying today's commit, and a
+      # GITHUB_TOKEN-opened issue cannot itself be the trigger for the separate claude.yml
+      # comment workflow's write actions later.
+      GH_TOKEN: ${{ secrets.POGO_GITHUB_PAT }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.POGO_GITHUB_PAT }}
+          fetch-depth: 1
+
+      - name: Configure git identity
+        run: |
+          git config --global user.name "pogo-bot"
+          git config --global user.email "actions@users.noreply.github.com"
+
+      - name: Run Claude Code
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_args: |
+            --max-turns 80
+          prompt: |
+            You are running unattended as the pogo repo's daily maintenance job. Follow
+            CLAUDE.md's rules (LIVE facts are looked up, never remembered; never trust an
+            LLM-summarised fetch of a table; use the project skills). Work through all four
+            tasks below in order. If a step's data source is unreachable, skip that step,
+            leave a note in the final commit message or a comment on the relevant issue, and
+            continue with the rest — do not guess.
+
+            Today's real date, for every "is this over" check below, is the output of
+            `date -u +%Y-%m-%dT%H:%M:%SZ` — always shell out for it, never assume.
+
+            ## 1. Refresh the events snapshot
+
+            Use the `update-events` skill. Run `python3 scripts/update_events.py`. If
+            `git diff --quiet -- web/events-data.js` shows no change, do nothing further for
+            this task. If it changed, that's the only file this task touches.
+
+            ## 2. Archive finished trackers
+
+            `web/events.js`'s `TRACKERS` map lists every event with a catch-list tracker page.
+            For each entry, read its data file (`web/<slug>-data.js` — the `DAYS` array's
+            entries carry `isoDate` and time windows; see the `new-event-tracker` skill for
+            the shape). An entry is over once its last day's `isoDate` plus that day's latest
+            end time is clearly, unambiguously in the past — at least 24 hours ago against
+            today's UTC date, to absorb local-timezone slop. When in doubt, leave it for
+            tomorrow's run rather than archiving early.
+
+            For each tracker that is over:
+            - Add a row to the `ARCHIVE` array in `web/archive-data.js`:
+              `{ name, href, ended }`, `ended` a plain human date ("6 September 2026").
+            - Remove its entry from `TRACKERS` in `web/events.js`.
+            - Remove its link from the `links` array in `buildNav()` in `web/store.js`.
+            - Do **not** move, rename or delete the tracker's own `.html` or `-data.js`
+              files, and do not touch their content. Their URL is what an existing browser
+              bookmark and any outstanding ntfy reminder deep-link point at — see
+              CLAUDE.md's "Automation" section and the `event-reminders` skill.
+            - Run `node --check` on every JS file you edited.
+
+            Commit archiving changes separately from task 1's snapshot refresh if both
+            happened, so each commit reads clearly.
+
+            ## 3. File issues for events that might want a tracker
+
+            Fetch `https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json`
+            directly (or reuse task 1's fresh `web/events-data.js`). Only consider events
+            whose `start` falls within the next 3 days from today's UTC date — far-out events
+            get picked up on a later run, once they're close enough that the roster is
+            actually likely to be settled. For every such event that is NOT already in
+            `TRACKERS` and looks like the `new-event-tracker` skill's stated scope — GO Fest,
+            Community Day, Max Battle Day, a raid rotation with several targets, a season
+            roster change — file an issue, UNLESS one already exists (see dedupe below). Skip
+            single-target things like a Spotlight Hour or a plain research-only event; a
+            tracker for one Pokémon isn't worth building.
+
+            Dedupe: `gh issue list --state all --search "pogo-tracker-request:<event-id> in:body"`.
+            If anything comes back, skip — an issue for this event already exists, open or
+            closed.
+
+            Ensure the label exists (idempotent):
+            `gh label create tracker-request --color 8256d0 --description "Candidate event that may want a catch-list tracker" --force`
+
+            Then `gh issue create --label tracker-request --title "Tracker: <event name>"`
+            with a body containing: the event name, its feed id, start/end times (say
+            plainly whether they're local or the global `Z`-suffixed kind — see CLAUDE.md's
+            "events page is live data" section), the event's `link` field from the feed, and
+            this block verbatim (fill in the event id on the marker line):
+
+            ```
+            ## Build this tracker
+
+            Comment "@claude implement it" below and Claude will check whether this event
+            has already ended; if not, it will follow the new-event-tracker skill — verify
+            the roster against at least two live sources — and open a PR adding the tracker
+            page. If the event has already ended by then, it will say so here and close this
+            issue instead.
+
+            <!-- pogo-tracker-request:<event-id> -->
+            ```
+
+            ## 4. Clean up stale tracker-request issues
+
+            `gh issue list --label tracker-request --state open`. For each, read the event id
+            from its `<!-- pogo-tracker-request:... -->` marker and re-derive its window from
+            the current feed (or, if it has rolled out of the feed entirely, treat that as
+            "over" too — a dropped event isn't coming back). If it's over and nobody ever
+            commented to build it, post a short comment saying the event has already ended,
+            then close the issue. Do not use the literal string "@claude" in your comment —
+            it would be a valid trigger for the comment-triggered workflow and cause a loop.
+            Leave alone any issue whose event is still current or upcoming.
