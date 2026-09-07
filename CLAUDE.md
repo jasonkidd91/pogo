@@ -380,10 +380,14 @@ workflows, which would silently stop `pages.yml` from deploying an automated com
      `EVENT_END` in "Site architecture" above).
   3. **Files an issue for events starting within the next 3 days** that aren't in `TRACKERS`
      yet and look tracker-worthy — the same scope the `new-event-tracker` skill states (GO
-     Fest, Community Day, Max Battle Day, a raid rotation, a season), not a single-target
-     Spotlight Hour. The 3-day window is deliberate: further out, a roster usually isn't
-     settled yet, and a later run picks it up once it's close. Deduped by searching issues
-     (open and closed) for a hidden `<!-- pogo-tracker-request:<event-id>
+     Fest, Community Day, Max Battle Day, a raid rotation), not a single-target Spotlight
+     Hour. `season`/`go-pass` feed types are excluded outright — they're `BACKGROUND` in
+     `events.js` and don't fit the tracker shape (no habitats, no fixed windows, no per-mon
+     cost). This was learned the expensive way: a season issue got filed once and correctly
+     rejected by the comment-triggered workflow below, but the same judgment is cheap to make
+     here, before an issue exists to reject. The 3-day window is deliberate too: further out,
+     a roster usually isn't settled yet, and a later run picks it up once it's close. Deduped
+     by searching issues (open and closed) for a hidden `<!-- pogo-tracker-request:<event-id>
      -->` marker before creating a new one, labelled `tracker-request`.
   4. **Closes stale `tracker-request` issues** whose event has since ended (or dropped out of
      the feed entirely) without ever getting a tracker — a comment saying so, then close.
@@ -398,7 +402,12 @@ workflows, which would silently stop `pages.yml` from deploying an automated com
   which is already in context, plus this file, which loads automatically from the checked-out
   repo. The tracker build opens a PR rather than pushing to `main` directly, on purpose — a
   roster is exactly the kind of LIVE fact this file exists to keep out of an unreviewed
-  auto-commit.
+  auto-commit. Verification for that PR is `node --check` plus the design-system grep check,
+  not the full `verify-site` browser suite — standing up its Chromium sysroot from scratch
+  burned the whole turn budget (60) on the first real attempt, with the roster verified and
+  the page written but nothing committed. `--max-turns` is 150 now and the issue template
+  says to leave the human visual check to PR review, but don't reintroduce a from-scratch
+  Playwright run into this workflow without raising it further.
 
 ## Project skills
 

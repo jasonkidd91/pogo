@@ -97,12 +97,20 @@ jobs:
             directly (or reuse task 1's fresh `web/events-data.js`). Only consider events
             whose `start` falls within the next 3 days from today's UTC date — far-out events
             get picked up on a later run, once they're close enough that the roster is
-            actually likely to be settled. For every such event that is NOT already in
-            `TRACKERS` and looks like the `new-event-tracker` skill's stated scope — GO Fest,
-            Community Day, Max Battle Day, a raid rotation with several targets, a season
-            roster change — file an issue, UNLESS one already exists (see dedupe below). Skip
-            single-target things like a Spotlight Hour or a plain research-only event; a
-            tracker for one Pokémon isn't worth building.
+            actually likely to be settled.
+
+            Skip anything whose feed `eventType` is `season` or `go-pass` outright — this
+            repo's own `web/events.js` already classifies those as `BACKGROUND`, and they
+            don't fit the `new-event-tracker` skill's shape at all (no habitats, no fixed
+            catch windows, no per-Pokémon cost). Don't file one and let the comment-triggered
+            workflow reject it later; that already happened once and the answer was always
+            going to be no. Also skip single-target things like a Spotlight Hour or a plain
+            research-only event — a tracker for one Pokémon isn't worth building.
+
+            For every remaining event that is NOT already in `TRACKERS` and looks like the
+            `new-event-tracker` skill's stated scope — GO Fest, Community Day, Max Battle Day,
+            a raid rotation with several targets — file an issue, UNLESS one already exists
+            (see dedupe below).
 
             Dedupe: `gh issue list --state all --search "pogo-tracker-request:<event-id> in:body"`.
             If anything comes back, skip — an issue for this event already exists, open or
@@ -125,6 +133,13 @@ jobs:
             the roster against at least two live sources — and open a PR adding the tracker
             page. If the event has already ended by then, it will say so here and close this
             issue instead.
+
+            Verification in that PR should be `node --check` on every new/edited JS file plus
+            the design-system grep check (`createElement`/`innerHTML` outside `ui.js`) — not
+            the full `verify-site` browser suite. Standing up Playwright's Chromium sysroot
+            from scratch burned the entire turn budget on the first attempt at this, before a
+            single file was committed. Note in the PR description that a human visual check
+            (`verify-site` skill) is still needed before merging.
 
             <!-- pogo-tracker-request:<event-id> -->
             ```

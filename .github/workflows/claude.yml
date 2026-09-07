@@ -35,7 +35,7 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: |
-            --max-turns 60
+            --max-turns 150
             --permission-mode bypassPermissions
 
           # bypassPermissions: headless Claude Code denies Bash/Edit/Write by default since
@@ -44,6 +44,13 @@ jobs:
           # Safe here because only repo write-access users can trigger this workflow at all
           # (default actor check, no allowed_non_write_users) and it authenticates with the
           # scoped, short-lived default GITHUB_TOKEN, not a long-lived PAT.
+          #
+          # 150, not 60: a real tracker build (verify a roster against 2+ live sources, write
+          # 3 files, commit, push, open a PR) ran out of turns at 60 with the roster verified
+          # and the page already written but nothing committed — standing up the verify-site
+          # skill's Chromium sysroot from scratch ate the rest. The issue-body template this
+          # responds to now tells it to skip that and leave full browser verification to the
+          # PR review instead, but the headroom stays; a fresh runner has no cached sysroot.
           #
           # Everything else — "is this event over?", "use the new-event-tracker skill",
           # "reply and close if it's finished" — comes from the issue body that
