@@ -206,6 +206,7 @@ function buildNav(active) {
   const links = [
     ['events', 'index.html', "What's on"],
     ['finale', 'mega-finale.html', 'Mega Finale'],
+    ['squads', 'mega-squads.html', 'Mega Squads'],
     ['megas', 'megas.html', 'Mega Pokémon'],
     ['dynamax', 'dynamax.html', 'Dynamax'],
     ['notify', 'notifications.html', 'Notifications'],
