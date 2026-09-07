@@ -36,7 +36,15 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: |
             --max-turns 60
+            --permission-mode bypassPermissions
 
+          # bypassPermissions: headless Claude Code denies Bash/Edit/Write by default since
+          # there's no human to click "allow" — confirmed empirically on this repo's other
+          # workflow (14 silent permission denials, no-op run) before this flag was added.
+          # Safe here because only repo write-access users can trigger this workflow at all
+          # (default actor check, no allowed_non_write_users) and it authenticates with the
+          # scoped, short-lived default GITHUB_TOKEN, not a long-lived PAT.
+          #
           # Everything else — "is this event over?", "use the new-event-tracker skill",
           # "reply and close if it's finished" — comes from the issue body that
           # daily-maintenance.yml wrote, plus CLAUDE.md, which is loaded automatically from

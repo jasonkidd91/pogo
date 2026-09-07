@@ -1,6 +1,13 @@
 name: Daily site maintenance
 
 # 03:00 Asia/Kuala_Lumpur (MYT, UTC+8, no DST) == 19:00 UTC the day before.
+#
+# Runs with --permission-mode bypassPermissions (see the Run Claude Code step) because
+# headless Claude Code denies Bash/Edit/Write by default — there's no human here to click
+# "allow". Confirmed empirically: the first run of this workflow, without the flag, completed
+# "successfully" but did nothing — 14 silent permission denials. Only schedule and
+# workflow_dispatch can trigger this job (the latter requires write access), so there's no
+# untrusted-comment surface the way there is on claude.yml.
 on:
   schedule:
     - cron: '0 19 * * *'
@@ -42,6 +49,7 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: |
             --max-turns 80
+            --permission-mode bypassPermissions
           prompt: |
             You are running unattended as the pogo repo's daily maintenance job. Follow
             CLAUDE.md's rules (LIVE facts are looked up, never remembered; never trust an
