@@ -97,9 +97,7 @@ const HAS_LABEL = {
  * Events that have a catch-list tracker on this site, by feed id. Deliberately sparse —
  * a tracker page is built on request, not for every event that comes along.
  */
-const TRACKERS = {
-  'pokemon-go-fest-2026-mega-finale': { href: 'mega-finale.html', label: 'Catch tracker' },
-};
+const TRACKERS = {};
 
 /** Long-running background things. They matter, but not in the same list as a 3-hour event. */
 const BACKGROUND = new Set(['season', 'go-pass']);

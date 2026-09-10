@@ -11,4 +11,6 @@
  * the shape: { name, href, ended } with `ended` as a plain human-readable date.
  */
 
-const ARCHIVE = [];
+const ARCHIVE = [
+  { name: 'Pokémon GO Fest 2026: Mega Finale', href: 'mega-finale.html', ended: '6 September 2026' },
+];

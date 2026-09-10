@@ -205,7 +205,6 @@ function stickySummary() {
 function buildNav(active) {
   const links = [
     ['events', 'index.html', "What's on"],
-    ['finale', 'mega-finale.html', 'Mega Finale'],
     ['megas', 'megas.html', 'Mega Pokémon'],
     ['dynamax', 'dynamax.html', 'Dynamax'],
     ['notify', 'notifications.html', 'Notifications'],
