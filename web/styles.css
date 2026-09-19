@@ -17,6 +17,8 @@
  *   reminders panel    .remindbox .rb-*            Remind.panel()      (remind.js)
  *   ntfy setup steps   .rb-steps .rb-sub           Remind.setup()      (remind.js)
  *   reminder list      .rlist .rrow .rstate        render()            (notifications.js)
+ *   nav nudge           .nudge                      buildNav()          (store.js)
+ *   promo code card     .pcard .pcode .pcode-text   promo-codes.js
  *
  * A page owns its domain-specific components and builds them from the primitives above —
  * the events page's .ecard/.erow/.ecaveat in events.js, and .remindbox/.rb-* in remind.js,
@@ -312,6 +314,16 @@ footer .srcs { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 6px; }
 }
 .sitenav a:hover { color: var(--text); background: var(--surface-2); }
 .sitenav a[aria-current="page"] { color: var(--text); background: var(--surface-2); font-weight: 600; }
+
+/* The Promo Codes nav link's "you haven't seen this one yet" dot — see Promos.unseenCount()
+   in web/promos.js. A count, not a bare dot, because "something changed" is less useful than
+   "how many" when the answer might be four. */
+.nudge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 16px; height: 16px; padding: 0 4px; margin-left: 6px;
+  border-radius: var(--r-pill); background: var(--e200); color: #0b1020;
+  font-size: 10px; font-weight: 800; line-height: 1; vertical-align: 1px;
+}
 
 /* ---------- search + chip rows ---------- */
 
@@ -638,6 +650,15 @@ body.signed-out #reset { opacity: .4; }
   letter-spacing: .02em;
 }
 .erow .ehas { margin-top: 4px; }
+/* The blurb and Includes list, collapsed by default — see aboutBlock() in events.js for why
+   caveats are never put behind this. [hidden] on .emore-panel is what actually hides it. */
+.emore {
+  margin-top: 10px; font-size: var(--fs-sub); color: var(--accent);
+  background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;
+}
+.emore:hover { text-decoration: underline; }
+.emore-panel { margin-top: 6px; }
+.emore-panel .eblurb { margin-top: 0; }
 /* On a compact row it gets one or two lines, with the full text in the tooltip. */
 .eabout-row {
   margin-top: 4px; font-size: 12.5px; color: var(--text); line-height: 1.45;
@@ -776,6 +797,42 @@ a.rname:hover { color: var(--accent); }
   border: 1px solid var(--done); border-radius: var(--r-lg); padding: 2px var(--sp-3);
 }
 .rstate.armed { color: var(--e200); border-color: var(--e200); border-style: dashed; }
+
+/* ---------- promo codes page (promo-codes.js) ---------- */
+/* Same "shorter than the official one" instinct as the events page: one card, one code, one
+   Copy and one Redeem, and nothing tracked — a code is either spent at Niantic's store or it
+   isn't, and this site has no way to know which. */
+
+.pcard {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 16px;
+}
+/* Dimmed and struck through, not hidden — a code that expired since the last snapshot refresh
+   still has to be seen as dead, not silently omitted. Same reasoning as .card.caught's dim,
+   opposite direction: there, dimming means "done"; here it means "can't be used any more". */
+.pcard.expired { opacity: .55; }
+.pcard.expired h3, .pcard.expired .pcode-text { text-decoration: line-through; }
+
+.phead { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; margin-bottom: 6px; }
+.phead h3 { margin: 0; font-size: 15.5px; line-height: 1.3; }
+.pdesc { margin: 0 0 8px; font-size: var(--fs-ui); color: var(--text); line-height: 1.5; }
+.prewards { margin: 0 0 10px; font-size: var(--fs-sub); color: var(--muted); }
+
+/* Same "credential in a monospace box, Copy beside it" recipe as .rb-topicrow/.rb-topic —
+   a promo code and an ntfy topic are both "one string you have to carry somewhere else". */
+.pcode { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2) var(--sp-3); margin-bottom: 8px; }
+.pcode-text {
+  display: inline-block; padding: 3px var(--sp-3);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: var(--fs-sub); font-weight: 600; color: var(--text);
+  background: var(--surface-2); border: 1px solid var(--border-bright);
+  border-radius: var(--r-md); user-select: all; word-break: break-all;
+}
+.pcard.expired .pcode-text { color: var(--muted); }
+
+.pfoot { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); flex-wrap: wrap; }
+.pexpiry { font-size: var(--fs-sub); color: var(--muted); font-variant-numeric: tabular-nums; }
+.pexpiry.urgent { color: var(--e200); font-weight: 700; }
 
 @media (max-width: 560px) {
   .remindbox { padding: var(--sp-4); }

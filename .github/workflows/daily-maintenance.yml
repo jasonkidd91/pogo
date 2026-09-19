@@ -53,7 +53,7 @@ jobs:
           prompt: |
             You are running unattended as the pogo repo's daily maintenance job. Follow
             CLAUDE.md's rules (LIVE facts are looked up, never remembered; never trust an
-            LLM-summarised fetch of a table; use the project skills). Work through all four
+            LLM-summarised fetch of a table; use the project skills). Work through all five
             tasks below in order. If a step's data source is unreachable, skip that step,
             leave a note in the final commit message or a comment on the relevant issue, and
             continue with the rest — do not guess.
@@ -67,7 +67,15 @@ jobs:
             `git diff --quiet -- web/events-data.js` shows no change, do nothing further for
             this task. If it changed, that's the only file this task touches.
 
-            ## 2. Archive finished trackers
+            ## 2. Refresh the promo codes snapshot
+
+            Use the `update-promos` skill. Run `python3 scripts/update_promos.py`. If
+            `git diff --quiet -- web/promo-data.js` shows no change, do nothing further for
+            this task. If it changed, that's the only file this task touches — the nav nudge
+            and the "new code" tags are computed client-side from this file at load time, not
+            written by this script.
+
+            ## 3. Archive finished trackers
 
             `web/events.js`'s `TRACKERS` map lists every event with a catch-list tracker page.
             For each entry, read its data file (`web/<slug>-data.js` — the `DAYS` array's
@@ -91,7 +99,7 @@ jobs:
             Commit archiving changes separately from task 1's snapshot refresh if both
             happened, so each commit reads clearly.
 
-            ## 3. File issues for events that might want a tracker
+            ## 4. File issues for events that might want a tracker
 
             Fetch `https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json`
             directly (or reuse task 1's fresh `web/events-data.js`). Only consider events
@@ -144,7 +152,7 @@ jobs:
             <!-- pogo-tracker-request:<event-id> -->
             ```
 
-            ## 4. Clean up stale tracker-request issues
+            ## 5. Clean up stale tracker-request issues
 
             `gh issue list --label tracker-request --state open`. For each, read the event id
             from its `<!-- pogo-tracker-request:... -->` marker and re-derive its window from

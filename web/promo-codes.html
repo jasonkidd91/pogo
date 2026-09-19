@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Promo Codes — Pokémon GO</title>
+<meta name="description" content="Every currently-active Pokémon GO promo code, with one-tap copy and a direct redeem link. Refreshed live from LeekDuck.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27%235b8cff%27/%3E%3Cpath d=%27M2 16h28%27 stroke=%27%230f1219%27 stroke-width=%273%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%230f1219%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%23e8ecf4%27/%3E%3C/svg%3E">
+<!-- auth.js pulls the Firebase SDK from here; warm the connection during parse. -->
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://leekduck.com">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Pokémon GO</p>
+    <h1>Promo Codes</h1>
+    <p class="sub">
+      Every promo code LeekDuck currently lists as active, fetched live from their
+      <a href="https://leekduck.com/promo-codes/" target="_blank" rel="noopener">Promo Codes
+      page</a>. Redeem a code at the official
+      <a href="https://store.pokemongo.com/offer-redemption" target="_blank" rel="noopener">Pokémon
+      GO Web Store</a> — Copy puts it on your clipboard, Redeem opens the page with it filled
+      in. You can redeem more than one code, but each works once per account, and every code
+      eventually expires.
+    </p>
+  </header>
+
+  <div class="summary"></div>
+
+  <main id="list"></main>
+
+  <footer>
+    <p id="freshness" class="freshness"></p>
+    <p>
+      This page has no sign-in gate and nothing here is tracked on your account — a promo
+      code is either redeemed at Niantic's store or it isn't, and this site has no way to
+      know which. The <strong>NEW</strong> tag and the dot on this page's nav link are purely
+      local to this browser: they mark codes you haven't opened this page to see yet, not
+      codes you haven't redeemed.
+    </p>
+    <div class="srcs">
+      <span>Source</span>
+      <a href="https://leekduck.com/promo-codes/">LeekDuck — Available Promo Codes</a>
+      <span>· live on every load; a daily snapshot is the fallback if that fetch fails</span>
+    </div>
+  </footer>
+
+</div>
+<script src="ui.js"></script>
+<script src="store.js"></script>
+<script src="auth.js"></script>
+<script src="promos.js"></script>
+<script src="promo-data.js"></script>
+<script src="promo-codes.js"></script>
+</body>
+</html>

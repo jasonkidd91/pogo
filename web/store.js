@@ -205,15 +205,28 @@ function stickySummary() {
 function buildNav(active) {
   const links = [
     ['events', 'index.html', "What's on"],
+    ['promos', 'promo-codes.html', 'Promo Codes'],
     ['megas', 'megas.html', 'Mega Pokémon'],
     ['dynamax', 'dynamax.html', 'Dynamax'],
     ['notify', 'notifications.html', 'Notifications'],
     ['archive', 'archive.html', 'Archive'],
   ];
+  // How many currently-active codes this browser hasn't opened Promo Codes to see yet — a
+  // day-stale read of PROMO_SNAPSHOT (web/promo-data.js), which is loaded on every page for
+  // exactly this. `Promos` itself is only defined on pages that load promos.js; both are
+  // absent on nothing in this repo, but the guard keeps this file from hard-depending on them.
+  const unseen = typeof Promos !== 'undefined' ? Promos.unseenCount() : 0;
+
   document.body.prepend(el('nav', { class: 'sitenav' },
     el('span', { class: 'brand', text: 'PoGO' }),
     links.map(([k, href, label]) =>
-      el('a', { href, text: label, 'aria-current': k === active ? 'page' : null })),
+      el('a', { href, 'aria-current': k === active ? 'page' : null },
+        label,
+        k === 'promos' && unseen > 0 && el('span', {
+          class: 'nudge', text: String(unseen),
+          'aria-label': `${unseen} new promo code${unseen === 1 ? '' : 's'}`,
+          title: `${unseen} new promo code${unseen === 1 ? '' : 's'} since you last checked`,
+        }))),
     el('span', { class: 'spacer' }),
     el('div', { class: 'authbox', id: 'authbox' })));
 
