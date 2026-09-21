@@ -4,7 +4,7 @@
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_events.py
  * Source: https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json
  *         (ScrapedDuck, which scrapes https://leekduck.com/events/)
- * Fetched: 2026-09-20 21:14 local
+ * Fetched: 2026-09-21 22:29 local
  *
  * EVENTS ARE LIVE DATA. events.js fetches the feed above on every page load and renders
  * that; this file is only what it shows while the fetch is in flight or if it fails, and
@@ -23,7 +23,7 @@
  * rotations are published. events.js branches on the suffix; do not normalise it away.
  */
 
-const EVENTS_FETCHED = "2026-09-20 21:14";
+const EVENTS_FETCHED = "2026-09-21 22:29";
 const EVENTS_SOURCE = "https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json";
 
 const EVENTS_SNAPSHOT = [
@@ -54,7 +54,7 @@ const EVENTS_SNAPSHOT = [
   {"id": "harvest-festival-taken-over-2026", "name": "Harvest Festival: Taken Over", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/harvest-festival-taken-over-2026/", "start": "2026-10-02T00:00:00.000", "end": "2026-10-05T20:00:00.000", "blurb": "Rescue Shadow Zekrom, battle new Shadow Pokémon, and hatch Shiny Shroodle during Harvest Festival: Taken Over!", "has": ["bonuses", "spawns", "research", "shiny"], "caveats": [{"k": "shiny", "t": "Shiny Shroodle will be available to hatch for the first time in Pokémon GO!"}]},
   {"id": "patterns-of-the-wild-2026", "name": "Patterns of the Wild", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/patterns-of-the-wild-2026/", "start": "2026-10-02T10:00:00.000", "end": "2026-10-02T20:00:00.000", "blurb": "This event is available only in Indonesia. Note: The original announcement was updated to say this event is exclusive to Indonesia.", "has": ["bonuses", "spawns", "research", "shiny"], "caveats": [{"k": "costume", "t": "Patterns of the Wild brings a Special Background for Pikachu wearing a batik shirt, along with boosted wild encounters, Incense bonuses, and research rewards!"}, {"k": "debut", "t": "Pikachu wearing a batik shirt can have a Special Background for the first time in Pokémon GO!"}, {"k": "shiny", "t": "These Pokémon will appear more often in the wild, with an increased chance of encountering their Shiny variants."}]},
   {"id": "gigantamax-cinderace-max-battle-day-2026", "name": "Gigantamax Cinderace Max Battle Day", "type": "max-battles", "heading": "Max Battles", "link": "https://leekduck.com/events/gigantamax-cinderace-max-battle-day-2026/", "start": "2026-10-03T14:00:00.000", "end": "2026-10-03T17:00:00.000", "blurb": "Shiny Gigantamax Cinderace makes its Pokémon GO debut in six-star Max Battles!", "has": ["bonuses", "research", "shiny"], "caveats": [{"k": "debut", "t": "For the first time in Pokémon GO, you’ll be able to encounter Shiny Gigantamax Cinderace—if you’re lucky!"}]},
-  {"id": "unannounced-event-october-2026", "name": "???", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/unannounced-event-october-2026/", "start": "2026-10-04T10:00:00.000", "end": "2026-10-10T20:00:00.000", "blurb": "The event is expected to begin at 10:00 a.m. and end at 8:00 p.m. local time."},
+  {"id": "world-space-week-2026", "name": "World Space Week 2026", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/world-space-week-2026/", "start": "2026-10-04T00:00:00.000", "end": "2026-10-10T23:59:00.000", "blurb": "Blast off with Astronaut Pikachu during World Space Week! This new costumed Pokémon makes its Pokémon GO debut in raids and free Timed Research.", "has": ["raids", "research", "shiny"], "caveats": [{"k": "debut", "t": "This new costumed Pokémon makes its Pokémon GO debut in raids and free Timed Research."}, {"k": "costume", "t": "Shiny Astronaut Pikachu will be available when the costume debuts."}]},
   {"id": "max-mondays-2026-10-05", "name": "Dynamax Sizzlipede during Max Monday", "type": "max-mondays", "heading": "Max Mondays", "link": "https://leekduck.com/events/max-mondays-2026-10-05/", "start": "2026-10-05T06:00:00.000", "end": "2026-10-05T21:00:00.000"},
   {"id": "gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-2", "name": "Great League: Mega Edition, Ultra League: Mega Edition, and Master League: Mega Edition | Twilight Trails", "type": "go-battle-league", "heading": "GO Battle League", "link": "https://leekduck.com/events/gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-2/", "start": "2026-10-06T20:00:00.000Z", "end": "2026-10-13T20:00:00.000Z"},
   {"id": "mega-blastoise-in-mega-raids-october-2026", "name": "Mega Blastoise in Mega Raids", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/mega-blastoise-in-mega-raids-october-2026/", "start": "2026-10-07T06:00:00.000", "end": "2026-10-13T22:00:00.000", "mons": ["Mega Blastoise"], "has": ["raids", "shiny"]},
