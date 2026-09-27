@@ -4,7 +4,7 @@
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_events.py
  * Source: https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json
  *         (ScrapedDuck, which scrapes https://leekduck.com/events/)
- * Fetched: 2026-09-26 21:54 local
+ * Fetched: 2026-09-27 21:53 local
  *
  * EVENTS ARE LIVE DATA. events.js fetches the feed above on every page load and renders
  * that; this file is only what it shows while the fetch is in flight or if it fails, and
@@ -23,7 +23,7 @@
  * rotations are published. events.js branches on the suffix; do not normalise it away.
  */
 
-const EVENTS_FETCHED = "2026-09-26 21:54";
+const EVENTS_FETCHED = "2026-09-27 21:53";
 const EVENTS_SOURCE = "https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json";
 
 const EVENTS_SNAPSHOT = [
@@ -36,12 +36,8 @@ const EVENTS_SNAPSHOT = [
   {"id": "xurkitree-pheromosa-buzzwole-in-5-star-raid-battles-september-2026", "name": "Xurkitree, Pheromosa, and Buzzwole in 5-star Raid Battles", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/xurkitree-pheromosa-buzzwole-in-5-star-raid-battles-september-2026/", "start": "2026-09-23T06:00:00.000", "end": "2026-09-29T22:00:00.000", "mons": ["Buzzwole", "Pheromosa", "Xurkitree"], "blurb": "There will also be a Raid Hour featuring these regional raid bosses from 6:00 p.m. to 7:00 p.m. local time on September 23.", "has": ["raids", "shiny"]},
   {"id": "choose-your-path-twilight-trails-2026", "name": "Choose Your Path: Twilight Trails", "type": "choose-your-path", "heading": "Choose Your Path", "link": "https://leekduck.com/events/choose-your-path-twilight-trails-2026/", "start": "2026-09-23T10:00:00.000", "end": "2026-09-28T20:00:00.000"},
   {"id": "pokemon-x-adidas-2026", "name": "adidas × Pokémon Timed Research", "type": "research", "heading": "Research", "link": "https://leekduck.com/events/pokemon-x-adidas-2026/", "start": "2026-09-25T10:00:00.000", "end": "2027-01-15T20:00:00.000"},
-  {"id": "pokemon-go-city-safari-brisbane-2026", "name": "Brisbane, Australia - Pokémon GO City Safari", "type": "city-safari", "heading": "City Safari", "link": "https://leekduck.com/events/pokemon-go-city-safari-brisbane-2026/", "start": "2026-09-26T00:00:00.000Z", "end": "2026-09-27T08:00:00.000Z"},
-  {"id": "pokemon-go-city-safari-marseille-2026", "name": "Marseille, France - Pokémon GO City Safari", "type": "city-safari", "heading": "City Safari", "link": "https://leekduck.com/events/pokemon-go-city-safari-marseille-2026/", "start": "2026-09-26T08:00:00.000Z", "end": "2026-09-27T16:00:00.000Z"},
-  {"id": "pokemon-go-city-safari-munich-2026", "name": "Munich, Germany - Pokémon GO City Safari", "type": "city-safari", "heading": "City Safari", "link": "https://leekduck.com/events/pokemon-go-city-safari-munich-2026/", "start": "2026-09-26T08:00:00.000Z", "end": "2026-09-27T16:00:00.000Z"},
-  {"id": "pokemon-go-city-safari-lisbon-2026", "name": "Lisbon, Portugal - Pokémon GO City Safari", "type": "city-safari", "heading": "City Safari", "link": "https://leekduck.com/events/pokemon-go-city-safari-lisbon-2026/", "start": "2026-09-26T09:00:00.000Z", "end": "2026-09-27T17:00:00.000Z"},
-  {"id": "catch-mastery-phantump-2026", "name": "Phantump Catch Mastery", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/catch-mastery-phantump-2026/", "start": "2026-09-26T10:00:00.000", "end": "2026-09-26T20:00:00.000", "blurb": "Get ready for a Catch Mastery event featuring Phantump, the Stump Pokémon!", "has": ["bonuses", "spawns", "research", "shiny"], "caveats": [{"k": "shiny", "t": "You’ll have an increased chance of encountering Shiny Phantump!"}]},
   {"id": "pokemon-go-city-safari-rio-de-janeiro-2026", "name": "Rio de Janeiro, Brazil - Pokémon GO City Safari", "type": "city-safari", "heading": "City Safari", "link": "https://leekduck.com/events/pokemon-go-city-safari-rio-de-janeiro-2026/", "start": "2026-09-26T13:00:00.000Z", "end": "2026-09-27T21:00:00.000Z"},
+  {"id": "pokemon-tcg-30th-celebration", "name": "Pokémon TCG: 30th Celebration", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/pokemon-tcg-30th-celebration/", "start": "2026-09-27T10:00:00.000", "end": "2026-10-20T22:00:00.000", "blurb": "Celebrate the release of Pokémon TCG: 30th Celebration! Visit participating Target, Best Buy, and GameStop locations in the United States for Mega Raids and Timed Research.", "has": ["raids", "research"]},
   {"id": "max-mondays-2026-09-28", "name": "Dynamax Sobble during Max Monday", "type": "max-mondays", "heading": "Max Mondays", "link": "https://leekduck.com/events/max-mondays-2026-09-28/", "start": "2026-09-28T06:00:00.000", "end": "2026-09-28T21:00:00.000"},
   {"id": "harvest-festival-2026", "name": "Harvest Festival 2026: Applin Picking", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/harvest-festival-2026/", "start": "2026-09-29T10:00:00.000", "end": "2026-10-05T20:00:00.000", "blurb": "Harvest Festival returns with the Pokémon GO debut of Shiny Applin! Gather apples, choose a Timed Research path, and earn rewards through the event GO Pass.", "has": ["bonuses", "spawns", "research", "shiny"], "caveats": [{"k": "debut", "t": "Harvest Festival returns with the Pokémon GO debut of Shiny Applin!"}, {"k": "costume", "t": "Tap these apples to receive Tart Apples, Sweet Apples, Syrupy Apples, or encounters with event-themed Pokémon, including Cottonee wearing a flower crown and Applin!"}, {"k": "shiny", "t": "Shiny Applin will be available for the first time in Pokémon GO!"}]},
   {"id": "gbl-twilight-trails_master-league_mega-color-cup-great-league-edition", "name": "Master League and Mega Color Cup: Great League Edition | Twilight Trails", "type": "go-battle-league", "heading": "GO Battle League", "link": "https://leekduck.com/events/gbl-twilight-trails_master-league_mega-color-cup-great-league-edition/", "start": "2026-09-29T20:00:00.000Z", "end": "2026-10-06T20:00:00.000Z"},
