@@ -5,7 +5,7 @@
  *
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_promos.py
  * Source: https://leekduck.com/promo-codes/
- * Fetched: 2026-09-26 21:54 local
+ * Fetched: 2026-09-27 21:53 local
  *
  * PROMO CODES ARE LIVE DATA. promo-codes.js fetches the page above on every load of
  * promo-codes.html and renders that; this file is only what it shows while the fetch is in
@@ -18,7 +18,7 @@
  * a real date — only used to detect an ALREADY-past deadline.
  */
 
-const PROMO_FETCHED = "2026-09-26 21:54";
+const PROMO_FETCHED = "2026-09-27 21:53";
 const PROMO_SOURCE = "https://leekduck.com/promo-codes/";
 
 const PROMO_SNAPSHOT = [
