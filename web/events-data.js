@@ -4,7 +4,7 @@
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_events.py
  * Source: https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json
  *         (ScrapedDuck, which scrapes https://leekduck.com/events/)
- * Fetched: 2026-09-29 22:51 local
+ * Fetched: 2026-09-30 22:50 local
  *
  * EVENTS ARE LIVE DATA. events.js fetches the feed above on every page load and renders
  * that; this file is only what it shows while the fetch is in flight or if it fails, and
@@ -23,7 +23,7 @@
  * rotations are published. events.js branches on the suffix; do not normalise it away.
  */
 
-const EVENTS_FETCHED = "2026-09-29 22:51";
+const EVENTS_FETCHED = "2026-09-30 22:50";
 const EVENTS_SOURCE = "https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json";
 
 const EVENTS_SNAPSHOT = [
@@ -31,7 +31,6 @@ const EVENTS_SNAPSHOT = [
   {"id": "go-pass-september-2026", "name": "GO Pass: September", "type": "go-pass", "heading": "GO Pass", "link": "https://leekduck.com/events/go-pass-september-2026/", "start": "2026-09-08T10:00:00.000", "end": "2026-10-06T10:00:00.000", "blurb": "Latios soars in faster than a jet for GO Pass: September!"},
   {"id": "season-24-twilight-trails", "name": "Twilight Trails", "type": "season", "heading": "Season", "link": "https://leekduck.com/events/season-24-twilight-trails/", "start": "2026-09-08T10:00:00.000", "end": "2026-12-01T10:00:00.000", "blurb": "Welcome to Pokémon GO: Twilight Trails! In Pokémon GO, Seasons are periods of time that feature new events, Pokémon debuts, and surprises that all follow a certain theme.", "has": ["bonuses", "spawns", "eggs"]},
   {"id": "shadow-thundurus-incarnate-forme-in-shadow-raids-september-2026", "name": "Shadow Thundurus (Incarnate Forme) in Shadow Raids", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/shadow-thundurus-incarnate-forme-in-shadow-raids-september-2026/", "start": "2026-09-09T06:00:00.000", "end": "2026-10-06T22:00:00.000", "mons": ["Thundurus (Incarnate)"], "blurb": "If you’re lucky, you may encounter Shiny Shadow Thundurus (Incarnate Forme)!", "has": ["raids", "shiny"]},
-  {"id": "gbl-twilight-trails_ultra-league_master-league-mega-edition_retro-cup-great-league-edition", "name": "Ultra League, Master League: Mega Edition, and Retro Cup: Great League Edition | Twilight Trails", "type": "go-battle-league", "heading": "GO Battle League", "link": "https://leekduck.com/events/gbl-twilight-trails_ultra-league_master-league-mega-edition_retro-cup-great-league-edition/", "start": "2026-09-22T20:00:00.000Z", "end": "2026-09-29T20:00:00.000Z"},
   {"id": "mega-malamar-in-mega-raids-september-2026", "name": "Mega Malamar in Mega Raids", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/mega-malamar-in-mega-raids-september-2026/", "start": "2026-09-23T06:00:00.000", "end": "2026-09-29T22:00:00.000", "mons": ["Mega Malamar"], "has": ["raids", "shiny"]},
   {"id": "xurkitree-pheromosa-buzzwole-in-5-star-raid-battles-september-2026", "name": "Xurkitree, Pheromosa, and Buzzwole in 5-star Raid Battles", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/xurkitree-pheromosa-buzzwole-in-5-star-raid-battles-september-2026/", "start": "2026-09-23T06:00:00.000", "end": "2026-09-29T22:00:00.000", "mons": ["Buzzwole", "Pheromosa", "Xurkitree"], "blurb": "There will also be a Raid Hour featuring these regional raid bosses from 6:00 p.m. to 7:00 p.m. local time on September 23.", "has": ["raids", "shiny"]},
   {"id": "pokemon-x-adidas-2026", "name": "adidas × Pokémon Timed Research", "type": "research", "heading": "Research", "link": "https://leekduck.com/events/pokemon-x-adidas-2026/", "start": "2026-09-25T10:00:00.000", "end": "2027-01-15T20:00:00.000"},
