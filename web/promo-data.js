@@ -5,7 +5,7 @@
  *
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_promos.py
  * Source: https://leekduck.com/promo-codes/
- * Fetched: 2026-09-30 22:50 local
+ * Fetched: 2026-10-01 23:01 local
  *
  * PROMO CODES ARE LIVE DATA. promo-codes.js fetches the page above on every load of
  * promo-codes.html and renders that; this file is only what it shows while the fetch is in
@@ -18,12 +18,10 @@
  * a real date — only used to detect an ALREADY-past deadline.
  */
 
-const PROMO_FETCHED = "2026-09-30 22:50";
+const PROMO_FETCHED = "2026-10-01 23:01";
 const PROMO_SOURCE = "https://leekduck.com/promo-codes/";
 
 const PROMO_SNAPSHOT = [
-  {"code": "LEGOxPOKEMONGOxCAP", "title": "LEGO × Pokémon GO Cap Timed Research", "redeem": "https://store.pokemongo.com/offer-redemption?passcode=LEGOxPOKEMONGOxCAP", "expires": "2026-09-30 23:59:00", "hideExpiry": false, "description": "Redeem this promo code for Bonus Timed Research that awards berries, XP, Stardust, and the 2026 LEGO® Pokémon Cap. The Cap Timed Research is unavailable in Japan, Taiwan, Hong Kong, Singapore, Thailand, and Indonesia, where LEGO® Pokémon™ products are not sold. Trainers in these regions can still redeem the code for alternate Timed Research with different rewards, including a Lucky Egg. Tasks must be completed and rewards claimed before Wednesday, September 30, 2026, at 11:59 p.m. local time. Research details here.", "link": "https://leekduck.com/events/lego-pokemon-go-2026/", "rewards": ["Pinap Berry ×3", "Razz Berry ×3", "Nanab Berry ×3", "XP ×1000", "Stardust ×1000", "2026 LEGO® Pokémon Cap"]},
-  {"code": "MLBxPOKEMONGO2026", "title": "MLB-branded T-shirt Avatar Item", "redeem": "https://store.pokemongo.com/offer-redemption?passcode=MLBxPOKEMONGO2026", "expires": "2026-09-30 23:59:59 -0700", "hideExpiry": false, "description": "To celebrate the Pokémon GO and Major League Baseball collaboration returning for the 2026 season, trainers can redeem this code to get an exclusive MLB-branded T-shirt avatar item. Offer code available for redemption until September 30, 2026. Learn more here.", "link": "https://pokemongo.com/post/mlb-2026", "rewards": ["MLB-branded T-shirt"]},
   {"code": "LEGOxPOKEMONGOxBERRIES", "title": "LEGO × Pokémon GO Berries", "redeem": "https://store.pokemongo.com/offer-redemption?passcode=LEGOxPOKEMONGOxBERRIES", "expires": "2026-12-31 23:59:59 -0800", "hideExpiry": true, "description": "Promo code for free berries and Poké Balls tied to the Pokémon GO and LEGO Group partnership. Learn more here.", "link": "https://leekduck.com/events/lego-pokemon-go-2026/", "rewards": ["Razz Berry ×5", "Poké Ball ×10", "Pinap Berry ×5", "Nanab Berry ×5"]},
   {"code": "FENDIxFRGMTxPOKEMON", "title": "FENDI x FRGMT x POKÉMON Hoodie Avatar Item", "redeem": "https://store.pokemongo.com/offer-redemption?passcode=FENDIxFRGMTxPOKEMON", "expires": "2027-01-04 23:59:59 -0800", "hideExpiry": true, "description": "Trainers can redeem this code to get an exclusive FENDI x FRGMT x POKÉMON hoodie avatar item. (This code should have expired on January 4, 2025 but it appears to still work.)", "rewards": ["FENDI x FRGMT x POKÉMON hoodie"]}
 ];
