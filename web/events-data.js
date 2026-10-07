@@ -4,7 +4,7 @@
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_events.py
  * Source: https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json
  *         (ScrapedDuck, which scrapes https://leekduck.com/events/)
- * Fetched: 2026-10-06 22:55 local
+ * Fetched: 2026-10-07 23:29 local
  *
  * EVENTS ARE LIVE DATA. events.js fetches the feed above on every page load and renders
  * that; this file is only what it shows while the fetch is in flight or if it fails, and
@@ -23,18 +23,13 @@
  * rotations are published. events.js branches on the suffix; do not normalise it away.
  */
 
-const EVENTS_FETCHED = "2026-10-06 22:55";
+const EVENTS_FETCHED = "2026-10-07 23:29";
 const EVENTS_SOURCE = "https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json";
 
 const EVENTS_SNAPSHOT = [
-  {"id": "go-pass-september-2026", "name": "GO Pass: September", "type": "go-pass", "heading": "GO Pass", "link": "https://leekduck.com/events/go-pass-september-2026/", "start": "2026-09-08T10:00:00.000", "end": "2026-10-06T10:00:00.000", "blurb": "Latios soars in faster than a jet for GO Pass: September!"},
   {"id": "season-24-twilight-trails", "name": "Twilight Trails", "type": "season", "heading": "Season", "link": "https://leekduck.com/events/season-24-twilight-trails/", "start": "2026-09-08T10:00:00.000", "end": "2026-12-01T10:00:00.000", "blurb": "Welcome to Pokémon GO: Twilight Trails! In Pokémon GO, Seasons are periods of time that feature new events, Pokémon debuts, and surprises that all follow a certain theme.", "has": ["bonuses", "spawns", "eggs"]},
-  {"id": "shadow-thundurus-incarnate-forme-in-shadow-raids-september-2026", "name": "Shadow Thundurus (Incarnate Forme) in Shadow Raids", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/shadow-thundurus-incarnate-forme-in-shadow-raids-september-2026/", "start": "2026-09-09T06:00:00.000", "end": "2026-10-06T22:00:00.000", "mons": ["Thundurus (Incarnate)"], "blurb": "If you’re lucky, you may encounter Shiny Shadow Thundurus (Incarnate Forme)!", "has": ["raids", "shiny"]},
   {"id": "pokemon-x-adidas-2026", "name": "adidas × Pokémon Timed Research", "type": "research", "heading": "Research", "link": "https://leekduck.com/events/pokemon-x-adidas-2026/", "start": "2026-09-25T10:00:00.000", "end": "2027-01-15T20:00:00.000"},
   {"id": "pokemon-tcg-30th-celebration", "name": "Pokémon TCG: 30th Celebration", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/pokemon-tcg-30th-celebration/", "start": "2026-09-27T10:00:00.000", "end": "2026-10-20T22:00:00.000", "blurb": "Celebrate the release of Pokémon TCG: 30th Celebration! Visit participating Target, Best Buy, and GameStop locations in the United States for Mega Raids and Timed Research.", "has": ["raids", "research"]},
-  {"id": "gbl-twilight-trails_master-league_mega-color-cup-great-league-edition", "name": "Master League and Mega Color Cup: Great League Edition | Twilight Trails", "type": "go-battle-league", "heading": "GO Battle League", "link": "https://leekduck.com/events/gbl-twilight-trails_master-league_mega-color-cup-great-league-edition/", "start": "2026-09-29T20:00:00.000Z", "end": "2026-10-06T20:00:00.000Z"},
-  {"id": "mega-victreebel-in-mega-raids-september-2026", "name": "Mega Victreebel in Mega Raids", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/mega-victreebel-in-mega-raids-september-2026/", "start": "2026-09-30T06:00:00.000", "end": "2026-10-06T22:00:00.000", "mons": ["Mega Victreebel"], "has": ["raids", "shiny"]},
-  {"id": "xerneas-in-5-star-raid-battles-september-2026", "name": "Xerneas in 5-star Raid Battles", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/xerneas-in-5-star-raid-battles-september-2026/", "start": "2026-09-30T06:00:00.000", "end": "2026-10-06T22:00:00.000", "mons": ["Xerneas"], "blurb": "There will also be a Raid Hour featuring Xerneas from 6:00 p.m. to 7:00 p.m. local time on September 30.", "has": ["raids", "shiny"]},
   {"id": "world-space-week-2026", "name": "World Space Week 2026", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/world-space-week-2026/", "start": "2026-10-04T00:00:00.000", "end": "2026-10-10T23:59:00.000", "blurb": "Blast off with Astronaut Pikachu during World Space Week! This new costumed Pokémon makes its Pokémon GO debut in raids and free Timed Research.", "has": ["raids", "research", "shiny"], "caveats": [{"k": "debut", "t": "This new costumed Pokémon makes its Pokémon GO debut in raids and free Timed Research."}, {"k": "costume", "t": "Shiny Astronaut Pikachu will be available when the costume debuts."}]},
   {"id": "go-pass-october-2026", "name": "GO Pass: October", "type": "go-pass", "heading": "GO Pass", "link": "https://leekduck.com/events/go-pass-october-2026/", "start": "2026-10-06T10:00:00.000", "end": "2026-11-03T10:00:00.000", "blurb": "GO Pass: October features Kyogre, a Lucky Trinket in GO Pass Deluxe, milestone bonuses, and rewards available from October 6 to November 3, 2026."},
   {"id": "gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-2", "name": "Great League: Mega Edition, Ultra League: Mega Edition, and Master League: Mega Edition | Twilight Trails", "type": "go-battle-league", "heading": "GO Battle League", "link": "https://leekduck.com/events/gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-2/", "start": "2026-10-06T20:00:00.000Z", "end": "2026-10-13T20:00:00.000Z"},
