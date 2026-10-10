@@ -114,7 +114,8 @@ date in the header — preserve that convention for new event data.
 Plain scripts, no modules or bundler. **Load order matters**: `ui.js` → `store.js` →
 `auth.js` → `promos.js` → `promo-data.js` → data file → page script. The middle two are loaded
 on **every** page, not just `promo-codes.html` — `buildNav()`'s "unseen promo code" nudge needs
-them everywhere. The events page adds `remind.js` after those; no other page loads it.
+them everywhere. The events page adds `remind.js` after those; no other page loads it. It
+also adds `official-events.js` after `events-data.js`.
 
 - **`ui.js` is the design system, and everything visible goes through it.** One `el()`
   primitive, one `UI.monCard` used by all three Pokémon lists, one `UI.sectionHead`, one
@@ -238,6 +239,13 @@ Three things there are easy to get wrong:
   differs from the event's. The generator's patterns only *select and label* a sentence from
   the event's page; they never compose one. An evolution made after the deadline cannot be
   redone, so a caveat written from memory is the most expensive wrong thing this site could say.
+- **`web/official-events.js` holds the few events the feed misses**, hand-added from
+  pokemongo.com news, never from memory. Each one is added only after a human says yes on its
+  `missing-event` issue ("Automation", task 6). `events.js` merges them into the snapshot and
+  into the live list, so a feed gap can't hide them. They render with the `In person` type
+  and link to the official article. Same rules as `web/data.js`: sources and a `checked` date
+  on every entry, local times with no `Z`, a blurb quoted verbatim or left out. Delete an
+  entry once the feed carries it, or it shows twice.
 - **Trackers are opt-in.** An event appearing in the feed is not a reason to build a catch
   list for it. `TRACKERS` in `events.js` maps the few feed ids that have one; build a new one
   only when asked.

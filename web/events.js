@@ -43,6 +43,8 @@ const TYPES = {
   'go-pass':                { label: 'GO Pass',       cls: 'bg',    group: 'big' },
   'season':                 { label: 'Season',        cls: 'bg',    group: 'big' },
   'event':                  { label: 'Event',         cls: 'event', group: 'big' },
+  // Not a feed type: official-events.js uses it for venue events the feed missed.
+  'in-person':              { label: 'In person',     cls: 'fest',  group: 'big' },
 };
 
 /**
@@ -67,6 +69,7 @@ const WHAT_IS = {
   'season': 'A months-long season. Spawns, eggs and bonuses shift with it.',
   'go-pass': 'A reward track you work through by playing during the month.',
   'event': 'A limited-time event with its own spawns, bonuses and research.',
+  'in-person': 'Played at a real place — the event only counts inside the venue\'s gameplay area.',
 };
 
 /**
@@ -103,6 +106,18 @@ const TRACKERS = {};
 const BACKGROUND = new Set(['season', 'go-pass']);
 
 const DAY = 86400000;
+
+/**
+ * Events the feed does not carry, hand-added from Pokémon GO's own news once a human has
+ * reviewed the `missing-event` issue — see official-events.js. Merged into whichever list is
+ * on screen, snapshot or live, so a feed gap never hides them.
+ */
+const EXTRA = typeof OFFICIAL_EVENTS !== 'undefined' ? OFFICIAL_EVENTS : [];
+
+function withExtras(list) {
+  const ids = new Set(list.map((e) => e.id));
+  return list.concat(EXTRA.filter((e) => !ids.has(e.id)));
+}
 
 /**
  * Blurbs are scraped per event by scripts/update_events.py and live in the snapshot; the feed
@@ -540,7 +555,7 @@ async function refresh() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const raw = await res.json();
     if (!Array.isArray(raw) || raw.length < 10) throw new Error('feed shape changed');
-    events = raw.filter((e) => e && e.eventID && e.start).map(slim);
+    events = withExtras(raw.filter((e) => e && e.eventID && e.start).map(slim));
     source = 'live';
     checkedAt = new Date().toLocaleString([], {
       day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
@@ -571,13 +586,13 @@ document.addEventListener('DOMContentLoaded', () => {
   buildNav('events');
 
   if (typeof EVENTS_SNAPSHOT !== 'undefined') {
-    EVENTS_SNAPSHOT.forEach((e) => {
+    EVENTS_SNAPSHOT.concat(EXTRA).forEach((e) => {
       if (e.blurb || e.has || e.caveats) {
         described.set(e.id, { blurb: e.blurb, has: e.has, caveats: e.caveats });
       }
     });
   }
-  events = typeof EVENTS_SNAPSHOT !== 'undefined' ? EVENTS_SNAPSHOT.slice() : [];
+  events = withExtras(typeof EVENTS_SNAPSHOT !== 'undefined' ? EVENTS_SNAPSHOT : []);
   render();          // paint the snapshot immediately — never an empty page while fetching
   refresh();
 

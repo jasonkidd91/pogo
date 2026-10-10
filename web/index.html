@@ -52,7 +52,10 @@
       Event data comes from the <a href="https://leekduck.com/events/">LeekDuck</a> event list
       via the <a href="https://github.com/bigfoott/ScrapedDuck">ScrapedDuck</a> JSON feed, fetched
       fresh every time this page loads. If that fetch fails you get the saved copy shipped with
-      the site, and the line above says so.
+      the site, and the line above says so. A few events that feed misses, such as venue
+      events in Asia-Pacific, are added by hand from
+      <a href="https://pokemongo.com/en/news">Pokémon GO's own news</a> and marked
+      <em>In person</em>; their Details link goes to the official article.
     </p>
     <p>
       <strong>Times.</strong> Almost everything in Pokémon GO runs on <em>local</em> time — a
@@ -89,6 +92,7 @@
 <script src="promo-data.js"></script>
 <script src="remind.js"></script>
 <script src="events-data.js"></script>
+<script src="official-events.js"></script>
 <script src="events.js"></script>
 </body>
 </html>
