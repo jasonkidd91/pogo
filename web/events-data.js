@@ -4,7 +4,7 @@
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_events.py
  * Source: https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json
  *         (ScrapedDuck, which scrapes https://leekduck.com/events/)
- * Fetched: 2026-10-08 23:41 local
+ * Fetched: 2026-10-10 07:40 local
  *
  * EVENTS ARE LIVE DATA. events.js fetches the feed above on every page load and renders
  * that; this file is only what it shows while the fetch is in flight or if it fails, and
@@ -23,7 +23,7 @@
  * rotations are published. events.js branches on the suffix; do not normalise it away.
  */
 
-const EVENTS_FETCHED = "2026-10-08 23:41";
+const EVENTS_FETCHED = "2026-10-10 07:40";
 const EVENTS_SOURCE = "https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json";
 
 const EVENTS_SNAPSHOT = [
@@ -36,7 +36,6 @@ const EVENTS_SNAPSHOT = [
   {"id": "mega-blastoise-in-mega-raids-october-2026", "name": "Mega Blastoise in Mega Raids", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/mega-blastoise-in-mega-raids-october-2026/", "start": "2026-10-07T06:00:00.000", "end": "2026-10-13T22:00:00.000", "mons": ["Mega Blastoise"], "has": ["raids", "shiny"]},
   {"id": "yveltal-in-5-star-raid-battles-october-2026", "name": "Yveltal in 5-star Raid Battles", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/yveltal-in-5-star-raid-battles-october-2026/", "start": "2026-10-07T06:00:00.000", "end": "2026-10-13T22:00:00.000", "mons": ["Yveltal"], "blurb": "There will also be a Raid Hour featuring Yveltal from 6:00 p.m. to 7:00 p.m. local time on October 7.", "has": ["raids", "shiny"]},
   {"id": "shadow-landorus-incarnate-forme-in-shadow-raids-october-2026", "name": "Shadow Landorus (Incarnate Forme) in Shadow Raids", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/shadow-landorus-incarnate-forme-in-shadow-raids-october-2026/", "start": "2026-10-07T06:00:00.000", "end": "2026-11-03T22:00:00.000", "mons": ["Landorus (Incarnate)"], "blurb": "If you’re lucky, you may encounter Shiny Shadow Landorus (Incarnate Forme)!", "has": ["raids", "shiny"]},
-  {"id": "pokemonspotlighthour2026-10-08", "name": "Elgyem Spotlight Hour", "type": "pokemon-spotlight-hour", "heading": "Pokémon Spotlight Hour", "link": "https://leekduck.com/events/pokemonspotlighthour2026-10-08/", "start": "2026-10-08T18:00:00.000", "end": "2026-10-08T19:00:00.000", "bonus": "2× Catch Candy", "mons": ["Elgyem"]},
   {"id": "october-communityday2026", "name": "Zorua Community Day", "type": "community-day", "heading": "Community Day", "link": "https://leekduck.com/events/october-communityday2026/", "start": "2026-10-10T14:00:00.000", "end": "2026-10-10T17:00:00.000", "mons": ["Zorua"], "bonuses": ["Increased Spawns", "3x Catch XP", "3-hour Incense", "1-hour Lures*", "2x Catch Candy", "2x Chance for Trainers level 31 and up to receive Candy XL from catching Pokémon", "One additional Special Trade can be made for a maximum of two for the day*", "Trades made will require 50% less Stardust*"], "blurb": "Zorua, the Tricky Fox Pokémon, will be featured during October Community Day!", "has": ["bonuses", "spawns", "research", "shiny"], "caveats": [{"k": "move", "t": "Evolve Zorua during the event or up to four hours afterwards to get a Zoroark that knows the Fast Attack Sucker Punch."}, {"k": "shiny", "t": "Zorua attracted to regular Lure Modules will still have an increased chance to be Shiny and may have a Special Background."}]},
   {"id": "max-mondays-2026-10-12", "name": "Dynamax Rookidee during Max Monday", "type": "max-mondays", "heading": "Max Mondays", "link": "https://leekduck.com/events/max-mondays-2026-10-12/", "start": "2026-10-12T06:00:00.000", "end": "2026-10-12T21:00:00.000"},
   {"id": "fall-marathon-buddy-trek-2026", "name": "Fall Marathon: Buddy Trek", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/fall-marathon-buddy-trek-2026/", "start": "2026-10-13T10:00:00.000", "end": "2026-10-19T20:00:00.000", "blurb": "Bramblin makes its Pokémon GO debut during Fall Marathon: Buddy Trek! Explore up to 42 km to earn Marathon Visor Pikachu, enjoy increased chances of encountering Shiny Electrike and Shiny Hisuian Growlithe, and unlock new GO Pass rewards.", "has": ["spawns", "research", "shiny"], "caveats": [{"k": "debut", "t": "Bramblin makes its Pokémon GO debut during Fall Marathon: Buddy Trek!"}, {"k": "shiny", "t": "Explore up to 42 km to earn Marathon Visor Pikachu, enjoy increased chances of encountering Shiny Electrike and Shiny Hisuian Growlithe, and unlock new GO Pass rewards."}]},
