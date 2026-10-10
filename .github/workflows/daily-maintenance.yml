@@ -36,7 +36,9 @@ jobs:
         uses: actions/checkout@v6
         with:
           token: ${{ secrets.POGO_GITHUB_PAT }}
-          fetch-depth: 1
+          # Full history: task 6 matches official news against every event the snapshot
+          # has EVER carried (git log of web/events-data.js), not just today's feed.
+          fetch-depth: 0
 
       - name: Configure git identity
         run: |
@@ -53,7 +55,7 @@ jobs:
           prompt: |
             You are running unattended as the pogo repo's daily maintenance job. Follow
             CLAUDE.md's rules (LIVE facts are looked up, never remembered; never trust an
-            LLM-summarised fetch of a table; use the project skills). Work through all five
+            LLM-summarised fetch of a table; use the project skills). Work through all six
             tasks below in order. If a step's data source is unreachable, skip that step,
             leave a note in the final commit message or a comment on the relevant issue, and
             continue with the rest — do not guess.
@@ -162,3 +164,38 @@ jobs:
             then close the issue. Do not use the literal string "@claude" in your comment —
             it would be a valid trigger for the comment-triggered workflow and cause a loop.
             Leave alone any issue whose event is still current or upcoming.
+
+            ## 6. Catch events the feed missed
+
+            The feed above is one source, and it has gaps: it never carried PokéXciting!, the
+            September 2026 Pokémon 30th anniversary tour, and a trainer missed the Kuala
+            Lumpur stop because of it. Run `python3 scripts/check_official_news.py`. It lists
+            pokemongo.com news articles whose slug matches no event the site has ever shown.
+
+            If it exits non-zero, the news page was unreachable or its markup changed. Skip
+            this task and say so in your final summary. Never treat that as "nothing
+            missing".
+
+            For each `unmatched` article, open its `url` and decide. Most unmatched posts
+            are not events: update notes, a season overview, GBL, a web store sale. Those
+            need nothing. Only an article announcing a dated event (in-game, in-person or
+            city-specific) whose last day has not yet passed is worth an issue. Several
+            articles about one event (a "save the date" and a per-city post, say) are one
+            issue, not several.
+
+            Dedupe on the article slug:
+            `gh issue list --state all --search "pogo-missing-event:<slug> in:body"`.
+            Search for every slug that belongs to the event. If any of them comes back,
+            skip.
+
+            Ensure the label exists:
+            `gh label create missing-event --color d93f0b --description "Official event the ScrapedDuck feed does not carry" --force`
+
+            Then `gh issue create --label missing-event --title "Not in feed: <event name>"`
+            with a body that gives the event name, every date and city exactly as the
+            article states them (quote, don't paraphrase), the article URL(s), and one
+            line saying the ScrapedDuck feed doesn't carry it, so the events page isn't
+            showing it. End with one marker line per slug:
+            `<!-- pogo-missing-event:<slug> -->`. Don't use the literal string "@claude"
+            anywhere in it. Don't edit any file under `web/` for this task. Whether and how
+            the site shows the event is decided on the issue by a human.

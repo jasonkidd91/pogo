@@ -35,6 +35,10 @@ python3 scripts/update_events.py
 # above has to events.js. Also loaded on every OTHER page, for the nav "unseen code" nudge.
 python3 scripts/update_promos.py
 
+# Report official pokemongo.com news articles that match no event the site has ever shown
+# (a second source for the events feed — see "Automation", task 6). Read-only.
+python3 scripts/check_official_news.py
+
 # Syntax-check JS (no test suite exists)
 node --check web/app.js
 
@@ -405,7 +409,7 @@ workflows, which would silently stop `pages.yml` from deploying an automated com
 
 - **`daily-maintenance.yml`** — scheduled `0 19 * * *` UTC (03:00 Asia/Kuala_Lumpur, no DST),
   plus `workflow_dispatch` for a manual run. Headless (`prompt:` input, no comment trigger),
-  and pushes straight to `main`. Five jobs, in order, each skipped rather than guessed at if
+  and pushes straight to `main`. Six jobs, in order, each skipped rather than guessed at if
   its data source is unreachable:
   1. Runs the `update-events` skill's `scripts/update_events.py`; commits only if
      `web/events-data.js` actually changed.
@@ -435,6 +439,16 @@ workflows, which would silently stop `pages.yml` from deploying an automated com
      -->` marker before creating a new one, labelled `tracker-request`.
   5. **Closes stale `tracker-request` issues** whose event has since ended (or dropped out of
      the feed entirely) without ever getting a tracker — a comment saying so, then close.
+  6. **Files a `missing-event` issue for an official event the feed never carried.**
+     `scripts/check_official_news.py` lists pokemongo.com news articles whose slug matches no
+     event in the feed *or in `web/events-data.js`'s git history*, which is why the checkout
+     uses `fetch-depth: 0`. The job then judges which of those are real, upcoming events.
+     This exists because ScrapedDuck never carried PokéXciting! (the Sept 2026 30th
+     anniversary tour) and a trainer missed the Kuala Lumpur stop. It only files issues and
+     never edits `web/`: an event found this way is unverified, and a human decides whether
+     the site shows it. The script exits non-zero when it parses no articles, so "page
+     unreachable" can never read as "no gaps". Keep that. pokemongo.com is blocked from the
+     Claude Code cloud container; test changes with `--news <saved page>`.
 
 - **`claude.yml`** — the `@claude`-mention responder, triggered only by `issue_comment` and
   `pull_request_review_comment`, deliberately **not** by `issues: [opened, ...]`. The issue
