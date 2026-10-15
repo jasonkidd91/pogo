@@ -4,7 +4,7 @@
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_events.py
  * Source: https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json
  *         (ScrapedDuck, which scrapes https://leekduck.com/events/)
- * Fetched: 2026-10-14 22:06 local
+ * Fetched: 2026-10-15 21:59 local
  *
  * EVENTS ARE LIVE DATA. events.js fetches the feed above on every page load and renders
  * that; this file is only what it shows while the fetch is in flight or if it fails, and
@@ -23,7 +23,7 @@
  * rotations are published. events.js branches on the suffix; do not normalise it away.
  */
 
-const EVENTS_FETCHED = "2026-10-14 22:06";
+const EVENTS_FETCHED = "2026-10-15 21:59";
 const EVENTS_SOURCE = "https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json";
 
 const EVENTS_SNAPSHOT = [
@@ -36,7 +36,6 @@ const EVENTS_SNAPSHOT = [
   {"id": "gbl-twilight-trails_great-league_ultra-league-mega-edition_little-cup", "name": "Great League, Ultra League: Mega Edition, and Little Cup | Twilight Trails", "type": "go-battle-league", "heading": "GO Battle League", "link": "https://leekduck.com/events/gbl-twilight-trails_great-league_ultra-league-mega-edition_little-cup/", "start": "2026-10-13T20:00:00.000Z", "end": "2026-10-20T20:00:00.000Z"},
   {"id": "dialga-in-5-star-raid-battles-october-2026", "name": "Dialga in 5-star Raid Battles", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/dialga-in-5-star-raid-battles-october-2026/", "start": "2026-10-14T06:00:00.000", "end": "2026-10-20T22:00:00.000", "mons": ["Dialga"], "blurb": "There will also be a Raid Hour featuring Dialga from 6:00 p.m. to 7:00 p.m. local time on October 14.", "has": ["raids", "shiny"]},
   {"id": "mega-dragonite-in-mega-raids-october-2026", "name": "Mega Dragonite in Mega Raids", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/mega-dragonite-in-mega-raids-october-2026/", "start": "2026-10-14T06:00:00.000", "end": "2026-10-20T22:00:00.000", "mons": ["Mega Dragonite"], "has": ["raids", "shiny"]},
-  {"id": "raidhour20261014", "name": "Dialga Raid Hour", "type": "raid-hour", "heading": "Raid Hour", "link": "https://leekduck.com/events/raidhour20261014/", "start": "2026-10-14T18:00:00.000", "end": "2026-10-14T19:00:00.000"},
   {"id": "pokemonspotlighthour2026-10-15", "name": "Stufful Spotlight Hour", "type": "pokemon-spotlight-hour", "heading": "Pokémon Spotlight Hour", "link": "https://leekduck.com/events/pokemonspotlighthour2026-10-15/", "start": "2026-10-15T18:00:00.000", "end": "2026-10-15T19:00:00.000", "bonus": "2× Transfer Candy", "mons": ["Stufful"]},
   {"id": "sandile-hatch-day-2026", "name": "Sandile Hatch Day", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/sandile-hatch-day-2026/", "start": "2026-10-17T11:00:00.000", "end": "2026-10-17T17:00:00.000", "blurb": "Sandile Hatch Day features more Sandile hatching from 2 km Eggs and an increased chance of hatching Shiny Sandile!", "has": ["bonuses", "research", "shiny"], "caveats": [{"k": "shiny", "t": "Sandile Hatch Day features more Sandile hatching from 2 km Eggs and an increased chance of hatching Shiny Sandile!"}, {"k": "only", "t": "Complete free event-exclusive Timed Research to earn an Incubator and XP."}]},
   {"id": "max-mondays-2026-10-19", "name": "Dynamax Sneasel during Max Monday", "type": "max-mondays", "heading": "Max Mondays", "link": "https://leekduck.com/events/max-mondays-2026-10-19/", "start": "2026-10-19T06:00:00.000", "end": "2026-10-19T21:00:00.000"},
