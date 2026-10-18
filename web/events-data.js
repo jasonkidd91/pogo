@@ -4,7 +4,7 @@
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_events.py
  * Source: https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json
  *         (ScrapedDuck, which scrapes https://leekduck.com/events/)
- * Fetched: 2026-10-16 21:57 local
+ * Fetched: 2026-10-18 21:19 local
  *
  * EVENTS ARE LIVE DATA. events.js fetches the feed above on every page load and renders
  * that; this file is only what it shows while the fetch is in flight or if it fails, and
@@ -23,7 +23,7 @@
  * rotations are published. events.js branches on the suffix; do not normalise it away.
  */
 
-const EVENTS_FETCHED = "2026-10-16 21:57";
+const EVENTS_FETCHED = "2026-10-18 21:19";
 const EVENTS_SOURCE = "https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json";
 
 const EVENTS_SNAPSHOT = [
@@ -36,8 +36,7 @@ const EVENTS_SNAPSHOT = [
   {"id": "gbl-twilight-trails_great-league_ultra-league-mega-edition_little-cup", "name": "Great League, Ultra League: Mega Edition, and Little Cup | Twilight Trails", "type": "go-battle-league", "heading": "GO Battle League", "link": "https://leekduck.com/events/gbl-twilight-trails_great-league_ultra-league-mega-edition_little-cup/", "start": "2026-10-13T20:00:00.000Z", "end": "2026-10-20T20:00:00.000Z"},
   {"id": "dialga-in-5-star-raid-battles-october-2026", "name": "Dialga in 5-star Raid Battles", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/dialga-in-5-star-raid-battles-october-2026/", "start": "2026-10-14T06:00:00.000", "end": "2026-10-20T22:00:00.000", "mons": ["Dialga"], "blurb": "There will also be a Raid Hour featuring Dialga from 6:00 p.m. to 7:00 p.m. local time on October 14.", "has": ["raids", "shiny"]},
   {"id": "mega-dragonite-in-mega-raids-october-2026", "name": "Mega Dragonite in Mega Raids", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/mega-dragonite-in-mega-raids-october-2026/", "start": "2026-10-14T06:00:00.000", "end": "2026-10-20T22:00:00.000", "mons": ["Mega Dragonite"], "has": ["raids", "shiny"]},
-  {"id": "pokemonspotlighthour2026-10-15", "name": "Stufful Spotlight Hour", "type": "pokemon-spotlight-hour", "heading": "Pokémon Spotlight Hour", "link": "https://leekduck.com/events/pokemonspotlighthour2026-10-15/", "start": "2026-10-15T18:00:00.000", "end": "2026-10-15T19:00:00.000", "bonus": "2× Transfer Candy", "mons": ["Stufful"]},
-  {"id": "sandile-hatch-day-2026", "name": "Sandile Hatch Day", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/sandile-hatch-day-2026/", "start": "2026-10-17T11:00:00.000", "end": "2026-10-17T17:00:00.000", "blurb": "Sandile Hatch Day features more Sandile hatching from 2 km Eggs and an increased chance of hatching Shiny Sandile!", "has": ["bonuses", "research", "shiny"], "caveats": [{"k": "shiny", "t": "Sandile Hatch Day features more Sandile hatching from 2 km Eggs and an increased chance of hatching Shiny Sandile!"}, {"k": "only", "t": "Complete free event-exclusive Timed Research to earn an Incubator and XP."}]},
+  {"id": "sandile-hatch-day-2026", "name": "Sandile Hatch Day", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/sandile-hatch-day-2026/", "start": "2026-10-17T11:00:00.000", "end": "2026-10-17T17:00:00.000", "blurb": "Sandile Hatch Day features more Sandile hatching from 2 km Eggs and an increased chance of hatching Shiny Sandile!", "has": ["bonuses", "research", "shiny"], "caveats": [{"k": "shiny", "t": "Sandile Hatch Day features more Sandile hatching from 2 km Eggs and an increased chance of hatching Shiny Sandile!"}]},
   {"id": "max-mondays-2026-10-19", "name": "Dynamax Sneasel during Max Monday", "type": "max-mondays", "heading": "Max Mondays", "link": "https://leekduck.com/events/max-mondays-2026-10-19/", "start": "2026-10-19T06:00:00.000", "end": "2026-10-19T21:00:00.000"},
   {"id": "minior-showers-orionids-2026", "name": "Minior Showers: Orionids 2026", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/minior-showers-orionids-2026/", "start": "2026-10-19T17:00:00.000", "end": "2026-10-24T23:59:00.000", "blurb": "Encounter Minior during the Orionids meteor shower, with increased Stardust for catching Minior and boosted encounters from 5:00 p.m. to 9:00 p.m. each day.", "has": ["bonuses", "spawns"], "caveats": [{"k": "debut", "t": "Minior, the Meteor Pokémon, will make its Pokémon GO debut during the Orionids meteor shower!"}]},
   {"id": "gbl-twilight-trails_ultra-league_master-league-mega-edition_fantasy-cup-great-league-edition", "name": "Ultra League, Master League: Mega Edition, and Fantasy Cup: Great League Edition | Twilight Trails", "type": "go-battle-league", "heading": "GO Battle League", "link": "https://leekduck.com/events/gbl-twilight-trails_ultra-league_master-league-mega-edition_fantasy-cup-great-league-edition/", "start": "2026-10-20T20:00:00.000Z", "end": "2026-10-27T20:00:00.000Z"},
