@@ -4,7 +4,7 @@
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_events.py
  * Source: https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json
  *         (ScrapedDuck, which scrapes https://leekduck.com/events/)
- * Fetched: 2026-10-23 21:54 local
+ * Fetched: 2026-10-24 21:26 local
  *
  * EVENTS ARE LIVE DATA. events.js fetches the feed above on every page load and renders
  * that; this file is only what it shows while the fetch is in flight or if it fails, and
@@ -23,7 +23,7 @@
  * rotations are published. events.js branches on the suffix; do not normalise it away.
  */
 
-const EVENTS_FETCHED = "2026-10-23 21:54";
+const EVENTS_FETCHED = "2026-10-24 21:26";
 const EVENTS_SOURCE = "https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json";
 
 const EVENTS_SNAPSHOT = [
@@ -35,7 +35,6 @@ const EVENTS_SNAPSHOT = [
   {"id": "gbl-twilight-trails_ultra-league_master-league-mega-edition_fantasy-cup-great-league-edition", "name": "Ultra League, Master League: Mega Edition, and Fantasy Cup: Great League Edition | Twilight Trails", "type": "go-battle-league", "heading": "GO Battle League", "link": "https://leekduck.com/events/gbl-twilight-trails_ultra-league_master-league-mega-edition_fantasy-cup-great-league-edition/", "start": "2026-10-20T20:00:00.000Z", "end": "2026-10-27T20:00:00.000Z"},
   {"id": "mega-charizard-x-mega-charizard-y-in-mega-raids-october-2026", "name": "Mega Charizard X and Mega Charizard Y in Mega Raids", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/mega-charizard-x-mega-charizard-y-in-mega-raids-october-2026/", "start": "2026-10-21T06:00:00.000", "end": "2026-10-27T22:00:00.000", "mons": ["Mega Charizard X", "Mega Charizard Y"], "has": ["raids", "shiny"]},
   {"id": "palkia-in-5-star-raid-battles-october-2026", "name": "Palkia in 5-star Raid Battles", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/palkia-in-5-star-raid-battles-october-2026/", "start": "2026-10-21T06:00:00.000", "end": "2026-10-27T22:00:00.000", "mons": ["Palkia"], "blurb": "There will also be a Raid Hour featuring Palkia from 6:00 p.m. to 7:00 p.m. local time on October 21.", "has": ["raids", "shiny"]},
-  {"id": "pokemonspotlighthour2026-10-22", "name": "Morelull Spotlight Hour", "type": "pokemon-spotlight-hour", "heading": "Pokémon Spotlight Hour", "link": "https://leekduck.com/events/pokemonspotlighthour2026-10-22/", "start": "2026-10-22T18:00:00.000", "end": "2026-10-22T19:00:00.000", "bonus": "2× Catch Stardust", "mons": ["Morelull"]},
   {"id": "pokemon-go-city-safari-boston-2026-rescheduled", "name": "Pokémon GO City Safari: Boston (Rescheduled)", "type": "city-safari", "heading": "City Safari", "link": "https://leekduck.com/events/pokemon-go-city-safari-boston-2026-rescheduled/", "start": "2026-10-24T10:00:00.000", "end": "2026-10-25T18:00:00.000"},
   {"id": "dynamax-uxie-mesprit-azelf-max-battle-day-2026", "name": "Dynamax Uxie, Mesprit, and Azelf Max Battle Day", "type": "max-battles", "heading": "Max Battles", "link": "https://leekduck.com/events/dynamax-uxie-mesprit-azelf-max-battle-day-2026/", "start": "2026-10-24T14:00:00.000", "end": "2026-10-24T17:00:00.000", "blurb": "Uxie, Mesprit, and Azelf make their Dynamax debuts in regional five-star Max Battles!", "has": ["bonuses", "research", "shiny"]},
   {"id": "pokemon-night-out-2026-twitch-drops", "name": "Twitch Drops for Pokémon Night Out 2026", "type": "twitch-drops", "heading": "Twitch Drops", "link": "https://leekduck.com/events/pokemon-night-out-2026-twitch-drops/", "start": "2026-10-25T02:30:00.000Z", "end": "2026-10-25T06:59:00.000Z"},
