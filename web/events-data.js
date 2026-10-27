@@ -4,7 +4,7 @@
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_events.py
  * Source: https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json
  *         (ScrapedDuck, which scrapes https://leekduck.com/events/)
- * Fetched: 2026-10-26 23:03 local
+ * Fetched: 2026-10-27 22:52 local
  *
  * EVENTS ARE LIVE DATA. events.js fetches the feed above on every page load and renders
  * that; this file is only what it shows while the fetch is in flight or if it fails, and
@@ -23,7 +23,7 @@
  * rotations are published. events.js branches on the suffix; do not normalise it away.
  */
 
-const EVENTS_FETCHED = "2026-10-26 23:03";
+const EVENTS_FETCHED = "2026-10-27 22:52";
 const EVENTS_SOURCE = "https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json";
 
 const EVENTS_SNAPSHOT = [
@@ -34,8 +34,6 @@ const EVENTS_SNAPSHOT = [
   {"id": "gbl-twilight-trails_ultra-league_master-league-mega-edition_fantasy-cup-great-league-edition", "name": "Ultra League, Master League: Mega Edition, and Fantasy Cup: Great League Edition | Twilight Trails", "type": "go-battle-league", "heading": "GO Battle League", "link": "https://leekduck.com/events/gbl-twilight-trails_ultra-league_master-league-mega-edition_fantasy-cup-great-league-edition/", "start": "2026-10-20T20:00:00.000Z", "end": "2026-10-27T20:00:00.000Z"},
   {"id": "mega-charizard-x-mega-charizard-y-in-mega-raids-october-2026", "name": "Mega Charizard X and Mega Charizard Y in Mega Raids", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/mega-charizard-x-mega-charizard-y-in-mega-raids-october-2026/", "start": "2026-10-21T06:00:00.000", "end": "2026-10-27T22:00:00.000", "mons": ["Mega Charizard X", "Mega Charizard Y"], "has": ["raids", "shiny"]},
   {"id": "palkia-in-5-star-raid-battles-october-2026", "name": "Palkia in 5-star Raid Battles", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/palkia-in-5-star-raid-battles-october-2026/", "start": "2026-10-21T06:00:00.000", "end": "2026-10-27T22:00:00.000", "mons": ["Palkia"], "blurb": "There will also be a Raid Hour featuring Palkia from 6:00 p.m. to 7:00 p.m. local time on October 21.", "has": ["raids", "shiny"]},
-  {"id": "pokemon-go-city-safari-boston-2026-rescheduled", "name": "Pokémon GO City Safari: Boston (Rescheduled)", "type": "city-safari", "heading": "City Safari", "link": "https://leekduck.com/events/pokemon-go-city-safari-boston-2026-rescheduled/", "start": "2026-10-24T10:00:00.000", "end": "2026-10-25T18:00:00.000"},
-  {"id": "max-mondays-2026-10-26", "name": "Dynamax Sableye during Max Monday", "type": "max-mondays", "heading": "Max Mondays", "link": "https://leekduck.com/events/max-mondays-2026-10-26/", "start": "2026-10-26T06:00:00.000", "end": "2026-10-26T21:00:00.000"},
   {"id": "halloween-2026-part-1", "name": "Pokémon GO Halloween 2026 Part I", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/halloween-2026-part-1/", "start": "2026-10-27T10:00:00.000", "end": "2026-11-01T10:00:00.000", "blurb": "Celebrate Halloween with the debut of Pikachu wearing a hat and capelet, Zubat wearing a top hat, and Sinistea wearing a bow! Discover spooky surprises in the wild and unlock Candy and Stardust bonuses with the event GO Pass.", "has": ["bonuses", "spawns", "raids", "research", "shiny"], "caveats": [{"k": "costume", "t": "Celebrate Halloween with the debut of Pikachu wearing a hat and capelet, Zubat wearing a top hat, and Sinistea wearing a bow!"}, {"k": "shiny", "t": "The celebration continues in Halloween 2026 Part II, featuring Shiny Greavard’s debut and Mega Sableye’s new Super Max level."}]},
   {"id": "gbl-twilight-trails_master-league_mega-halloween-cup-great-league-edition", "name": "Master League and Mega Halloween Cup: Great League Edition | Twilight Trails", "type": "go-battle-league", "heading": "GO Battle League", "link": "https://leekduck.com/events/gbl-twilight-trails_master-league_mega-halloween-cup-great-league-edition/", "start": "2026-10-27T21:00:00.000Z", "end": "2026-11-03T21:00:00.000Z"},
   {"id": "giratina-origin-forme-in-5-star-raid-battles-october-2026", "name": "Giratina (Origin Forme) in 5-star Raid Battles", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/giratina-origin-forme-in-5-star-raid-battles-october-2026/", "start": "2026-10-28T06:00:00.000", "end": "2026-11-03T22:00:00.000", "mons": ["Giratina (Origin)"], "blurb": "There will also be a Raid Hour featuring Giratina (Origin Forme) from 6:00 p.m. to 7:00 p.m. local time on October 28.", "has": ["raids", "shiny"]},
