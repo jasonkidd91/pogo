@@ -4,7 +4,7 @@
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_events.py
  * Source: https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json
  *         (ScrapedDuck, which scrapes https://leekduck.com/events/)
- * Fetched: 2026-10-29 23:07 local
+ * Fetched: 2026-10-30 22:49 local
  *
  * EVENTS ARE LIVE DATA. events.js fetches the feed above on every page load and renders
  * that; this file is only what it shows while the fetch is in flight or if it fails, and
@@ -23,7 +23,7 @@
  * rotations are published. events.js branches on the suffix; do not normalise it away.
  */
 
-const EVENTS_FETCHED = "2026-10-29 23:07";
+const EVENTS_FETCHED = "2026-10-30 22:49";
 const EVENTS_SOURCE = "https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json";
 
 const EVENTS_SNAPSHOT = [
@@ -35,7 +35,6 @@ const EVENTS_SNAPSHOT = [
   {"id": "gbl-twilight-trails_master-league_mega-halloween-cup-great-league-edition", "name": "Master League and Mega Halloween Cup: Great League Edition | Twilight Trails", "type": "go-battle-league", "heading": "GO Battle League", "link": "https://leekduck.com/events/gbl-twilight-trails_master-league_mega-halloween-cup-great-league-edition/", "start": "2026-10-27T21:00:00.000Z", "end": "2026-11-03T21:00:00.000Z"},
   {"id": "giratina-origin-forme-in-5-star-raid-battles-october-2026", "name": "Giratina (Origin Forme) in 5-star Raid Battles", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/giratina-origin-forme-in-5-star-raid-battles-october-2026/", "start": "2026-10-28T06:00:00.000", "end": "2026-11-03T22:00:00.000", "mons": ["Giratina (Origin)"], "blurb": "There will also be a Raid Hour featuring Giratina (Origin Forme) from 6:00 p.m. to 7:00 p.m. local time on October 28.", "has": ["raids", "shiny"]},
   {"id": "mega-sableye-in-mega-raids-october-2026", "name": "Mega Sableye in Mega Raids", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/mega-sableye-in-mega-raids-october-2026/", "start": "2026-10-28T06:00:00.000", "end": "2026-11-08T22:00:00.000", "mons": ["Mega Sableye"], "has": ["raids", "shiny"]},
-  {"id": "raidhour20261028", "name": "Giratina (Origin Forme) Raid Hour", "type": "raid-hour", "heading": "Raid Hour", "link": "https://leekduck.com/events/raidhour20261028/", "start": "2026-10-28T18:00:00.000", "end": "2026-10-28T19:00:00.000"},
   {"id": "pokemonspotlighthour2026-10-29", "name": "Gastly Spotlight Hour", "type": "pokemon-spotlight-hour", "heading": "Pokémon Spotlight Hour", "link": "https://leekduck.com/events/pokemonspotlighthour2026-10-29/", "start": "2026-10-29T18:00:00.000", "end": "2026-10-29T19:00:00.000", "bonus": "2× Evolution XP", "mons": ["Gastly"]},
   {"id": "chandelure-super-mega-raid-day-2026", "name": "Chandelure Super Mega Raid Day", "type": "raid-day", "heading": "Raid Day", "link": "https://leekduck.com/events/chandelure-super-mega-raid-day-2026/", "start": "2026-10-31T14:00:00.000", "end": "2026-10-31T17:00:00.000", "blurb": "Mega Chandelure makes its Pokémon GO debut during Chandelure Super Mega Raid Day on Saturday, October 31, 2026, from 2:00 p.m. to 5:00 p.m. local time!", "has": ["bonuses", "raids", "research", "shiny"], "caveats": [{"k": "debut", "t": "Mega Chandelure makes its Pokémon GO debut during Chandelure Super Mega Raid Day on Saturday, October 31, 2026, from 2:00 p.m. to 5:00 p.m. local time!"}, {"k": "shiny", "t": "Trainers will have an increased chance of encountering Shiny Chandelure from Super Mega Raids."}]},
   {"id": "halloween-2026-part-2", "name": "Pokémon GO Halloween 2026 Part II", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/halloween-2026-part-2/", "start": "2026-11-01T10:00:00.000", "end": "2026-11-05T20:00:00.000", "blurb": "Shiny Greavard makes its Pokémon GO debut, and Mega Sableye can reach the new Super Max Mega Level! Halloween continues with costumed Pokémon, themed encounters, and GO Pass bonuses.", "has": ["bonuses", "spawns", "raids", "research", "shiny"], "caveats": [{"k": "shiny", "t": "Shiny Greavard makes its Pokémon GO debut, and Mega Sableye can reach the new Super Max Mega Level!"}, {"k": "costume", "t": "Halloween continues with costumed Pokémon, themed encounters, and GO Pass bonuses."}, {"k": "debut", "t": "Starting with this event, Mega Sableye can reach Super Max Level for the first time in Pokémon GO."}]},
