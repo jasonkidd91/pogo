@@ -5,7 +5,7 @@
  *
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_promos.py
  * Source: https://leekduck.com/promo-codes/
- * Fetched: 2026-11-05 00:12 local
+ * Fetched: 2026-11-05 23:57 local
  *
  * PROMO CODES ARE LIVE DATA. promo-codes.js fetches the page above on every load of
  * promo-codes.html and renders that; this file is only what it shows while the fetch is in
@@ -18,10 +18,9 @@
  * a real date — only used to detect an ALREADY-past deadline.
  */
 
-const PROMO_FETCHED = "2026-11-05 00:12";
+const PROMO_FETCHED = "2026-11-05 23:57";
 const PROMO_SOURCE = "https://leekduck.com/promo-codes/";
 
 const PROMO_SNAPSHOT = [
-  {"code": "LEGOxPOKEMONGOxBERRIES", "title": "LEGO × Pokémon GO Berries", "redeem": "https://store.pokemongo.com/offer-redemption?passcode=LEGOxPOKEMONGOxBERRIES", "expires": "2026-12-31 23:59:59 -0800", "hideExpiry": true, "description": "Promo code for free berries and Poké Balls tied to the Pokémon GO and LEGO Group partnership. Learn more here.", "link": "https://leekduck.com/events/lego-pokemon-go-2026/", "rewards": ["Razz Berry ×5", "Poké Ball ×10", "Pinap Berry ×5", "Nanab Berry ×5"]},
-  {"code": "FENDIxFRGMTxPOKEMON", "title": "FENDI x FRGMT x POKÉMON Hoodie Avatar Item", "redeem": "https://store.pokemongo.com/offer-redemption?passcode=FENDIxFRGMTxPOKEMON", "expires": "2027-01-04 23:59:59 -0800", "hideExpiry": true, "description": "Trainers can redeem this code to get an exclusive FENDI x FRGMT x POKÉMON hoodie avatar item. (This code should have expired on January 4, 2025 but it appears to still work.)", "rewards": ["FENDI x FRGMT x POKÉMON hoodie"]}
+  {"code": "LEGOxPOKEMONGOxBERRIES", "title": "LEGO × Pokémon GO Berries", "redeem": "https://store.pokemongo.com/offer-redemption?passcode=LEGOxPOKEMONGOxBERRIES", "expires": "2026-12-31 23:59:59 -0800", "hideExpiry": true, "description": "Promo code for free berries and Poké Balls tied to the Pokémon GO and LEGO Group partnership. Learn more here.", "link": "https://leekduck.com/events/lego-pokemon-go-2026/", "rewards": ["Razz Berry ×5", "Poké Ball ×10", "Pinap Berry ×5", "Nanab Berry ×5"]}
 ];
