@@ -4,7 +4,7 @@
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_events.py
  * Source: https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json
  *         (ScrapedDuck, which scrapes https://leekduck.com/events/)
- * Fetched: 2026-11-03 23:52 local
+ * Fetched: 2026-11-05 00:11 local
  *
  * EVENTS ARE LIVE DATA. events.js fetches the feed above on every page load and renders
  * that; this file is only what it shows while the fetch is in flight or if it fails, and
@@ -23,7 +23,7 @@
  * rotations are published. events.js branches on the suffix; do not normalise it away.
  */
 
-const EVENTS_FETCHED = "2026-11-03 23:52";
+const EVENTS_FETCHED = "2026-11-05 00:11";
 const EVENTS_SOURCE = "https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json";
 
 const EVENTS_SNAPSHOT = [
@@ -35,7 +35,6 @@ const EVENTS_SNAPSHOT = [
   {"id": "giratina-origin-forme-in-5-star-raid-battles-october-2026", "name": "Giratina (Origin Forme) in 5-star Raid Battles", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/giratina-origin-forme-in-5-star-raid-battles-october-2026/", "start": "2026-10-28T06:00:00.000", "end": "2026-11-03T22:00:00.000", "mons": ["Giratina (Origin)"], "blurb": "There will also be a Raid Hour featuring Giratina (Origin Forme) from 6:00 p.m. to 7:00 p.m. local time on October 28.", "has": ["raids", "shiny"]},
   {"id": "mega-sableye-in-mega-raids-october-2026", "name": "Mega Sableye in Mega Raids", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/mega-sableye-in-mega-raids-october-2026/", "start": "2026-10-28T06:00:00.000", "end": "2026-11-08T22:00:00.000", "mons": ["Mega Sableye"], "has": ["raids", "shiny"]},
   {"id": "halloween-2026-part-2", "name": "Pokémon GO Halloween 2026 Part II", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/halloween-2026-part-2/", "start": "2026-11-01T10:00:00.000", "end": "2026-11-05T20:00:00.000", "blurb": "Shiny Greavard makes its Pokémon GO debut, and Mega Sableye can reach the new Super Max Mega Level! Halloween continues with costumed Pokémon, themed encounters, and GO Pass bonuses.", "has": ["bonuses", "spawns", "raids", "research", "shiny"], "caveats": [{"k": "shiny", "t": "Shiny Greavard makes its Pokémon GO debut, and Mega Sableye can reach the new Super Max Mega Level!"}, {"k": "costume", "t": "Halloween continues with costumed Pokémon, themed encounters, and GO Pass bonuses."}, {"k": "debut", "t": "Starting with this event, Mega Sableye can reach Super Max Level for the first time in Pokémon GO."}]},
-  {"id": "max-mondays-2026-11-02", "name": "Dynamax Machop during Max Monday", "type": "max-mondays", "heading": "Max Mondays", "link": "https://leekduck.com/events/max-mondays-2026-11-02/", "start": "2026-11-02T06:00:00.000", "end": "2026-11-02T21:00:00.000"},
   {"id": "go-pass-november-2026", "name": "GO Pass: November", "type": "go-pass", "heading": "GO Pass", "link": "https://leekduck.com/events/go-pass-november-2026/", "start": "2026-11-03T10:00:00.000", "end": "2026-12-01T10:00:00.000", "blurb": "GO Pass: November features Groudon, 400 PokéCoins on the free track, 1,000 additional PokéCoins with GO Pass Deluxe…"},
   {"id": "gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-3", "name": "Great League: Mega Edition, Ultra League: Mega Edition, and Master League: Mega Edition | Twilight Trails", "type": "go-battle-league", "heading": "GO Battle League", "link": "https://leekduck.com/events/gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-3/", "start": "2026-11-03T21:00:00.000Z", "end": "2026-11-10T21:00:00.000Z"},
   {"id": "giratina-altered-forme-in-5-star-raid-battles-november-2026", "name": "Giratina (Altered Forme) in 5-star Raid Battles", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/giratina-altered-forme-in-5-star-raid-battles-november-2026/", "start": "2026-11-04T06:00:00.000", "end": "2026-11-08T22:00:00.000", "mons": ["Giratina (Altered)"], "blurb": "Raid bosses change at 6:00 a.m. local time. There will also be a Raid Hour featuring Giratina (Altered Forme) from 6:00 p.m. to 7:00 p.m. local time on November 4.", "has": ["raids", "shiny"]},
