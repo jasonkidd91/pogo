@@ -4,7 +4,7 @@
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_events.py
  * Source: https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json
  *         (ScrapedDuck, which scrapes https://leekduck.com/events/)
- * Fetched: 2026-11-06 23:40 local
+ * Fetched: 2026-11-08 22:41 local
  *
  * EVENTS ARE LIVE DATA. events.js fetches the feed above on every page load and renders
  * that; this file is only what it shows while the fetch is in flight or if it fails, and
@@ -23,7 +23,7 @@
  * rotations are published. events.js branches on the suffix; do not normalise it away.
  */
 
-const EVENTS_FETCHED = "2026-11-06 23:40";
+const EVENTS_FETCHED = "2026-11-08 22:41";
 const EVENTS_SOURCE = "https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json";
 
 const EVENTS_SNAPSHOT = [
@@ -37,7 +37,7 @@ const EVENTS_SNAPSHOT = [
   {"id": "pokemon-go-wild-area-2026-sendai-japan", "name": "Pokémon GO Wild Area 2026: Sendai • Tohoku", "type": "wild-area", "heading": "Wild Area", "link": "https://leekduck.com/events/pokemon-go-wild-area-2026-sendai-japan/", "start": "2026-11-06T01:00:00.000Z", "end": "2026-11-08T09:00:00.000Z"},
   {"id": "go-wild-area-gigantamax-machamp-power-up-timed-research", "name": "GO Wild Area: Gigantamax Machamp Power Up! Timed Research", "type": "timed-research", "heading": "Timed Research", "link": "https://leekduck.com/events/go-wild-area-gigantamax-machamp-power-up-timed-research/", "start": "2026-11-06T10:00:00.000", "end": "2026-11-15T23:59:00.000"},
   {"id": "pokemon-go-wild-area-2026-mexico-city", "name": "Pokémon GO Wild Area 2026: Mexico City", "type": "wild-area", "heading": "Wild Area", "link": "https://leekduck.com/events/pokemon-go-wild-area-2026-mexico-city/", "start": "2026-11-06T16:00:00.000Z", "end": "2026-11-09T00:00:00.000Z"},
-  {"id": "into-the-wild-2026", "name": "Into the Wild", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/into-the-wild-2026/", "start": "2026-11-09T10:00:00.000", "end": "2026-11-13T20:00:00.000", "blurb": "It’s time to head back Into the Wild for a Steel- and Dragon-type adventure! Regidrago makes its Dynamax debut in five-star Max Battles, Dynamax Meltan debuts in GO Pass: Into the Wild, and Crowned Sword Zacian and Crowned Shield Zamazenta take over…", "has": ["bonuses", "spawns", "raids", "research", "moves"], "caveats": [{"k": "debut", "t": "Regidrago makes its Dynamax debut in five-star Max Battles, Dynamax Meltan debuts in GO Pass: Into the Wild, and Crowned Sword Zacian and Crowned Shield Zamazenta take over five-star raids as Pokémon GO Wild Area 2026 approaches."}]},
+  {"id": "into-the-wild-2026", "name": "Into the Wild 2026", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/into-the-wild-2026/", "start": "2026-11-09T10:00:00.000", "end": "2026-11-13T20:00:00.000", "blurb": "It’s time to head back Into the Wild for a Steel- and Dragon-type adventure! Regidrago makes its Dynamax debut in five-star Max Battles, Dynamax Meltan debuts in GO Pass: Into the Wild, and Crowned Sword Zacian and Crowned Shield Zamazenta take over…", "has": ["bonuses", "spawns", "raids", "research", "moves"], "caveats": [{"k": "debut", "t": "Regidrago makes its Dynamax debut in five-star Max Battles, Dynamax Meltan debuts in GO Pass: Into the Wild, and Crowned Sword Zacian and Crowned Shield Zamazenta take over five-star raids as Pokémon GO Wild Area 2026 approaches."}]},
   {"id": "pokemon-night-out-london-2026", "name": "Pokémon Night Out 2026 - London", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/pokemon-night-out-london-2026/", "start": "2026-11-10T18:00:00.000Z", "end": "2026-11-10T22:30:00.000Z", "blurb": "Unconfirmed Pokémon GO hours: The times shown are based on the Pokémon Night Out event schedule, beginning when doors open. Pokémon GO gameplay hours have not been confirmed, and the event may run at different times.", "has": ["bonuses", "spawns", "raids", "research"]},
   {"id": "gbl-twilight-trails_great-league_ultra-league-mega-edition_2026-go-laic-cup", "name": "Great League, Ultra League: Mega Edition, and 2026 GO LAIC Cup | Twilight Trails", "type": "go-battle-league", "heading": "GO Battle League", "link": "https://leekduck.com/events/gbl-twilight-trails_great-league_ultra-league-mega-edition_2026-go-laic-cup/", "start": "2026-11-10T21:00:00.000Z", "end": "2026-11-17T21:00:00.000Z"},
   {"id": "pokemon-go-wild-area-2026-global", "name": "Pokémon GO Wild Area 2026: Global", "type": "wild-area", "heading": "Wild Area", "link": "https://leekduck.com/events/pokemon-go-wild-area-2026-global/", "start": "2026-11-14T10:00:00.000", "end": "2026-11-15T18:00:00.000"},
