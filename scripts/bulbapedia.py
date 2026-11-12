@@ -20,14 +20,69 @@ Two traps this module exists to solve. Do not hand-roll around them:
      Bulbasaur and Cyclizar in prose, so scraping it for {{p|...}} links reports them as
      Legendary. `category_members` asks the MediaWiki category API instead, which is the
      actual membership list.
+
+Bulbapedia sits behind Cloudflare, which answers datacenter IPs (GitHub runners, cloud
+containers) with a "Just a moment..." challenge instead of data — first seen 2026-11-12.
+Never try to get past it. Instead, every successful fetch is saved to CACHE_DIR, which is
+committed, and with BULBAPEDIA_CACHE_FALLBACK=1 a blocked fetch reads that copy. Each use is
+recorded in FALLBACKS and stamped into the generated file by `write_js`, so a roster built
+from a cached page always says how old that page is. Without the variable a block still
+raises: a local run must never quietly use stale data.
 """
 
+import datetime
 import json
+import os
 import re
 import subprocess
 import urllib.parse
 
 UA = "Mozilla/5.0 (pogo-site data updater)"
+
+CACHE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "bulbapedia-cache")
+FALLBACKS: list[tuple[str, str]] = []  # (cache key, date it was fetched) for each cache hit
+
+
+class Blocked(RuntimeError):
+    """Bulbapedia answered with something other than data (Cloudflare challenge, 403...)."""
+
+
+def _cache_path(key: str) -> str:
+    return os.path.join(CACHE_DIR, re.sub(r"[^A-Za-z0-9._()-]+", "_", key) + ".json")
+
+
+def _fetch(url: str, key: str, valid) -> str:
+    """GET `url`; on success cache the body under `key`. If the response fails `valid`,
+    fall back to the cache when BULBAPEDIA_CACHE_FALLBACK=1, otherwise raise Blocked."""
+    out = subprocess.run(
+        ["curl", "-sL", "-A", UA, url], capture_output=True, text=True, check=True
+    ).stdout
+    if valid(out):
+        os.makedirs(CACHE_DIR, exist_ok=True)
+        with open(_cache_path(key), "w") as f:
+            json.dump({"key": key, "url": url, "fetched": datetime.date.today().isoformat(),
+                       "body": out}, f, ensure_ascii=False, indent=0)
+            f.write("\n")
+        return out
+    msg = f"{key}: Bulbapedia did not return data (got {out[:120]!r})"
+    if os.environ.get("BULBAPEDIA_CACHE_FALLBACK") != "1":
+        raise Blocked(msg)
+    try:
+        with open(_cache_path(key)) as f:
+            cached = json.load(f)
+    except FileNotFoundError:
+        raise Blocked(msg + " and no cached copy exists — run the generator locally once")
+    print(f"WARNING: {msg}; using cached copy from {cached['fetched']}")
+    FALLBACKS.append((key, cached["fetched"]))
+    return cached["body"]
+
+
+def _is_json(s: str) -> bool:
+    try:
+        json.loads(s)
+        return True
+    except ValueError:
+        return False
 
 
 def fetch_wikitext(page: str, strip_comments: bool = True) -> str:
@@ -36,13 +91,8 @@ def fetch_wikitext(page: str, strip_comments: bool = True) -> str:
         "https://bulbapedia.bulbagarden.net/w/index.php?"
         + urllib.parse.urlencode({"title": page, "action": "raw"})
     )
-    out = subprocess.run(
-        ["curl", "-sL", "-A", UA, url], capture_output=True, text=True, check=True
-    ).stdout
-    if not out.strip():
-        raise RuntimeError(f"empty response for {page}")
-    if "==" not in out:
-        raise RuntimeError(f"{page} did not return wikitext (got {out[:120]!r})")
+    # Wikitext has headings; a challenge page or empty body does not.
+    out = _fetch(url, page, lambda s: "==" in s and not s.lstrip().startswith("<!DOCTYPE"))
     return re.sub(r"<!--.*?-->", "", out, flags=re.DOTALL) if strip_comments else out
 
 
@@ -60,13 +110,7 @@ def category_members(category: str) -> set[str]:
         if cont:
             params["cmcontinue"] = cont
         url = "https://bulbapedia.bulbagarden.net/w/api.php?" + urllib.parse.urlencode(params)
-        out = subprocess.run(
-            ["curl", "-sL", "-A", UA, url], capture_output=True, text=True, check=True
-        ).stdout
-        try:
-            data = json.loads(out)
-        except json.JSONDecodeError:
-            raise RuntimeError(f"category API returned non-JSON for {category!r}: {out[:120]!r}")
+        data = json.loads(_fetch(url, f"Category:{category}#{pages}", _is_json))
         for m in data.get("query", {}).get("categorymembers", []):
             hit = re.fullmatch(r"(.+) \(Pokémon\)", m["title"])
             if hit:
@@ -148,6 +192,12 @@ def check_sprites(slugs, base="https://img.pokemondb.net/sprites/home/normal/"):
 def write_js(path: str, header: str, blocks: dict):
     """Write `const NAME = [...]` blocks as a plain (non-module) JS data file."""
     parts = [header]
+    if FALLBACKS:
+        # The weekly workflow ignores lines containing "bulbapedia-cache" when deciding
+        # whether anything changed, so this stamp alone never opens a PR.
+        oldest = min(d for _, d in FALLBACKS)
+        parts.append(f"// Bulbapedia was unreachable; built from scripts/bulbapedia-cache "
+                     f"(oldest page fetched {oldest}). The Game Master data is current.\n")
     for name, arr in blocks.items():
         body = ",\n".join("  " + json.dumps(x, ensure_ascii=False) for x in arr)
         parts.append(f"const {name} = [\n{body}\n];\n")

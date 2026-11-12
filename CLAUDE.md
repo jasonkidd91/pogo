@@ -465,9 +465,15 @@ workflows, which would silently stop `pages.yml` from deploying an automated com
   roster entry and its rank deserve a human look. A change that only bumps the Game Master
   sha in the header is ignored. The PR body lists added, removed and changed cards and any
   `?` ranks. **Bulbapedia's Cloudflare blocks the runners** (first seen 2026-11-12: a "Just a
-  moment..." challenge page). The job recognises that, ends green, and opens or comments on one
-  `collections-blocked` issue telling you to run the generators locally. The next run that gets
-  through closes it. Do not try to get past the challenge; the block is deliberate.
+  moment..." challenge page). Do not try to get past the challenge; the block is deliberate.
+  Instead every successful Bulbapedia fetch is saved to `scripts/bulbapedia-cache/` (committed),
+  and the job runs with `BULBAPEDIA_CACHE_FALLBACK=1`: a blocked fetch reads the cached page,
+  the generated file gets a `// … built from scripts/bulbapedia-cache (oldest page fetched …)`
+  stamp, and the Game Master half (stats, typing, rank) still refreshes. The roster only moves
+  when the cache does, so the job also opens or comments on one `collections-blocked` issue
+  asking for a local run; commit the cache along with the data files. The next run that gets
+  through closes it. Without the variable (any local run) a block still raises — a human
+  running a generator must never quietly get stale data.
 
 - **`claude.yml`** — the `@claude`-mention responder, triggered only by `issue_comment` and
   `pull_request_review_comment`, deliberately **not** by `issues: [opened, ...]`. The issue

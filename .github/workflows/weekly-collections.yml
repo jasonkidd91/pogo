@@ -51,44 +51,67 @@ jobs:
 
       - name: Regenerate Mega and Dynamax lists
         id: gen
+        env:
+          # Bulbapedia sits behind Cloudflare, which answers runner requests with a "Just a
+          # moment..." challenge page instead of data (first seen 2026-11-12). Never try to
+          # get past it; the block is deliberate. Instead scripts/bulbapedia.py falls back to
+          # the committed copy in scripts/bulbapedia-cache/ (refreshed by every run that gets
+          # through, local or here), so the Game Master half of each card (stats, typing,
+          # rank) still refreshes weekly. The roster itself only moves when the cache does,
+          # which is what the issue below asks a human to do.
+          BULBAPEDIA_CACHE_FALLBACK: '1'
         run: |
-          # Bulbapedia sits behind Cloudflare, which has answered runner requests with a
-          # "Just a moment..." challenge page instead of data (first seen 2026-11-12). The
-          # generators already refuse that page and quote its first 120 characters in the
-          # error. Treat that case as "source unreachable": skip, report it in the issue
-          # below, and end green. Any other failure is a real bug and still fails the job.
-          # Never try to get past the challenge. The block is deliberate, so the fix is a
-          # local run or Bulbapedia's permission.
           set -o pipefail
+          : > "$RUNNER_TEMP/gen.log"
           for script in update_megas.py update_dynamax.py; do
-            if ! python3 "scripts/$script" 2>&1 | tee "$RUNNER_TEMP/gen.log"; then
-              if grep -q 'Just a moment' "$RUNNER_TEMP/gen.log"; then
+            if ! python3 "scripts/$script" 2>&1 | tee -a "$RUNNER_TEMP/gen.log"; then
+              # Blocked AND no cached copy to fall back to: nothing can be built.
+              if grep -qE 'Just a moment|Bulbapedia did not return data' "$RUNNER_TEMP/gen.log"; then
                 echo "blocked=true" >> "$GITHUB_OUTPUT"
-                echo "::warning::Bulbapedia returned a Cloudflare challenge during $script; skipping this week."
+                echo "generated=false" >> "$GITHUB_OUTPUT"
+                echo "::warning::Bulbapedia blocked $script and it has no cached copy; skipping this week."
                 git checkout -- $FILES
                 exit 0
               fi
               exit 1
             fi
           done
-          echo "blocked=false" >> "$GITHUB_OUTPUT"
+          echo "generated=true" >> "$GITHUB_OUTPUT"
+          if grep -q 'using cached copy' "$RUNNER_TEMP/gen.log"; then
+            echo "blocked=true" >> "$GITHUB_OUTPUT"
+            oldest=$(grep -oE 'cached copy from [0-9-]+' "$RUNNER_TEMP/gen.log" | awk '{print $4}' | sort | head -1)
+            echo "cache_date=$oldest" >> "$GITHUB_OUTPUT"
+            echo "::warning::Bulbapedia was blocked; built from the cached roster (oldest page $oldest)."
+          else
+            echo "blocked=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Report a Bulbapedia block
         if: steps.gen.outputs.blocked == 'true'
+        env:
+          GENERATED: ${{ steps.gen.outputs.generated }}
+          CACHE_DATE: ${{ steps.gen.outputs.cache_date }}
         run: |
+          if [ "$GENERATED" = true ]; then
+            note='The lists were rebuilt from the cached pages in `scripts/bulbapedia-cache/` (oldest fetched '"$CACHE_DATE"') with a current Game Master: stats and ranks are fresh, but a newly released Mega or Dynamax Pokémon will not appear until the cache is refreshed.'
+          else
+            note='There is no cached copy yet, so `web/mega-data.js` and `web/max-data.js` were not regenerated.'
+          fi
           gh label create collections-blocked --color d93f0b \
             --description "Weekly Mega/Dynamax refresh could not reach Bulbapedia" --force
           run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           existing=$(gh issue list --label collections-blocked --state open --json number --jq '.[0].number')
           if [ -n "$existing" ]; then
-            gh issue comment "$existing" --body "Still blocked on $(date -u +%Y-%m-%d): $run_url"
+            gh issue comment "$existing" --body "Still blocked on $(date -u +%Y-%m-%d): $run_url
+
+          $note"
           else
             gh issue create --label collections-blocked \
               --title "Weekly Mega/Dynamax refresh blocked by Bulbapedia" \
               --body "$(cat <<EOF
           The weekly collection refresh could not reach Bulbapedia: its Cloudflare
-          protection returned a "Just a moment..." challenge page instead of data, so
-          \`web/mega-data.js\` and \`web/max-data.js\` were not regenerated.
+          protection returned a "Just a moment..." challenge page instead of data.
+          $note
 
           Run: $run_url
 
@@ -99,7 +122,8 @@ jobs:
           python3 scripts/update_dynamax.py
           \`\`\`
 
-          then commit the two data files. Do not try to work around the challenge; the
+          then commit the two data files **and \`scripts/bulbapedia-cache/\`** (that is what
+          lets this job keep working while blocked). Do not try to work around the challenge; the
           block is deliberate. This issue closes itself on the next run that gets through.
           EOF
           )"
@@ -113,19 +137,20 @@ jobs:
           done
 
       - name: Syntax-check generated files
-        if: steps.gen.outputs.blocked == 'false'
+        if: steps.gen.outputs.generated == 'true'
         run: |
           for f in $FILES; do node --check "$f"; done
 
       - name: Detect a real change
-        if: steps.gen.outputs.blocked == 'false'
+        if: steps.gen.outputs.generated == 'true'
         id: diff
         run: |
           # The header records the Game Master commit it was built from. That sha moves
           # almost every week. On its own it is not worth a PR, so ignore lines that only
           # carry it. Any change to a card, including a rank shifted by the new Game
           # Master, still counts.
-          if git diff --quiet -I 'PokeMiners game_master' -- $FILES; then
+          # The "built from scripts/bulbapedia-cache" stamp is ignored the same way.
+          if git diff --quiet -I 'PokeMiners game_master' -I 'bulbapedia-cache' -- $FILES; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "No roster or card changes (Game Master sha bumps ignored)."
           else
@@ -135,6 +160,8 @@ jobs:
 
       - name: Summarise the change
         if: steps.diff.outputs.changed == 'true'
+        env:
+          CACHE_DATE: ${{ steps.gen.outputs.cache_date }}
         run: |
           python3 - <<'PY' > "$RUNNER_TEMP/body.md"
           import json, re, subprocess
@@ -152,8 +179,13 @@ jobs:
                       out[d["name"]] = d
               return out
 
+          import os
           print("Weekly regeneration of the Mega and Dynamax lists from Bulbapedia and the "
                 "PokeMiners Game Master.\n")
+          if os.environ.get("CACHE_DATE"):
+              print(f"> **Bulbapedia was blocked this week.** The roster comes from "
+                    f"`scripts/bulbapedia-cache/` (oldest page fetched {os.environ['CACHE_DATE']}); "
+                    "only the Game Master side is current. See the `collections-blocked` issue.\n")
           for path, label in [("web/mega-data.js", "Mega"), ("web/max-data.js", "Dynamax")]:
               old = subprocess.run(["git", "show", f"HEAD:{path}"], capture_output=True,
                                    text=True).stdout
@@ -195,7 +227,8 @@ jobs:
           git config user.name "pogo-bot"
           git config user.email "actions@users.noreply.github.com"
           git checkout -B "$BRANCH"
-          git add $FILES
+          # The cache rides along so a run that got through keeps it fresh for blocked ones.
+          git add $FILES scripts/bulbapedia-cache
           git commit -m "Refresh Mega and Dynamax lists"
           # One standing branch: a PR left unmerged for a week gets rebuilt from the current
           # main, rather than a second PR piling up next to it.
