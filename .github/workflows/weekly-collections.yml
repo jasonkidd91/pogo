@@ -1,0 +1,151 @@
+name: Weekly collection refresh
+
+# Regenerates the Mega and Dynamax lists (web/mega-data.js, web/max-data.js) and opens a PR
+# if the roster or any card's data changed. Sunday 20:00 UTC == Monday 04:00 MYT, an hour
+# after the daily maintenance run so the two never race on main.
+#
+# Deliberately NOT a Claude run and NOT a push to main:
+# - The generators are deterministic and already refuse to write bad data (sprite check,
+#   typing guard, "?" count guard — see scripts/bulbapedia.py and scripts/gamemaster.py).
+#   If one raises, this job fails and nothing is written. No judgement is needed to run
+#   them, so there is no reason to spend a Claude run on it.
+# - A new roster entry and its rank are worth a human look before they ship, the same
+#   reasoning that makes tracker builds open a PR.
+#
+# Rosters are SLOW data, which is why this runs weekly rather than daily.
+on:
+  schedule:
+    - cron: '0 20 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: weekly-collections
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # PAT, not GITHUB_TOKEN, for the same reason as daily-maintenance.yml: anything a
+      # GITHUB_TOKEN pushes or opens does not trigger other workflows.
+      GH_TOKEN: ${{ secrets.POGO_GITHUB_PAT }}
+      BRANCH: auto/collections-refresh
+      FILES: web/mega-data.js web/max-data.js
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.POGO_GITHUB_PAT }}
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Regenerate Mega list
+        run: python3 scripts/update_megas.py
+
+      - name: Regenerate Dynamax list
+        run: python3 scripts/update_dynamax.py
+
+      - name: Syntax-check generated files
+        run: |
+          for f in $FILES; do node --check "$f"; done
+
+      - name: Detect a real change
+        id: diff
+        run: |
+          # The header records the Game Master commit it was built from. That sha moves
+          # almost every week. On its own it is not worth a PR, so ignore lines that only
+          # carry it. Any change to a card, including a rank shifted by the new Game
+          # Master, still counts.
+          if git diff --quiet -I 'PokeMiners game_master' -- $FILES; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No roster or card changes (Game Master sha bumps ignored)."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git diff --stat -- $FILES
+          fi
+
+      - name: Summarise the change
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          python3 - <<'PY' > "$RUNNER_TEMP/body.md"
+          import json, re, subprocess
+
+          def entries(text):
+              # Each card is one JSON object on its own line, starting {"name": ...
+              out = {}
+              for line in text.splitlines():
+                  line = line.strip().rstrip(",")
+                  if line.startswith('{"name"'):
+                      try:
+                          d = json.loads(line)
+                      except ValueError:
+                          continue
+                      out[d["name"]] = d
+              return out
+
+          print("Weekly regeneration of the Mega and Dynamax lists from Bulbapedia and the "
+                "PokeMiners Game Master.\n")
+          for path, label in [("web/mega-data.js", "Mega"), ("web/max-data.js", "Dynamax")]:
+              old = subprocess.run(["git", "show", f"HEAD:{path}"], capture_output=True,
+                                   text=True).stdout
+              new = open(path).read()
+              a, b = entries(old), entries(new)
+              added = sorted(set(b) - set(a))
+              removed = sorted(set(a) - set(b))
+              changed = sorted(n for n in set(a) & set(b) if a[n] != b[n])
+              unknown = sorted(n for n, d in b.items() if d.get("rank") == "?")
+              print(f"### {label} (`{path}`)\n")
+              if not (added or removed or changed):
+                  print("No card changes.\n")
+              for title, names in [("Added", added), ("Removed", removed)]:
+                  if names:
+                      print(f"**{title}:** " + ", ".join(names) + "\n")
+              if changed:
+                  print("**Changed:**\n")
+                  for n in changed:
+                      keys = sorted(k for k in set(a[n]) | set(b[n]) if a[n].get(k) != b[n].get(k))
+                      diffs = "; ".join(f"`{k}` {a[n].get(k)!r} → {b[n].get(k)!r}" for k in keys)
+                      print(f"- {n}: {diffs}")
+                  print()
+              if unknown:
+                  print("**Rank `?`** (Game Master has no entry yet; it fills in on a later "
+                        "run): " + ", ".join(unknown) + "\n")
+
+          print("### Before merging\n")
+          print("- [ ] Check that any added Pokémon has actually been released (Bulbapedia "
+                "is the source; the generator already drops HTML-commented, unreleased rows).")
+          print("- [ ] Open `megas.html` / `dynamax.html` and look at the new cards "
+                "(`verify-site` skill).\n")
+          print("🤖 Generated with [Claude Code](https://claude.com/claude-code)")
+          PY
+          cat "$RUNNER_TEMP/body.md"
+
+      - name: Open or update the PR
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "pogo-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git add $FILES
+          git commit -m "Refresh Mega and Dynamax lists"
+          # One standing branch: a PR left unmerged for a week gets rebuilt from the current
+          # main, rather than a second PR piling up next to it.
+          git push --force origin "$BRANCH"
+          existing=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            gh pr edit "$existing" --body-file "$RUNNER_TEMP/body.md"
+            echo "Updated PR #$existing"
+          else
+            gh pr create --base main --head "$BRANCH" \
+              --title "Refresh Mega and Dynamax lists" \
+              --body-file "$RUNNER_TEMP/body.md"
+          fi

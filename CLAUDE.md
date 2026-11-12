@@ -410,7 +410,7 @@ else.
 
 ## Automation
 
-`.github/workflows/` runs two Claude Code Actions, both authenticated with the
+`.github/workflows/` runs two Claude Code Actions plus one plain generator job. The Claude ones are authenticated with the
 `CLAUDE_CODE_OAUTH_TOKEN` secret. Issue and push operations use the `POGO_GITHUB_PAT` secret
 instead of the default `GITHUB_TOKEN` — a `GITHUB_TOKEN`-authored push does not trigger other
 workflows, which would silently stop `pages.yml` from deploying an automated commit.
@@ -457,6 +457,14 @@ workflows, which would silently stop `pages.yml` from deploying an automated com
      the site shows it. The script exits non-zero when it parses no articles, so "page
      unreachable" can never read as "no gaps". Keep that. pokemongo.com is blocked from the
      Claude Code cloud container; test changes with `--news <saved page>`.
+
+- **`weekly-collections.yml`** — Sundays `0 20 * * 0` UTC, plus `workflow_dispatch`. Runs
+  `update_megas.py` and `update_dynamax.py` directly (no Claude run: the generators are
+  deterministic and raise rather than write bad data). It opens or updates one PR on the
+  standing `auto/collections-refresh` branch, and never pushes to `main`, because a new
+  roster entry and its rank deserve a human look. A change that only bumps the Game Master
+  sha in the header is ignored. The PR body lists added, removed and changed cards and any
+  `?` ranks.
 
 - **`claude.yml`** — the `@claude`-mention responder, triggered only by `issue_comment` and
   `pull_request_review_comment`, deliberately **not** by `issues: [opened, ...]`. The issue
