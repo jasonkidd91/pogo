@@ -22,12 +22,13 @@ Two traps this module exists to solve. Do not hand-roll around them:
      actual membership list.
 
 Bulbapedia sits behind Cloudflare, which answers datacenter IPs (GitHub runners, cloud
-containers) with a "Just a moment..." challenge instead of data — first seen 2026-11-12.
-Never try to get past it. Instead, every successful fetch is saved to CACHE_DIR, which is
-committed, and with BULBAPEDIA_CACHE_FALLBACK=1 a blocked fetch reads that copy. Each use is
-recorded in FALLBACKS and stamped into the generated file by `write_js`, so a roster built
-from a cached page always says how old that page is. Without the variable a block still
-raises: a local run must never quietly use stale data.
+containers, and at least one home connection) with a "Just a moment..." challenge instead of
+data — first seen 2026-11-12. Never try to get past it. A blocked fetch raises `Blocked`.
+With BULBAPEDIA_FALLBACK=1 (the weekly workflow) a generator catches that and carries the
+Bulbapedia-derived fields over from its own previous output via `previous_rows` — that file
+IS the last good parse — while the Game Master half still refreshes. `write_js` stamps which
+of the two happened, so a carried-over roster always says so. Without the variable a block
+still raises: a local run must never quietly reuse an old roster.
 """
 
 import datetime
@@ -39,42 +40,20 @@ import urllib.parse
 
 UA = "Mozilla/5.0 (pogo-site data updater)"
 
-CACHE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "bulbapedia-cache")
-FALLBACKS: list[tuple[str, str]] = []  # (cache key, date it was fetched) for each cache hit
+ROSTER_DATE: dict[str, str] = {}   # output path -> "live" or "carried", set by a generator
 
 
 class Blocked(RuntimeError):
     """Bulbapedia answered with something other than data (Cloudflare challenge, 403...)."""
 
 
-def _cache_path(key: str) -> str:
-    return os.path.join(CACHE_DIR, re.sub(r"[^A-Za-z0-9._()-]+", "_", key) + ".json")
-
-
 def _fetch(url: str, key: str, valid) -> str:
-    """GET `url`; on success cache the body under `key`. If the response fails `valid`,
-    fall back to the cache when BULBAPEDIA_CACHE_FALLBACK=1, otherwise raise Blocked."""
     out = subprocess.run(
         ["curl", "-sL", "-A", UA, url], capture_output=True, text=True, check=True
     ).stdout
-    if valid(out):
-        os.makedirs(CACHE_DIR, exist_ok=True)
-        with open(_cache_path(key), "w") as f:
-            json.dump({"key": key, "url": url, "fetched": datetime.date.today().isoformat(),
-                       "body": out}, f, ensure_ascii=False, indent=0)
-            f.write("\n")
-        return out
-    msg = f"{key}: Bulbapedia did not return data (got {out[:120]!r})"
-    if os.environ.get("BULBAPEDIA_CACHE_FALLBACK") != "1":
-        raise Blocked(msg)
-    try:
-        with open(_cache_path(key)) as f:
-            cached = json.load(f)
-    except FileNotFoundError:
-        raise Blocked(msg + " and no cached copy exists — run the generator locally once")
-    print(f"WARNING: {msg}; using cached copy from {cached['fetched']}")
-    FALLBACKS.append((key, cached["fetched"]))
-    return cached["body"]
+    if not valid(out):
+        raise Blocked(f"{key}: Bulbapedia did not return data (got {out[:120]!r})")
+    return out
 
 
 def _is_json(s: str) -> bool:
@@ -83,6 +62,40 @@ def _is_json(s: str) -> bool:
         return True
     except ValueError:
         return False
+
+
+def fallback_allowed() -> bool:
+    return os.environ.get("BULBAPEDIA_FALLBACK") == "1"
+
+
+def previous_rows(path: str, const: str) -> list[dict]:
+    """The entries of `const NAME = [...]` in a file written by `write_js` (one per line)."""
+    src = open(path).read()
+    m = re.search(rf"const {const} = \[\n(.*?)\n\];", src, re.S)
+    if not m:
+        raise RuntimeError(f"{path} has no {const} block to carry over")
+    rows = [json.loads(l.strip().rstrip(",")) for l in m.group(1).splitlines() if l.strip()]
+    if not rows:
+        raise RuntimeError(f"{path}: {const} is empty — nothing to carry over")
+    return rows
+
+
+ROSTER_LINE = re.compile(r"^// Roster: .*?(\d{4}-\d{2}-\d{2})", re.M)
+
+
+def roster_stamp(path: str, carried: bool) -> str:
+    """The line `write_js` puts under the header saying where the roster came from.
+
+    The weekly workflow ignores lines starting "// Roster:" when deciding whether anything
+    changed, so the stamp alone never opens a PR.
+    """
+    today = datetime.date.today().isoformat()
+    if not carried:
+        return f"// Roster: Bulbapedia, fetched {today}.\n"
+    prev = ROSTER_LINE.search(open(path).read()) if os.path.exists(path) else None
+    since = prev.group(1) if prev else "before 2026-11-12"
+    return (f"// Roster: carried over from the previous build (last fetched from Bulbapedia "
+            f"{since}) because Bulbapedia was blocked on {today}. Game Master data is current.\n")
 
 
 def fetch_wikitext(page: str, strip_comments: bool = True) -> str:
@@ -192,12 +205,8 @@ def check_sprites(slugs, base="https://img.pokemondb.net/sprites/home/normal/"):
 def write_js(path: str, header: str, blocks: dict):
     """Write `const NAME = [...]` blocks as a plain (non-module) JS data file."""
     parts = [header]
-    if FALLBACKS:
-        # The weekly workflow ignores lines containing "bulbapedia-cache" when deciding
-        # whether anything changed, so this stamp alone never opens a PR.
-        oldest = min(d for _, d in FALLBACKS)
-        parts.append(f"// Bulbapedia was unreachable; built from scripts/bulbapedia-cache "
-                     f"(oldest page fetched {oldest}). The Game Master data is current.\n")
+    if path in ROSTER_DATE:
+        parts.append(roster_stamp(path, ROSTER_DATE[path] == "carried"))
     for name, arr in blocks.items():
         body = ",\n".join("  " + json.dumps(x, ensure_ascii=False) for x in arr)
         parts.append(f"const {name} = [\n{body}\n];\n")

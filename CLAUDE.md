@@ -39,6 +39,10 @@ python3 scripts/update_promos.py
 # (a second source for the events feed — see "Automation", task 6). Read-only.
 python3 scripts/check_official_news.py
 
+# Compare the Mega/Dynamax rosters with Serebii's (report only; the weekly job's tripwire
+# while Bulbapedia blocks it). Exit 2 means Serebii was unreadable, not "no differences".
+python3 scripts/check_serebii.py
+
 # Syntax-check JS (no test suite exists)
 node --check web/app.js
 
@@ -465,15 +469,19 @@ workflows, which would silently stop `pages.yml` from deploying an automated com
   roster entry and its rank deserve a human look. A change that only bumps the Game Master
   sha in the header is ignored. The PR body lists added, removed and changed cards and any
   `?` ranks. **Bulbapedia's Cloudflare blocks the runners** (first seen 2026-11-12: a "Just a
-  moment..." challenge page). Do not try to get past the challenge; the block is deliberate.
-  Instead every successful Bulbapedia fetch is saved to `scripts/bulbapedia-cache/` (committed),
-  and the job runs with `BULBAPEDIA_CACHE_FALLBACK=1`: a blocked fetch reads the cached page,
-  the generated file gets a `// … built from scripts/bulbapedia-cache (oldest page fetched …)`
-  stamp, and the Game Master half (stats, typing, rank) still refreshes. The roster only moves
-  when the cache does, so the job also opens or comments on one `collections-blocked` issue
-  asking for a local run; commit the cache along with the data files. The next run that gets
-  through closes it. Without the variable (any local run) a block still raises — a human
-  running a generator must never quietly get stale data.
+  moment..." challenge page), and so did the only other connection tried. Do not try to get
+  past the challenge; the block is deliberate. The job runs with `BULBAPEDIA_FALLBACK=1`: a
+  blocked generator carries Bulbapedia's fields (roster, energy, dates, Super Max attack,
+  Legendary class) over from **its own previous output**, which is the last good parse, and
+  recomputes every Game Master field. The file gets a `// Roster: carried over …` stamp, which
+  the change check ignores. No cache or seeding step is needed. The roster is then frozen, so
+  `scripts/check_serebii.py` compares it against Serebii every week and the differences go
+  into the PR and the `collections-blocked` issue. That check **reports and never edits**:
+  on its first run Serebii and the site disagreed in both directions, and one source cannot
+  settle a roster. The Game Master can't settle it either, because it carries unreleased
+  forms (Mega Clefable, which Serebii marks "Not currently available"). Without the variable
+  (any local run) a block still raises, so a human running a generator never quietly gets an
+  old roster. The next run that gets through closes the issue.
 
 - **`claude.yml`** — the `@claude`-mention responder, triggered only by `issue_comment` and
   `pull_request_review_comment`, deliberately **not** by `issues: [opened, ...]`. The issue

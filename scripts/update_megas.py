@@ -4,7 +4,8 @@
 import os, re, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from bulbapedia import (fetch_wikitext, section, rows, cells, cell_value,
-                        find_date, slug, check_sprites, write_js, category_members)
+                        find_date, slug, check_sprites, write_js, category_members,
+                        Blocked, fallback_allowed, previous_rows, ROSTER_DATE)
 import gamemaster
 from rank import apply_ranks, power_of, power_scale
 
@@ -78,7 +79,8 @@ def raid_class(name, special):
     return "Mega Raid", 4
 
 
-def main():
+def from_bulbapedia():
+    """(Legendary+Mythical species, parsed rows) from the live Bulbapedia pages."""
     # Legendary/Mythical membership decides the raid class; fetch it before parsing so a
     # category rename fails before we have written anything.
     special = category_members("Legendary Pokémon") | category_members("Mythical Pokémon")
@@ -110,6 +112,36 @@ def main():
         out.append({"name": name, "boosts": boosts, "energy": int(cost or last["cost"]),
                     "attack": atk, "released": date or last["date"],
                     "_inherited": cost is None})
+
+    return special, out
+
+
+def from_previous():
+    """The same two values, carried over from the last build of web/mega-data.js.
+
+    Only Bulbapedia's fields are reused: roster, energy, boosts, Super Max attack, release
+    date and the Legendary/Mythical class. Everything from the Game Master is recomputed.
+    """
+    prev = previous_rows(OUT, "MEGAS")
+    special = {base_species(e["name"]) for e in prev if e["raid"] == "Legendary Mega Raid"}
+    out = [{"name": e["name"], "boosts": e["boosts"], "energy": e["energy"],
+            "attack": e.get("attack"), "released": e["released"], "_inherited": False}
+           for e in prev]
+    print(f"carried over {len(out)} Megas from {os.path.relpath(OUT)}")
+    return special, out
+
+
+def main():
+    try:
+        special, out = from_bulbapedia()
+        ROSTER_DATE[OUT] = "live"
+    except Blocked as err:
+        if not fallback_allowed():
+            raise
+        print(f"WARNING: {err}")
+        print("WARNING: Bulbapedia blocked; carrying the roster over (BULBAPEDIA_FALLBACK=1)")
+        special, out = from_previous()
+        ROSTER_DATE[OUT] = "carried"
 
     if not out:
         raise RuntimeError("parsed zero Megas — page layout changed")

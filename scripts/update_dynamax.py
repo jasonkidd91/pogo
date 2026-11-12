@@ -4,7 +4,8 @@
 import os, re, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from bulbapedia import (fetch_wikitext, section, rows, cells, find_date,
-                        slug, check_sprites, write_js)
+                        slug, check_sprites, write_js,
+                        Blocked, fallback_allowed, previous_rows, ROSTER_DATE)
 import gamemaster
 from rank import apply_ranks, apply_roles, power_of, power_scale
 
@@ -19,7 +20,8 @@ FORMS = {
 }
 
 
-def main():
+def from_bulbapedia():
+    """(gigantamax rows, dynamax rows) from the live Bulbapedia pages."""
     # ---- Gigantamax ----
     g_txt = fetch_wikitext("Gigantamax_(GO)")
     gmax = []
@@ -62,6 +64,36 @@ def main():
             if nm in gnames:
                 e["hasGmax"] = True
             dyn.append(e)
+
+    return gmax, dyn
+
+
+# The Bulbapedia-derived fields of each entry. Everything else (types, fam, rank, dps,
+# moves, legacy, role) comes from the Game Master and is recomputed on every run.
+GMAX_FIELDS = ("name", "art", "gmaxMove", "raid", "stars", "released")
+DYN_FIELDS = ("name", "art", "released", "form", "hasGmax")
+
+
+def from_previous():
+    """The same two lists, carried over from the last build of web/max-data.js."""
+    pick = lambda e, keys: {k: e[k] for k in keys if k in e}
+    gmax = [pick(e, GMAX_FIELDS) for e in previous_rows(OUT, "GIGANTAMAX")]
+    dyn = [pick(e, DYN_FIELDS) for e in previous_rows(OUT, "DYNAMAX")]
+    print(f"carried over {len(dyn)} Dynamax + {len(gmax)} Gigantamax from {os.path.relpath(OUT)}")
+    return gmax, dyn
+
+
+def main():
+    try:
+        gmax, dyn = from_bulbapedia()
+        ROSTER_DATE[OUT] = "live"
+    except Blocked as err:
+        if not fallback_allowed():
+            raise
+        print(f"WARNING: {err}")
+        print("WARNING: Bulbapedia blocked; carrying the roster over (BULBAPEDIA_FALLBACK=1)")
+        gmax, dyn = from_previous()
+        ROSTER_DATE[OUT] = "carried"
 
     if not gmax or not dyn:
         raise RuntimeError("parsed zero rows — page layout changed")
