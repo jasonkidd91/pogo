@@ -4,7 +4,7 @@
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_events.py
  * Source: https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json
  *         (ScrapedDuck, which scrapes https://leekduck.com/events/)
- * Fetched: 2026-11-10 23:55 local
+ * Fetched: 2026-11-12 01:20 local
  *
  * EVENTS ARE LIVE DATA. events.js fetches the feed above on every page load and renders
  * that; this file is only what it shows while the fetch is in flight or if it fails, and
@@ -23,14 +23,13 @@
  * rotations are published. events.js branches on the suffix; do not normalise it away.
  */
 
-const EVENTS_FETCHED = "2026-11-10 23:55";
+const EVENTS_FETCHED = "2026-11-12 01:20";
 const EVENTS_SOURCE = "https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json";
 
 const EVENTS_SNAPSHOT = [
   {"id": "season-24-twilight-trails", "name": "Twilight Trails", "type": "season", "heading": "Season", "link": "https://leekduck.com/events/season-24-twilight-trails/", "start": "2026-09-08T10:00:00.000", "end": "2026-12-01T10:00:00.000", "blurb": "Welcome to Pokémon GO: Twilight Trails! In Pokémon GO, Seasons are periods of time that feature new events, Pokémon debuts, and surprises that all follow a certain theme.", "has": ["bonuses", "spawns", "eggs"]},
   {"id": "pokemon-x-adidas-2026", "name": "adidas × Pokémon Timed Research", "type": "research", "heading": "Research", "link": "https://leekduck.com/events/pokemon-x-adidas-2026/", "start": "2026-09-25T10:00:00.000", "end": "2027-01-15T20:00:00.000"},
   {"id": "go-pass-november-2026", "name": "GO Pass: November", "type": "go-pass", "heading": "GO Pass", "link": "https://leekduck.com/events/go-pass-november-2026/", "start": "2026-11-03T10:00:00.000", "end": "2026-12-01T10:00:00.000", "blurb": "GO Pass: November features Groudon, 400 PokéCoins on the free track, 1,000 additional PokéCoins with GO Pass Deluxe…"},
-  {"id": "gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-3", "name": "Great League: Mega Edition, Ultra League: Mega Edition, and Master League: Mega Edition | Twilight Trails", "type": "go-battle-league", "heading": "GO Battle League", "link": "https://leekduck.com/events/gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-3/", "start": "2026-11-03T21:00:00.000Z", "end": "2026-11-10T21:00:00.000Z"},
   {"id": "go-wild-area-gigantamax-machamp-power-up-timed-research", "name": "GO Wild Area: Gigantamax Machamp Power Up! Timed Research", "type": "timed-research", "heading": "Timed Research", "link": "https://leekduck.com/events/go-wild-area-gigantamax-machamp-power-up-timed-research/", "start": "2026-11-06T10:00:00.000", "end": "2026-11-15T23:59:00.000"},
   {"id": "into-the-wild-2026", "name": "Into the Wild 2026", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/into-the-wild-2026/", "start": "2026-11-09T10:00:00.000", "end": "2026-11-13T20:00:00.000", "blurb": "It’s time to head back Into the Wild for a Steel- and Dragon-type adventure! Regidrago makes its Dynamax debut in five-star Max Battles, Dynamax Meltan debuts in GO Pass: Into the Wild, and Crowned Sword Zacian and Crowned Shield Zamazenta take over…", "has": ["bonuses", "spawns", "raids", "research", "moves"], "caveats": [{"k": "debut", "t": "Regidrago makes its Dynamax debut in five-star Max Battles, Dynamax Meltan debuts in GO Pass: Into the Wild, and Crowned Sword Zacian and Crowned Shield Zamazenta take over five-star raids as Pokémon GO Wild Area 2026 approaches."}]},
   {"id": "zacian-crowned-sword-zamazenta-crowned-shield-in-5-star-raid-battles-november-2026", "name": "Zacian (Crowned Sword) and Zamazenta (Crowned Shield) in 5-star Raid Battles", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/zacian-crowned-sword-zamazenta-crowned-shield-in-5-star-raid-battles-november-2026/", "start": "2026-11-09T10:00:00.000", "end": "2026-11-13T20:00:00.000", "mons": ["Zacian (Crowned Sword)", "Zamazenta (Crowned Shield)"], "blurb": "These raids start at 10:00 a.m. local time on November 9 and end at 8:00 p.m. local time on November 13. Defeating Zacian (Crowned Sword) or Zamazenta (Crowned Shield) in raids will earn you Crowned Sword Energy or Crowned Shield Energy…", "has": ["raids", "shiny"]},
