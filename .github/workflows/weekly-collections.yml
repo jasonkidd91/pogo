@@ -87,7 +87,7 @@ jobs:
               --title "Weekly Mega/Dynamax refresh blocked by Bulbapedia" \
               --body "$(cat <<EOF
           The weekly collection refresh could not reach Bulbapedia: its Cloudflare
-          protection returned a \"Just a moment...\" challenge page instead of data, so
+          protection returned a "Just a moment..." challenge page instead of data, so
           \`web/mega-data.js\` and \`web/max-data.js\` were not regenerated.
 
           Run: $run_url
