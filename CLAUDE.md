@@ -464,7 +464,10 @@ workflows, which would silently stop `pages.yml` from deploying an automated com
   standing `auto/collections-refresh` branch, and never pushes to `main`, because a new
   roster entry and its rank deserve a human look. A change that only bumps the Game Master
   sha in the header is ignored. The PR body lists added, removed and changed cards and any
-  `?` ranks.
+  `?` ranks. **Bulbapedia's Cloudflare blocks the runners** (first seen 2026-11-12: a "Just a
+  moment..." challenge page). The job recognises that, ends green, and opens or comments on one
+  `collections-blocked` issue telling you to run the generators locally. The next run that gets
+  through closes it. Do not try to get past the challenge; the block is deliberate.
 
 - **`claude.yml`** — the `@claude`-mention responder, triggered only by `issue_comment` and
   `pull_request_review_comment`, deliberately **not** by `issues: [opened, ...]`. The issue

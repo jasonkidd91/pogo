@@ -21,6 +21,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
 
 concurrency:
   group: weekly-collections
@@ -48,17 +49,76 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Regenerate Mega list
-        run: python3 scripts/update_megas.py
+      - name: Regenerate Mega and Dynamax lists
+        id: gen
+        run: |
+          # Bulbapedia sits behind Cloudflare, which has answered runner requests with a
+          # "Just a moment..." challenge page instead of data (first seen 2026-11-12). The
+          # generators already refuse that page and quote its first 120 characters in the
+          # error. Treat that case as "source unreachable": skip, report it in the issue
+          # below, and end green. Any other failure is a real bug and still fails the job.
+          # Never try to get past the challenge. The block is deliberate, so the fix is a
+          # local run or Bulbapedia's permission.
+          set -o pipefail
+          for script in update_megas.py update_dynamax.py; do
+            if ! python3 "scripts/$script" 2>&1 | tee "$RUNNER_TEMP/gen.log"; then
+              if grep -q 'Just a moment' "$RUNNER_TEMP/gen.log"; then
+                echo "blocked=true" >> "$GITHUB_OUTPUT"
+                echo "::warning::Bulbapedia returned a Cloudflare challenge during $script; skipping this week."
+                git checkout -- $FILES
+                exit 0
+              fi
+              exit 1
+            fi
+          done
+          echo "blocked=false" >> "$GITHUB_OUTPUT"
 
-      - name: Regenerate Dynamax list
-        run: python3 scripts/update_dynamax.py
+      - name: Report a Bulbapedia block
+        if: steps.gen.outputs.blocked == 'true'
+        run: |
+          gh label create collections-blocked --color d93f0b \
+            --description "Weekly Mega/Dynamax refresh could not reach Bulbapedia" --force
+          run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          existing=$(gh issue list --label collections-blocked --state open --json number --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "Still blocked on $(date -u +%Y-%m-%d): $run_url"
+          else
+            gh issue create --label collections-blocked \
+              --title "Weekly Mega/Dynamax refresh blocked by Bulbapedia" \
+              --body "$(cat <<EOF
+          The weekly collection refresh could not reach Bulbapedia: its Cloudflare
+          protection returned a \"Just a moment...\" challenge page instead of data, so
+          \`web/mega-data.js\` and \`web/max-data.js\` were not regenerated.
+
+          Run: $run_url
+
+          **To refresh by hand**, from a normal connection:
+
+          \`\`\`bash
+          python3 scripts/update_megas.py
+          python3 scripts/update_dynamax.py
+          \`\`\`
+
+          then commit the two data files. Do not try to work around the challenge; the
+          block is deliberate. This issue closes itself on the next run that gets through.
+          EOF
+          )"
+          fi
+
+      - name: Close the block issue once Bulbapedia answers again
+        if: steps.gen.outputs.blocked == 'false'
+        run: |
+          for n in $(gh issue list --label collections-blocked --state open --json number --jq '.[].number'); do
+            gh issue close "$n" --comment "Bulbapedia answered again on $(date -u +%Y-%m-%d); the weekly refresh ran normally."
+          done
 
       - name: Syntax-check generated files
+        if: steps.gen.outputs.blocked == 'false'
         run: |
           for f in $FILES; do node --check "$f"; done
 
       - name: Detect a real change
+        if: steps.gen.outputs.blocked == 'false'
         id: diff
         run: |
           # The header records the Game Master commit it was built from. That sha moves
