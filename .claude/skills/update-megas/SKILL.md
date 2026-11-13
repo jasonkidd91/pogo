@@ -57,7 +57,7 @@ Compare against the previous run. A refresh should be a small delta.
   impossible; if you see it, `category_members` is being bypassed.
 - **`no Game Master entry yet` lists more than a handful** → `gm_key` has stopped matching
   `pokemonId`, which would blank the rank on every card. The script raises above 8. One or
-  two is normal and expected: PokeMiners lags a release by days, and those cards show `?`
+  two is normal and expected: the Game Master mirrors lag a release by days, and those cards show `?`
   rather than a guessed grade.
 
 ## Then verify in the browser

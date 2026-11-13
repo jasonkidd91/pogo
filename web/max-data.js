@@ -4,7 +4,7 @@
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_dynamax.py
  * Sources: https://bulbapedia.bulbagarden.net/wiki/Dynamax_(GO)
  *          https://bulbapedia.bulbagarden.net/wiki/Gigantamax_(GO)
- *          PokeMiners game_master 8e227be44f28 (2026-08-29) — base stats, typing and move tables
+ *          Game Master alexelgt/game_masters@f5913d667893 (2026-11-11) — base stats, typing and move tables
  *
  * A Gigantamax form is tracked separately from its Dynamax entry — they are different
  * catches. hasGmax marks a Dynamax entry whose species also has a Gigantamax form.
@@ -29,15 +29,17 @@
  *        "search the whole family" toggle. Absent when the species is its own whole family.
  */
 
+// Roster: carried over from the previous build (last fetched from Bulbapedia before 2026-11-12) because Bulbapedia was blocked on 2026-11-13. Game Master data is current.
+
 const GIGANTAMAX = [
-  {"name": "Venusaur", "art": "venusaur-gigantamax", "gmaxMove": "G-Max Vine Lash", "raid": "Gigantamax Battle", "stars": 6, "released": "October 26, 2024", "types": ["Grass", "Poison"], "fam": ["bulbasaur", "ivysaur", "venusaur"], "dps": 12.1, "moves": "Vine Whip + Frenzy Plant", "legacy": true, "rank": "B", "role": "Guard"},
+  {"name": "Venusaur", "art": "venusaur-gigantamax", "gmaxMove": "G-Max Vine Lash", "raid": "Gigantamax Battle", "stars": 6, "released": "October 26, 2024", "types": ["Grass", "Poison"], "fam": ["bulbasaur", "ivysaur", "venusaur"], "dps": 12.1, "moves": "Vine Whip + Frenzy Plant", "legacy": true, "rank": "C", "role": "Guard"},
   {"name": "Charizard", "art": "charizard-gigantamax", "gmaxMove": "G-Max Wildfire", "raid": "Gigantamax Battle", "stars": 6, "released": "October 26, 2024", "types": ["Fire", "Flying"], "fam": ["charizard", "charmander", "charmeleon"], "dps": 12.2, "moves": "Fire Spin + Blast Burn", "legacy": true, "rank": "B", "role": null},
   {"name": "Blastoise", "art": "blastoise-gigantamax", "gmaxMove": "G-Max Cannonade", "raid": "Gigantamax Battle", "stars": 6, "released": "October 26, 2024", "types": ["Water"], "fam": ["blastoise", "squirtle", "wartortle"], "dps": 10.0, "moves": "Water Gun + Hydro Cannon", "legacy": true, "rank": "D", "role": "Guard"},
   {"name": "Butterfree", "art": "butterfree-gigantamax", "gmaxMove": "G-Max Befuddle", "raid": "Gigantamax Battle", "stars": 6, "released": "August 3, 2025", "types": ["Bug", "Flying"], "fam": ["butterfree", "caterpie", "metapod"], "dps": 8.5, "moves": "Bug Bite + Bug Buzz", "legacy": true, "rank": "D", "role": null},
   {"name": "Pikachu", "art": "pikachu-gigantamax", "gmaxMove": "G-Max Volt Crash", "raid": "Gigantamax Battle", "stars": 6, "released": "March 28, 2026", "types": ["Electric"], "fam": ["pichu", "pikachu", "raichu"], "dps": 6.8, "moves": "Thunder Shock + Wild Charge", "rank": "D", "role": null},
   {"name": "Meowth", "art": "meowth-gigantamax", "gmaxMove": "G-Max Gold Rush", "raid": "Gigantamax Battle", "stars": 6, "released": "February 15, 2026", "types": ["Normal"], "fam": ["meowth", "perrserker", "persian"], "dps": 4.8, "moves": "Scratch + Foul Play", "rank": "D", "role": null},
   {"name": "Machamp", "art": "machamp-gigantamax", "gmaxMove": "G-Max Chi Strike", "raid": "Gigantamax Battle", "stars": 6, "released": "May 25, 2025", "types": ["Fighting"], "fam": ["machamp", "machoke", "machop"], "dps": 11.6, "moves": "Counter + Dynamic Punch", "rank": "C", "role": "Spirit"},
-  {"name": "Gengar", "art": "gengar-gigantamax", "gmaxMove": "G-Max Terror", "raid": "Gigantamax Battle", "stars": 6, "released": "October 31, 2024", "types": ["Ghost", "Poison"], "fam": ["gastly", "gengar", "haunter"], "dps": 13.6, "moves": "Lick + Shadow Ball", "legacy": true, "rank": "A", "role": "Attacker"},
+  {"name": "Gengar", "art": "gengar-gigantamax", "gmaxMove": "G-Max Terror", "raid": "Gigantamax Battle", "stars": 6, "released": "October 31, 2024", "types": ["Ghost", "Poison"], "fam": ["gastly", "gengar", "haunter"], "dps": 13.6, "moves": "Lick + Shadow Ball", "legacy": true, "rank": "B", "role": "Attacker"},
   {"name": "Kingler", "art": "kingler-gigantamax", "gmaxMove": "G-Max Foam Burst", "raid": "Gigantamax Battle", "stars": 6, "released": "February 1, 2025", "types": ["Water"], "fam": ["kingler", "krabby"], "dps": 13.1, "moves": "Metal Claw + Crabhammer", "rank": "B", "role": "Attacker"},
   {"name": "Lapras", "art": "lapras-gigantamax", "gmaxMove": "G-Max Resonance", "raid": "Gigantamax Battle", "stars": 6, "released": "December 8, 2024", "types": ["Water", "Ice"], "dps": 8.9, "moves": "Water Gun + Blizzard", "rank": "D", "role": "Spirit"},
   {"name": "Snorlax", "art": "snorlax-gigantamax", "gmaxMove": "G-Max Replenish", "raid": "Gigantamax Battle", "stars": 6, "released": "April 19, 2025", "types": ["Normal"], "fam": ["munchlax", "snorlax"], "dps": 10.0, "moves": "Lick + Skull Bash", "rank": "D", "role": "Spirit"},
@@ -56,7 +58,7 @@ const DYNAMAX = [
   {"name": "Greedent", "art": "greedent", "released": "Sep 4, 2024", "types": ["Normal"], "fam": ["greedent", "skwovet"], "dps": 7.6, "moves": "Tackle + Body Slam", "rank": "D", "role": "Spirit"},
   {"name": "Bulbasaur", "art": "bulbasaur", "released": "Sep 10, 2024", "types": ["Grass", "Poison"], "fam": ["bulbasaur", "ivysaur", "venusaur"], "dps": 6.5, "moves": "Vine Whip + Power Whip", "rank": "D", "role": null},
   {"name": "Ivysaur", "art": "ivysaur", "released": "Sep 10, 2024", "types": ["Grass", "Poison"], "fam": ["bulbasaur", "ivysaur", "venusaur"], "dps": 8.8, "moves": "Vine Whip + Power Whip", "rank": "D", "role": null},
-  {"name": "Venusaur", "art": "venusaur", "released": "Sep 10, 2024", "hasGmax": true, "types": ["Grass", "Poison"], "fam": ["bulbasaur", "ivysaur", "venusaur"], "dps": 12.1, "moves": "Vine Whip + Frenzy Plant", "legacy": true, "rank": "B", "role": "Guard"},
+  {"name": "Venusaur", "art": "venusaur", "released": "Sep 10, 2024", "hasGmax": true, "types": ["Grass", "Poison"], "fam": ["bulbasaur", "ivysaur", "venusaur"], "dps": 12.1, "moves": "Vine Whip + Frenzy Plant", "legacy": true, "rank": "C", "role": "Guard"},
   {"name": "Charmander", "art": "charmander", "released": "Sep 10, 2024", "types": ["Fire"], "fam": ["charizard", "charmander", "charmeleon"], "dps": 5.9, "moves": "Ember + Flamethrower", "rank": "D", "role": null},
   {"name": "Charmeleon", "art": "charmeleon", "released": "Sep 10, 2024", "types": ["Fire"], "fam": ["charizard", "charmander", "charmeleon"], "dps": 7.9, "moves": "Fire Fang + Flamethrower", "rank": "D", "role": null},
   {"name": "Charizard", "art": "charizard", "released": "Sep 10, 2024", "hasGmax": true, "types": ["Fire", "Flying"], "fam": ["charizard", "charmander", "charmeleon"], "dps": 12.2, "moves": "Fire Spin + Blast Burn", "legacy": true, "rank": "B", "role": null},
@@ -78,7 +80,7 @@ const DYNAMAX = [
   {"name": "Falinks", "art": "falinks", "released": "Oct 1, 2024", "types": ["Fighting"], "dps": 9.3, "moves": "Counter + Super Power", "rank": "D", "role": null},
   {"name": "Gastly", "art": "gastly", "released": "Oct 22, 2024", "types": ["Ghost", "Poison"], "fam": ["gastly", "gengar", "haunter"], "dps": 9.7, "moves": "Lick + Sludge Bomb", "rank": "D", "role": null},
   {"name": "Haunter", "art": "haunter", "released": "Oct 22, 2024", "types": ["Ghost", "Poison"], "fam": ["gastly", "gengar", "haunter"], "dps": 11.5, "moves": "Shadow Claw + Shadow Ball", "rank": "C", "role": null},
-  {"name": "Gengar", "art": "gengar", "released": "Oct 22, 2024", "hasGmax": true, "types": ["Ghost", "Poison"], "fam": ["gastly", "gengar", "haunter"], "dps": 13.6, "moves": "Lick + Shadow Ball", "legacy": true, "rank": "A", "role": "Attacker"},
+  {"name": "Gengar", "art": "gengar", "released": "Oct 22, 2024", "hasGmax": true, "types": ["Ghost", "Poison"], "fam": ["gastly", "gengar", "haunter"], "dps": 13.6, "moves": "Lick + Shadow Ball", "legacy": true, "rank": "B", "role": "Attacker"},
   {"name": "Drilbur", "art": "drilbur", "released": "Nov 15, 2024", "types": ["Ground"], "fam": ["drilbur", "excadrill"], "dps": 7.8, "moves": "Scratch + Drill Run", "rank": "D", "role": null},
   {"name": "Excadrill", "art": "excadrill", "released": "Nov 15, 2024", "types": ["Ground", "Steel"], "fam": ["drilbur", "excadrill"], "dps": 12.6, "moves": "Metal Claw + Earthquake", "rank": "B", "role": "Attacker"},
   {"name": "Toxtricity", "art": "toxtricity-amped", "released": "Nov 16, 2024", "form": "Amped Form", "hasGmax": true, "types": ["Electric", "Poison"], "fam": ["toxel", "toxtricity"], "dps": 11.6, "moves": "Poison Jab + Wild Charge", "rank": "C", "role": null},
@@ -122,7 +124,7 @@ const DYNAMAX = [
   {"name": "Latias", "art": "latias", "released": "Jul 26, 2025", "types": ["Dragon", "Psychic"], "dps": 11.9, "moves": "Dragon Breath + Aura Sphere", "rank": "C", "role": "Guard"},
   {"name": "Latios", "art": "latios", "released": "Jul 26, 2025", "types": ["Dragon", "Psychic"], "dps": 14.2, "moves": "Dragon Breath + Aura Sphere", "rank": "A", "role": "Attacker"},
   {"name": "Kabuto", "art": "kabuto", "released": "Jul 28, 2025", "types": ["Rock", "Water"], "fam": ["kabuto", "kabutops"], "dps": 6.2, "moves": "Mud Shot + Ancient Power", "rank": "D", "role": null},
-  {"name": "Kabutops", "art": "kabutops", "released": "Jul 28, 2025", "types": ["Rock", "Water"], "fam": ["kabuto", "kabutops"], "dps": 10.2, "moves": "Waterfall + Stone Edge", "rank": "C", "role": "Guard"},
+  {"name": "Kabutops", "art": "kabutops", "released": "Jul 28, 2025", "types": ["Rock", "Water"], "fam": ["kabuto", "kabutops"], "dps": 10.2, "moves": "Waterfall + Stone Edge", "rank": "D", "role": "Guard"},
   {"name": "Omanyte", "art": "omanyte", "released": "Aug 4, 2025", "types": ["Rock", "Water"], "fam": ["omanyte", "omastar"], "dps": 7.6, "moves": "Water Gun + Rock Blast", "rank": "D", "role": null},
   {"name": "Omastar", "art": "omastar", "released": "Aug 4, 2025", "types": ["Rock", "Water"], "fam": ["omanyte", "omastar"], "dps": 9.9, "moves": "Rock Throw + Hydro Pump", "legacy": true, "rank": "D", "role": "Guard"},
   {"name": "Trubbish", "art": "trubbish", "released": "Aug 11, 2025", "types": ["Poison"], "fam": ["garbodor", "trubbish"], "dps": 5.8, "moves": "Pound + Gunk Shot", "rank": "D", "role": null},
@@ -141,7 +143,7 @@ const DYNAMAX = [
   {"name": "Ralts", "art": "ralts", "released": "Nov 10, 2025", "types": ["Psychic", "Fairy"], "fam": ["gallade", "gardevoir", "kirlia", "ralts"], "dps": 4.1, "moves": "Confusion + Psyshock", "rank": "D", "role": null},
   {"name": "Kirlia", "art": "kirlia", "released": "Nov 10, 2025", "types": ["Psychic", "Fairy"], "fam": ["gallade", "gardevoir", "kirlia", "ralts"], "dps": 6.0, "moves": "Confusion + Psychic", "rank": "D", "role": null},
   {"name": "Gardevoir", "art": "gardevoir", "released": "Nov 10, 2025", "types": ["Psychic", "Fairy"], "fam": ["gallade", "gardevoir", "kirlia", "ralts"], "dps": 11.7, "moves": "Confusion + Psychic", "rank": "C", "role": "Guard"},
-  {"name": "Gallade", "art": "gallade", "released": "Nov 10, 2025", "types": ["Psychic", "Fighting"], "fam": ["gallade", "gardevoir", "kirlia", "ralts"], "dps": 11.7, "moves": "Confusion + Psychic", "rank": "C", "role": "Guard"},
+  {"name": "Gallade", "art": "gallade", "released": "Nov 10, 2025", "types": ["Psychic", "Fighting"], "fam": ["gallade", "gardevoir", "kirlia", "ralts"], "dps": 12.9, "moves": "Psycho Cut + Sacred Sword", "rank": "B", "role": "Guard"},
   {"name": "Eevee", "art": "eevee", "released": "Nov 24, 2025", "types": ["Normal"], "fam": ["eevee", "espeon", "flareon", "glaceon", "jolteon", "leafeon", "sylveon", "umbreon", "vaporeon"], "dps": 5.8, "moves": "Tackle + Last Resort", "legacy": true, "rank": "D", "role": null},
   {"name": "Vaporeon", "art": "vaporeon", "released": "Nov 24, 2025", "types": ["Water"], "fam": ["eevee", "espeon", "flareon", "glaceon", "jolteon", "leafeon", "sylveon", "umbreon", "vaporeon"], "dps": 9.7, "moves": "Water Gun + Hydro Pump", "rank": "D", "role": "Spirit"},
   {"name": "Jolteon", "art": "jolteon", "released": "Nov 24, 2025", "types": ["Electric"], "fam": ["eevee", "espeon", "flareon", "glaceon", "jolteon", "leafeon", "sylveon", "umbreon", "vaporeon"], "dps": 11.5, "moves": "Thunder Shock + Zap Cannon", "legacy": true, "rank": "C", "role": "Attacker"},
@@ -192,5 +194,5 @@ const DYNAMAX = [
   {"name": "Hitmontop", "art": "hitmontop", "released": "Aug 24, 2026", "types": ["Fighting"], "fam": ["hitmonchan", "hitmonlee", "hitmontop", "tyrogue"], "dps": 8.2, "moves": "Counter + Close Combat", "rank": "D", "role": "Guard"},
   {"name": "Rhyhorn", "art": "rhyhorn", "released": "Sep 14, 2026", "types": ["Ground", "Rock"], "fam": ["rhydon", "rhyhorn", "rhyperior"], "dps": 6.1, "moves": "Mud Slap + Bulldoze", "rank": "D", "role": null},
   {"name": "Rhydon", "art": "rhydon", "released": "Sep 14, 2026", "types": ["Ground", "Rock"], "fam": ["rhydon", "rhyhorn", "rhyperior"], "dps": 10.8, "moves": "Mud Slap + Earthquake", "rank": "C", "role": "Spirit"},
-  {"name": "Rhyperior", "art": "rhyperior", "released": "Sep 14, 2026", "types": ["Ground", "Rock"], "fam": ["rhydon", "rhyhorn", "rhyperior"], "dps": 12.1, "moves": "Mud Slap + Rock Wrecker", "legacy": true, "rank": "B", "role": "Spirit"}
+  {"name": "Rhyperior", "art": "rhyperior", "released": "Sep 14, 2026", "types": ["Ground", "Rock"], "fam": ["rhydon", "rhyhorn", "rhyperior"], "dps": 12.1, "moves": "Mud Slap + Rock Wrecker", "legacy": true, "rank": "C", "role": "Spirit"}
 ];

@@ -14,6 +14,10 @@ them fails *silently* — you get a plausible number, not an error.
      all. `mega_forms` simply will not contain them, and a generator that assumes full
      coverage will drop them from the page or, worse, rank them off their base species.
      Callers must handle "no Game Master entry" as "not rated yet", never as a guess.
+     Two public mirrors exist and lag differently: PokeMiners went unchanged from
+     2026-08-29 into November while alexelgt kept updating (and had Mega Staraptor and
+     Mega Chandelure, which PokeMiners still lacked). `fetch` reads whichever mirror
+     committed most recently, so one stalled mirror cannot freeze every rank.
 
   2. PVE AND PVP MOVE TABLES ARE DIFFERENT TEMPLATES. `moveSettings` (V####_MOVE_*) is the
      raid/gym table; `combatMove` (COMBAT_V####_MOVE_*) is the Trainer Battle table. The
@@ -39,9 +43,11 @@ import os
 import subprocess
 import tempfile
 
-REPO = "PokeMiners/game_masters"
-RAW = f"https://raw.githubusercontent.com/{REPO}/master/latest/latest.json"
-API = f"https://api.github.com/repos/{REPO}/commits?path=latest/latest.json&per_page=1"
+# Mirrors of the same file, same format: a list of {templateId, data}. (repo, path, branch)
+SOURCES = [
+    ("alexelgt/game_masters", "GAME_MASTER.json", "master"),
+    ("PokeMiners/game_masters", "latest/latest.json", "master"),
+]
 
 # From MEGA_EVOLUTION_LEVEL_0 in the Game Master. Every Mega gives the same party-wide
 # boost, which is why "which Mega boosts Fire best" is not a real question — see rank.py.
@@ -65,32 +71,48 @@ def _curl(url, extra=()):
     ).stdout
 
 
-def provenance():
-    """(sha, iso_date) of the Game Master commit currently on master."""
+def _latest_commit(repo, path):
+    """(sha, iso_datetime) of the last commit touching `path`, or None if unreadable."""
+    url = f"https://api.github.com/repos/{repo}/commits?path={path}&per_page=1"
     try:
-        commit = json.loads(_curl(API))[0]
-    except (json.JSONDecodeError, IndexError, KeyError) as exc:
-        raise RuntimeError(f"could not read {REPO} commit info: {exc}")
-    return commit["sha"][:12], commit["commit"]["author"]["date"][:10]
+        commit = json.loads(_curl(url))[0]
+        return commit["sha"][:12], commit["commit"]["author"]["date"]
+    except (json.JSONDecodeError, IndexError, KeyError, TypeError, subprocess.CalledProcessError):
+        return None
+
+
+def provenance():
+    """(source, sha, iso_date, raw_url) of the most recently updated mirror."""
+    seen = []
+    for repo, path, branch in SOURCES:
+        got = _latest_commit(repo, path)
+        if got:
+            seen.append((got[1], repo, got[0], f"https://raw.githubusercontent.com/{repo}/{branch}/{path}"))
+    if not seen:
+        raise RuntimeError("could not read commit info for any Game Master mirror: "
+                           + ", ".join(r for r, _, _ in SOURCES))
+    when, repo, sha, raw = max(seen)
+    return repo, sha, when[:10], raw
 
 
 def fetch(verbose=True):
-    """The Game Master as a list of templates, plus its (sha, date).
+    """The Game Master as a list of templates, plus its ("repo@sha", date).
 
     ~19 MB. Cached in the system temp directory keyed by commit sha, so re-running a
     generator is instant and a new upstream commit invalidates the cache by itself. There
     is deliberately no way to pin an older copy: a stale Game Master silently ranks a
-    Pokemon on last month's moves.
+    Pokemon on last month's moves. Whichever mirror in SOURCES committed last is used.
     """
-    sha, date = provenance()
-    cache = os.path.join(tempfile.gettempdir(), f"pogo-gamemaster-{sha}.json")
+    repo, sha, date, raw_url = provenance()
+    label = f"{repo}@{sha}"
+    cache = os.path.join(tempfile.gettempdir(), f"pogo-gamemaster-{repo.split('/')[0]}-{sha}.json")
     if os.path.exists(cache):
         if verbose:
-            print(f"game master {sha} ({date}) — cached")
-        return json.load(open(cache)), (sha, date)
+            print(f"game master {label} ({date}) — cached")
+        return json.load(open(cache)), (label, date)
     if verbose:
-        print(f"game master {sha} ({date}) — downloading ~19 MB")
-    raw = _curl(RAW)
+        print(f"game master {label} ({date}) — downloading ~19 MB")
+    raw = _curl(raw_url)
     try:
         data = json.loads(raw)
     except json.JSONDecodeError:
@@ -98,7 +120,7 @@ def fetch(verbose=True):
     if not isinstance(data, list) or len(data) < 10000:
         raise RuntimeError(f"game master looks truncated: {type(data)}, {len(data)} entries")
     open(cache, "w").write(raw)
-    return data, (sha, date)
+    return data, (label, date)
 
 
 def _typename(t):

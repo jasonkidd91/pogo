@@ -26,9 +26,13 @@ is worse than no rank.
 
 ## Where the numbers come from
 
-**PokeMiners' `game_masters/latest/latest.json`** — the game's own data file, ~19 MB, updated
-within days of each release. It carries base stats, PvE and PvP move tables, typing, and the
-Mega boost multipliers.
+**The Game Master** — the game's own data file, ~19 MB. It carries base stats, PvE and PvP
+move tables, typing, and the Mega boost multipliers. Two public mirrors publish it in the same
+format, `alexelgt/game_masters` (`GAME_MASTER.json`) and `PokeMiners/game_masters`
+(`latest/latest.json`), and `gamemaster.SOURCES` lists both. `fetch()` uses whichever
+committed most recently. PokeMiners sat unchanged from 2026-08-29 into November while alexelgt
+kept updating, so a single fixed mirror can freeze every rank without any error. The data
+file header names the mirror and commit it was built from.
 
 `gamemaster.fetch()` caches by upstream commit sha in the temp directory, so re-running a
 generator is instant and a new upstream commit invalidates the cache by itself. **There is

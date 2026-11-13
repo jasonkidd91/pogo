@@ -3,7 +3,7 @@
  *
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_megas.py
  * Source: https://bulbapedia.bulbagarden.net/wiki/Mega_Evolution_(GO)
- *         PokeMiners game_master 8e227be44f28 (2026-08-29) — stats, moves and the Mega boost multipliers
+ *         Game Master alexelgt/game_masters@f5913d667893 (2026-11-11) — stats, moves and the Mega boost multipliers
  * Unreleased (HTML-commented) rows are excluded.
  *
  * energy  first-time activation cost; later activations cost far less
@@ -29,6 +29,8 @@
 
  * isNew   GO-original Mega with no mainline artwork; artFallback is base-species art
  */
+
+// Roster: carried over from the previous build (last fetched from Bulbapedia before 2026-11-12) because Bulbapedia was blocked on 2026-11-13. Game Master data is current.
 
 const MEGAS = [
   {"name": "Mega Venusaur", "art": "venusaur-mega", "types": ["Grass", "Poison"], "boosts": ["Grass", "Poison"], "energy": 200, "raid": "Mega Raid", "stars": 4, "released": "August 27, 2020", "fam": ["bulbasaur", "ivysaur", "venusaur"], "dps": 13.5, "moves": "Vine Whip + Frenzy Plant", "legacy": true, "rank": "B"},
@@ -80,14 +82,14 @@ const MEGAS = [
   {"name": "Primal Kyogre", "art": "kyogre-primal", "types": ["Water"], "boosts": ["Electric", "Water", "Bug"], "energy": 400, "raid": "Primal Raid", "stars": 5, "released": "February 18, 2023", "weatherBoost": true, "dps": 17.3, "moves": "Waterfall + Origin Pulse", "legacy": true, "rank": "S"},
   {"name": "Primal Groudon", "art": "groudon-primal", "types": ["Ground", "Fire"], "boosts": ["Grass", "Fire", "Ground"], "energy": 400, "raid": "Primal Raid", "stars": 5, "released": "February 18, 2023", "weatherBoost": true, "dps": 17.3, "moves": "Mud Shot + Precipice Blades", "legacy": true, "rank": "S"},
   {"name": "Mega Rayquaza", "art": "rayquaza-mega", "types": ["Dragon", "Flying"], "boosts": ["Flying", "Dragon", "Psychic"], "energy": 400, "raid": "Legendary Mega Raid", "stars": 6, "released": "August 4, 2023", "weatherBoost": true, "dps": 18.7, "moves": "Dragon Tail + Breaking Swipe", "legacy": true, "rank": "S"},
-  {"name": "Mega Staraptor", "art": "staraptor-mega", "types": ["Fighting", "Flying"], "boosts": ["Fighting", "Flying"], "energy": 300, "raid": "Mega Raid", "stars": 4, "released": "September 19, 2026", "fam": ["staraptor", "staravia", "starly"], "rank": "?", "artFallback": "staraptor", "isNew": true, "attack": "Brave Bird+"},
+  {"name": "Mega Staraptor", "art": "staraptor-mega", "types": ["Fighting", "Flying"], "boosts": ["Fighting", "Flying"], "energy": 300, "raid": "Mega Raid", "stars": 4, "released": "September 19, 2026", "fam": ["staraptor", "staravia", "starly"], "dps": 15.1, "moves": "Gust + Brave Bird", "legacy": true, "artFallback": "staraptor", "isNew": true, "attack": "Brave Bird+", "rank": "A"},
   {"name": "Mega Lopunny", "art": "lopunny-mega", "types": ["Normal", "Fighting"], "boosts": ["Normal", "Fighting"], "energy": 200, "raid": "Mega Raid", "stars": 4, "released": "April 4, 2021", "fam": ["buneary", "lopunny"], "dps": 14.7, "moves": "Pound + Focus Blast", "rank": "A"},
   {"name": "Mega Garchomp", "art": "garchomp-mega", "types": ["Dragon", "Ground"], "boosts": ["Dragon", "Ground"], "energy": 300, "raid": "Mega Raid", "stars": 4, "released": "November 11, 2023", "fam": ["gabite", "garchomp", "gible"], "dps": 16.6, "moves": "Dragon Tail + Earthquake", "rank": "S"},
   {"name": "Mega Lucario", "art": "lucario-mega", "types": ["Fighting", "Steel"], "boosts": ["Fighting", "Steel"], "energy": 200, "raid": "Mega Raid", "stars": 4, "released": "July 27, 2024", "fam": ["lucario", "riolu"], "dps": 18.3, "moves": "Force Palm + Aura Sphere", "legacy": true, "rank": "S"},
   {"name": "Mega Abomasnow", "art": "abomasnow-mega", "types": ["Grass", "Ice"], "boosts": ["Grass", "Ice"], "energy": 200, "raid": "Mega Raid", "stars": 4, "released": "December 1, 2020", "fam": ["abomasnow", "snover"], "dps": 11.7, "moves": "Leafage + Weather Ball Ice", "rank": "C"},
-  {"name": "Mega Gallade", "art": "gallade-mega", "types": ["Psychic", "Fighting"], "boosts": ["Psychic", "Fighting"], "energy": 200, "raid": "Mega Raid", "stars": 4, "released": "January 11, 2025", "fam": ["gallade", "gardevoir", "kirlia", "ralts"], "dps": 15.9, "moves": "Low Kick + Psychic", "rank": "S"},
+  {"name": "Mega Gallade", "art": "gallade-mega", "types": ["Psychic", "Fighting"], "boosts": ["Psychic", "Fighting"], "energy": 200, "raid": "Mega Raid", "stars": 4, "released": "January 11, 2025", "fam": ["gallade", "gardevoir", "kirlia", "ralts"], "dps": 17.4, "moves": "Psycho Cut + Sacred Sword", "rank": "S"},
   {"name": "Mega Audino", "art": "audino-mega", "types": ["Normal", "Fairy"], "boosts": ["Normal", "Fairy"], "energy": 200, "raid": "Mega Raid", "stars": 4, "released": "April 5, 2025", "dps": 8.4, "moves": "Pound + Hyper Beam", "rank": "D"},
-  {"name": "Mega Chandelure", "art": "chandelure-mega", "types": ["Ghost", "Fire"], "boosts": ["Ghost", "Fire"], "energy": 300, "raid": "Mega Raid", "stars": 4, "released": "April 5, 2025", "fam": ["chandelure", "lampent", "litwick"], "rank": "?", "artFallback": "chandelure", "isNew": true, "attack": "Ominous Wind+"},
+  {"name": "Mega Chandelure", "art": "chandelure-mega", "types": ["Ghost", "Fire"], "boosts": ["Ghost", "Fire"], "energy": 300, "raid": "Mega Raid", "stars": 4, "released": "April 5, 2025", "fam": ["chandelure", "lampent", "litwick"], "dps": 16.6, "moves": "Fire Spin + Overheat", "artFallback": "chandelure", "isNew": true, "attack": "Ominous Wind+", "rank": "S"},
   {"name": "Mega Chesnaught", "art": "chesnaught-mega", "types": ["Grass", "Fighting"], "boosts": ["Grass", "Fighting"], "energy": 300, "raid": "Mega Raid", "stars": 4, "released": "August 28, 2026", "fam": ["chesnaught", "chespin", "quilladin"], "dps": 13.5, "moves": "Low Kick + Frenzy Plant", "legacy": true, "artFallback": "chesnaught", "isNew": true, "attack": "Seed Bomb+", "rank": "B"},
   {"name": "Mega Delphox", "art": "delphox-mega", "types": ["Fire", "Psychic"], "boosts": ["Fire", "Psychic"], "energy": 300, "raid": "Mega Raid", "stars": 4, "released": "August 28, 2026", "fam": ["braixen", "delphox", "fennekin"], "dps": 17.4, "moves": "Fire Spin + Blast Burn", "legacy": true, "artFallback": "delphox", "isNew": true, "attack": "Mystical Fire+", "rank": "S"},
   {"name": "Mega Greninja", "art": "greninja-mega", "types": ["Water", "Dark"], "boosts": ["Water", "Dark"], "energy": 300, "raid": "Mega Raid", "stars": 4, "released": "August 28, 2026", "fam": ["froakie", "frogadier", "greninja"], "dps": 16.1, "moves": "Feint Attack + Hydro Cannon", "legacy": true, "artFallback": "greninja", "isNew": true, "attack": "Surf+", "rank": "S"},

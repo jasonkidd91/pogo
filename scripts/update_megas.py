@@ -281,7 +281,7 @@ HEADER = """/**
  *
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_megas.py
  * Source: https://bulbapedia.bulbagarden.net/wiki/Mega_Evolution_(GO)
- *         PokeMiners game_master {GM} — stats, moves and the Mega boost multipliers
+ *         Game Master {GM} — stats, moves and the Mega boost multipliers
  * Unreleased (HTML-commented) rows are excluded.
  *
  * energy  first-time activation cost; later activations cost far less

@@ -147,7 +147,7 @@ jobs:
           # carry it. Any change to a card, including a rank shifted by the new Game
           # Master, still counts.
           # The "// Roster:" stamp (and the blank line after it) is ignored the same way.
-          if git diff --quiet -I 'PokeMiners game_master' -I '^(// Roster:.*)?$' -- $FILES; then
+          if git diff --quiet -I 'PokeMiners game_master|Game Master [A-Za-z]+/game_masters@' -I '^(// Roster:.*)?$' -- $FILES; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "No roster or card changes (Game Master sha bumps ignored)."
           else
@@ -178,7 +178,7 @@ jobs:
 
           import os
           print("Weekly regeneration of the Mega and Dynamax lists from Bulbapedia and the "
-                "PokeMiners Game Master.\n")
+                "Game Master (newest of the alexelgt and PokeMiners mirrors).\n")
           if os.environ.get("BLOCKED") == "true":
               print("> **Bulbapedia was blocked this week.** The roster was carried over from "
                     "the previous build; only the Game Master side (stats, typing, rank) is "

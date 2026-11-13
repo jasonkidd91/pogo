@@ -194,7 +194,7 @@ HEADER = """/**
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_dynamax.py
  * Sources: https://bulbapedia.bulbagarden.net/wiki/Dynamax_(GO)
  *          https://bulbapedia.bulbagarden.net/wiki/Gigantamax_(GO)
- *          PokeMiners game_master {GM} — base stats, typing and move tables
+ *          Game Master {GM} — base stats, typing and move tables
  *
  * A Gigantamax form is tracked separately from its Dynamax entry — they are different
  * catches. hasGmax marks a Dynamax entry whose species also has a Gigantamax form.
