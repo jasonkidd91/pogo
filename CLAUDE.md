@@ -528,6 +528,22 @@ workflows, which would silently stop `pages.yml` from deploying an automated com
   (any local run) a block still raises, so a human running a generator never quietly gets an
   old roster. The next run that gets through closes the issue.
 
+- **`monthly-squad.yml`** — 1st of the month, `0 20 1 * *` UTC, plus `workflow_dispatch`. Runs
+  `update_squad.py` to refresh `web/squad-data.js` from Pokemon GO Hub (see "The Squad page"
+  above) and **pushes straight to `main`**, at the owner's explicit choice — unlike
+  `weekly-collections.yml`, there is deliberately no PR/review step here. Monthly rather than
+  weekly because Hub's PvE tier lists move with new Pokemon/move releases and its own
+  re-simulation, slower than the weekly Mega/Dynamax roster this depends on (that roster still
+  only updates when a `weekly-collections.yml` PR is merged — this job does not wait for one,
+  it just reads whatever roster is currently on `main`). A change that only bumps the header's
+  fetch date is ignored; a real diff gets summarised per type (added/removed Pokemon, and
+  anything that moved tier — Gmax/Dmax/Mega/plain — or moved within Hub's own SS–F ladder) in
+  the commit body. Unlike `weekly-collections.yml` there is **no block-detection or fallback
+  path yet**: if Pokemon GO Hub ever blocks this runner the way Bulbapedia blocks the weekly
+  job, `update_squad.py` simply raises and the run shows red in the Actions tab, nothing is
+  committed. Add the same detect-and-file-an-issue handling used there only once that's
+  actually observed happening — don't guess at a block signature in advance.
+
 - **`claude.yml`** — the `@claude`-mention responder, triggered only by `issue_comment` and
   `pull_request_review_comment`, deliberately **not** by `issues: [opened, ...]`. The issue
   bodies task 4 above writes contain the literal phrase "@claude implement it" as

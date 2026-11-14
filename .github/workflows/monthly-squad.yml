@@ -1,0 +1,131 @@
+name: Monthly squad refresh
+
+# Regenerates web/squad-data.js (the Squad page's by-type picks) from Pokemon GO Hub's PvE
+# tier lists and pushes straight to main if anything changed. Monthly rather than weekly:
+# Hub's tier movement comes from new Pokemon/move releases and its own re-simulation, which
+# is slower than the weekly Mega/Dynamax roster cadence those jobs track.
+#
+# DELIBERATE EXCEPTION, inherited from the generator: this page's ranking is Pokemon GO
+# Hub's scraped tier list, not scripts/rank.py, at the owner's explicit request. Read
+# scripts/update_squad.py's docstring before changing this job's judgment calls.
+#
+# Pushes directly to main (the owner's explicit choice) rather than opening a PR the way
+# weekly-collections.yml does for the Mega/Dynamax roster — there is deliberately no human
+# review step here. If Pokemon GO Hub ever starts blocking this runner the way Bulbapedia
+# blocks weekly-collections.yml (first seen there 2026-11-12), this job will just fail
+# loudly (a red run in the Actions tab, nothing written or committed — update_squad.py
+# raises rather than writing partial data) instead of silently doing nothing. Add the same
+# detect-and-file-an-issue handling used in weekly-collections.yml if and when that actually
+# happens, rather than guessing at a block signature in advance.
+on:
+  schedule:
+    - cron: '0 20 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: monthly-squad
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # PAT, not GITHUB_TOKEN: a GITHUB_TOKEN-authored push does not trigger other
+      # workflows, which would silently stop pages.yml from deploying this commit.
+      GH_TOKEN: ${{ secrets.POGO_GITHUB_PAT }}
+      FILE: web/squad-data.js
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.POGO_GITHUB_PAT }}
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Regenerate the Squad page's picks
+        run: python3 scripts/update_squad.py
+
+      - name: Syntax-check
+        run: node --check "$FILE"
+
+      - name: Detect a real change
+        id: diff
+        run: |
+          # The header's "Sources (fetched DATE)" line changes on every run even with no
+          # ranking change at all — ignore only that line, the same way weekly-collections.yml
+          # ignores the Game Master sha bump.
+          if git diff --quiet -I '^ \* Sources \(fetched' -- "$FILE"; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No pick changes."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git diff --stat -- "$FILE"
+          fi
+
+      - name: Summarise what moved
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          python3 - <<'PY' > "$RUNNER_TEMP/summary.md"
+          import json, re, subprocess
+
+          def load(text):
+              body = re.search(r"const SQUAD = \[\n(.*?)\n\];", text, re.S).group(1)
+              return {d["type"]: d for d in (json.loads(l.strip().rstrip(","))
+                                              for l in body.splitlines() if l.strip())}
+
+          old_text = subprocess.run(["git", "show", "HEAD:web/squad-data.js"],
+                                     capture_output=True, text=True).stdout
+          old = load(old_text)
+          new = load(open("web/squad-data.js").read())
+
+          TIER_LABEL = {"gmax": "Gigantamax", "dmax": "Dynamax", "mega": "Mega", "plain": "Attacker"}
+
+          print("Monthly refresh of the Squad page's picks from Pokemon GO Hub "
+                "(https://db.pokemongohub.net).\n")
+          any_change = False
+          for ptype in sorted(set(old) | set(new)):
+              a = {p["name"]: p for p in old.get(ptype, {}).get("picks", [])}
+              b = {p["name"]: p for p in new.get(ptype, {}).get("picks", [])}
+              added = sorted(set(b) - set(a))
+              removed = sorted(set(a) - set(b))
+              moved = []
+              for n in sorted(set(a) & set(b)):
+                  pa, pb = a[n], b[n]
+                  if pa.get("tier") != pb.get("tier"):
+                      moved.append(f"- {n}: {TIER_LABEL[pa['tier']]} -> {TIER_LABEL[pb['tier']]}")
+                  elif pa.get("phTier") != pb.get("phTier") or pa.get("place") != pb.get("place"):
+                      moved.append(f"- {n}: Hub {pa.get('phTier')} #{pa.get('place')} -> "
+                                    f"{pb.get('phTier')} #{pb.get('place')}")
+              if not (added or removed or moved):
+                  continue
+              any_change = True
+              print(f"### {ptype}\n")
+              if added:
+                  print(f"**Added:** {', '.join(added)}\n")
+              if removed:
+                  print(f"**Removed:** {', '.join(removed)}\n")
+              if moved:
+                  print("**Moved:**\n" + "\n".join(moved) + "\n")
+          if not any_change:
+              print("(No per-type pick changes beyond the fetch date.)\n")
+          print("🤖 Generated with [Claude Code](https://claude.com/claude-code)")
+          PY
+          cat "$RUNNER_TEMP/summary.md"
+
+      - name: Commit and push
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "pogo-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add "$FILE"
+          git commit -F "$RUNNER_TEMP/summary.md"
+          git pull --ff-only origin main
+          git push origin main
