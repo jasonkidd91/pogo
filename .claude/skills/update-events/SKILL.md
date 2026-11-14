@@ -133,6 +133,34 @@ const TRACKERS = {
 
 An event appearing on this page is not a request for a tracker.
 
+## Max Battle Counters prep link
+
+A `max-battles`/`max-mondays` card can carry a **Counters** link out to Pokemon GO Hub for
+the featured boss — the same idea as the Counters button on `dynamax.html`/`megas.html`, but
+for *before* the boss is live rather than after you've caught it.
+
+**The boss name is not a structured field in this feed.** Checked live: `extraData` for both
+Max event types carries only generic flags (`hasSpawns`, `hasFieldResearchTasks`), never a
+boss. `maxBoss()` in `events.js` (mirrored by `max_boss()` in `scripts/update_events.py`,
+report-only there — see below) instead reads the event's own title: "Dynamax Espurr during
+Max Monday" → `{name: 'Espurr', gmax: false}`. Same spirit as a caveat quoting its source
+sentence — select and label what's already there, never compose a guess. "Max Battle Day"
+and "Pokémon to be announced" titles correctly yield nothing.
+
+**Resolving that name to a Hub link happens entirely client-side, at render time**, against
+`web/max-data.js`'s `hub` field (added by `add_hub_links()` in `scripts/update_dynamax.py` —
+see the `update-dynamax` skill). That's why `index.html` now loads `max-data.js` as a data
+file, before `events-data.js`. Nothing about this is baked into `events-data.js`'s snapshot:
+`maxBoss`/`maxGmax` are fully derivable from fields the snapshot already carries (`name`,
+`type`), so baking them in would violate `slim()`'s own stated rule — "only the fields the
+page renders." `scripts/update_events.py` still computes the same extraction, but only to
+print a report during a regen run, as a visibility check, never written to the file.
+
+**A name two formes share is left out, not guessed.** Toxtricity and Urshifu each have two
+Dynamax entries (Amped/Low-Key, Single/Rapid Strike) with different Hub slugs, and a short
+event title essentially never says which. `hubByName()` in `events.js` drops any name that
+resolves to more than one roster entry rather than picking one.
+
 ## Reminders live here too
 
 Every upcoming row carries a **Remind me** button, backed by `web/remind.js`. That is a
@@ -186,5 +214,8 @@ Use the `verify-site` skill, which covers this page. The events-specific asserti
 - there is **no sign-in gate** — this page has no `data-tracker` attribute and nothing to tick,
 - signed out, Remind me reveals and flashes the reminders panel and publishes nothing, and
   every upcoming row has a button while no live card does,
+- a Max Battle card whose title names a boss the roster has a `hub` for shows a **Counters**
+  link; one whose title names no boss, or names one not in the roster, shows none — never a
+  broken link,
 - the design-system checks pass: five layout landmarks, every chip carries `data-group` and
   `aria-pressed`, one pressed per group, every chip row labelled.

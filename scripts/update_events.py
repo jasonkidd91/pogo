@@ -24,6 +24,14 @@ Community Day that reads 14:00 starts at 14:00 wherever you are, and is a differ
 in Tokyo and in London. A start/end WITH a trailing Z is a real instant, which is how GO
 Battle League rotations are published. The two must not be conflated, so the suffix is
 preserved verbatim here and events.js branches on it.
+
+MAX_BOSS. A max-battles/max-mondays event's boss is not a structured field in this feed —
+checked live, extraData for both types carries only generic flags. maxBoss() below only ever
+reads a name already sitting in the event's own title ("Dynamax Espurr during Max Monday"),
+the same spirit as the caveat patterns above: select and label, never compose. "Max Battle
+Day" with no boss named yet gets no maxBoss field, correctly. Mirrored in events.js's
+maxBoss() — the live page resolves the name against web/max-data.js's `hub` field itself, at
+render time, so this script never needs to read that roster or bake a Hub URL.
 """
 
 import datetime
@@ -266,6 +274,19 @@ def toc_of(page):
     return [t for t in TOC_KEEP if t in found]
 
 
+MAX_TYPES = {"max-battles", "max-mondays"}
+_MAX_BOSS_RE = re.compile(r"(Dynamax|Gigantamax)\s+([A-Z][\w'.-]*(?:\s[A-Z][\w'.-]*)?)")
+
+
+def max_boss(event_type, name):
+    """'Dynamax Espurr during Max Monday' -> ('Espurr', False). See the MAX_BOSS docstring
+    note above — mirrors maxBoss() in events.js exactly."""
+    if event_type not in MAX_TYPES:
+        return None
+    m = _MAX_BOSS_RE.search(name or "")
+    return m and (m.group(2), m.group(1) == "Gigantamax")
+
+
 def slim(e):
     """Only the fields the page renders. The feed carries a lot the page deliberately drops —
     article images, shiny flags, per-bonus icon URLs — because the point of the page is to be
@@ -304,6 +325,10 @@ def slim(e):
         if names:
             out["mons"] = names
 
+    # maxBoss is NOT baked into `out` — it is fully derivable from `name` + `type`, both of
+    # which are already here, so events.js's maxBoss() recomputes it client-side for both a
+    # live-fetched event and one read back out of this same snapshot. Baking a field the page
+    # never reads would break slim()'s own rule above ("only the fields the page renders").
     return {k: v for k, v in out.items() if v not in (None, [], "")}
 
 
@@ -372,6 +397,14 @@ def main():
             "with no descriptions in it"
         )
     print(f"  global (UTC-stamped) entries: {sum(1 for e in kept if e['start'].endswith('Z'))}")
+
+    # Report only — see the MAX_BOSS docstring note: nothing here is baked into the snapshot.
+    max_events = [e for e in kept if e.get("type") in MAX_TYPES]
+    named = [(e["name"], max_boss(e["type"], e["name"])) for e in max_events]
+    print(f"  Max Battle events: {len(max_events)}, naming a boss in the title: "
+          f"{sum(1 for _, b in named if b)}")
+    for name, boss in named:
+        print(f"    {name!r} -> {boss[0] if boss else '(no boss in the title yet)'}")
 
     stamp = now.strftime("%Y-%m-%d %H:%M")
     header = f"""/**

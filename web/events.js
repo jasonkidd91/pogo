@@ -24,10 +24,61 @@
  *
  * Signing in is required for a reminder and for nothing else on this page, so the panel does
  * the asking and the page still has no sign-in gate.
+ *
+ * MAX BATTLE COUNTERS. A Max Battle Day / Max Monday card gets a "Counters" link out to
+ * Pokemon GO Hub for the featured boss, same idea as the Counters button on dynamax.html and
+ * megas.html, so you can line up a counter team before the boss goes live rather than after.
+ * The boss's name is not a structured field in ScrapedDuck's feed (checked live 2026-11-14:
+ * extraData for max-battles/max-mondays carries only generic flags) — it is pulled from the
+ * event's own title with maxBoss() below, which only ever reads a name already sitting in
+ * the source text, same spirit as a caveat quoting its sentence verbatim. "Max Battle Day"
+ * with no boss named yet gets no link, correctly, rather than a guessed one. Mirrored in
+ * scripts/update_events.py's slim() so the baked fallback carries the same `maxBoss` field.
  */
 
 const FEED = typeof EVENTS_SOURCE !== 'undefined' ? EVENTS_SOURCE
   : 'https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json';
+
+const HUB_BASE = 'https://db.pokemongohub.net/pokemon/';
+const MAX_TYPES = new Set(['max-battles', 'max-mondays']);
+
+/**
+ * "Dynamax Espurr during Max Monday" -> {name: 'Espurr', gmax: false}. Only runs on the two
+ * Max event types, and only when the title actually names a boss — "Max Monday: Pokemon to
+ * be announced" correctly returns null.
+ */
+function maxBoss(e) {
+  if (!MAX_TYPES.has(e.type)) return null;
+  const m = /(Dynamax|Gigantamax)\s+([A-Z][\w'.-]*(?:\s[A-Z][\w'.-]*)?)/.exec(e.name || '');
+  return m && { name: m[2], gmax: m[1] === 'Gigantamax' };
+}
+
+/**
+ * Boss display name (lowercased) -> PogoHub slug, from the same roster dynamax.html reads.
+ * Built once. A name two forms share (Toxtricity, Urshifu) is left OUT rather than guessed —
+ * a Max event's title rarely says which forme, and the two formes' counters differ.
+ */
+function hubByName(rows) {
+  const counts = {}, out = {};
+  for (const r of rows) {
+    const k = r.name.toLowerCase();
+    counts[k] = (counts[k] || 0) + 1;
+    if (r.hub) out[k] = r.hub;
+  }
+  for (const k in counts) if (counts[k] > 1) delete out[k];
+  return out;
+}
+const GMAX_HUB = typeof GIGANTAMAX !== 'undefined' ? hubByName(GIGANTAMAX) : {};
+const DMAX_HUB = typeof DYNAMAX !== 'undefined' ? hubByName(DYNAMAX) : {};
+
+/** The prep link itself, or null when the boss isn't named yet or isn't in the roster/hub map. */
+function counterLink(e) {
+  const boss = maxBoss(e);
+  if (!boss) return null;
+  const hub = (boss.gmax ? GMAX_HUB : DMAX_HUB)[boss.name.toLowerCase()];
+  return hub && UI.linkOut(HUB_BASE + hub + '/counters-max-battles', 'Counters',
+    `Get ${boss.name}'s best counters ready before this Max Battle, from Pokemon GO Hub`);
+}
 
 /** Short label + colour class per feed type. `heading` from the feed is the fallback. */
 const TYPES = {
@@ -308,10 +359,10 @@ function appendGrouped(wrap, list, labelOf, rowOf) {
   }
 }
 
-/** Tracker link first, Details second — same order on a card and on a row. */
+/** Tracker link first, then Counters prep, then Details — same order on a card and a row. */
 function linkRow(e, opts = {}) {
   return UI.el('div', { class: 'elinks' },
-    opts.remind && remindButton(e), trackerLink(e), linkOut(e));
+    opts.remind && remindButton(e), trackerLink(e), counterLink(e), linkOut(e));
 }
 
 /* ---------- remind me ---------- */

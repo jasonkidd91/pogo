@@ -125,3 +125,22 @@ Each entry carries its evolution family, so the page can offer "search the whole
 It is computed by `gamemaster.families()` and is absent for a species that is its own whole
 family. See the **`family-search`** skill before changing it — the guard that a family never
 exceeds 12 species is what stops a merged evolution graph from quietly poisoning the search.
+
+## The `hub` field and the Counters button
+
+Each card can carry a "Counters" link out to Pokemon GO Hub's own counters page for that Mega
+(`https://db.pokemongohub.net/pokemon/<hub>/counters` — plain `/counters`, **not**
+`/counters-max-battles`, which is the Dynamax/Gigantamax path on `dynamax.html`; the two were
+confirmed as different live, not assumed to match). Rendered via `UI.linkOut()` in
+`badgesFor()` in `megas.html`; see the `update-dynamax` skill for why `stopPropagation()`
+there is load-bearing, not decorative.
+
+**The slug is never invented**, same rule as the Dynamax page. `add_hub_links()` in
+`scripts/update_megas.py` reads Hub's whole-list `mega-pokemon` page (`squadhub.single()` —
+the same parser `update_squad.py` uses) and only copies a slug Hub printed next to that exact
+Mega name. Coverage here runs much higher than the Dynamax page's (61/63 on the 2026-11-14
+run) because this is one ranked list rather than a per-type "Top N" cutoff — but a card still
+simply gets no button rather than a guessed link if Hub doesn't name it. If Hub itself is
+unreachable, the previous build's `hub` fields carry over (`_carry_hub_links()`) rather than
+every card losing its button for one bad run. Pass `--hub-from <dir>` for saved Hub HTML,
+the same accommodation `update_squad.py --from` makes.

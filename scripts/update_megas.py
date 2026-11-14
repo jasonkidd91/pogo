@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Regenerate web/mega-data.js from Bulbapedia. Usage: python3 scripts/update_megas.py"""
 
-import os, re, sys
+import argparse, os, re, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from bulbapedia import (fetch_wikitext, section, rows, cells, cell_value,
                         find_date, slug, check_sprites, write_js, category_members,
                         Blocked, fallback_allowed, previous_rows, ROSTER_DATE)
 import gamemaster
+import squadhub
 from rank import apply_ranks, power_of, power_scale
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "web", "mega-data.js")
@@ -131,7 +132,60 @@ def from_previous():
     return special, out
 
 
+# --------------------------------------------------------------------------------------
+# COUNTERS LINK — see add_hub_links() in scripts/update_dynamax.py for the full reasoning;
+# this is the same approach against Hub's whole-list "mega-pokemon" page instead of a
+# per-type table. Mega/Primal names already match Hub's own naming exactly ("Mega Beedrill",
+# "Primal Groudon"), so no prefix-stripping is needed here the way Gigantamax/Dynamax needed.
+def _carry_hub_links(entries):
+    try:
+        prev = {e["name"]: e.get("hub") for e in previous_rows(OUT, "MEGAS")}
+    except (OSError, RuntimeError) as err:
+        print(f"  no previous build to carry Counters links from: {err}")
+        return
+    carried = 0
+    for e in entries:
+        h = prev.get(e["name"])
+        if h:
+            e["hub"] = h
+            carried += 1
+    print(f"  Counters links: carried {carried}/{len(entries)} over from the previous build")
+
+
+def add_hub_links(entries, cache_dir=None):
+    try:
+        rows = squadhub.single(squadhub.fetch("mega-pokemon", cache_dir))
+    except squadhub.Unreadable as err:
+        print(f"WARNING: PogoHub unreadable ({err}); carrying previous Counters links over")
+        _carry_hub_links(entries)
+        return
+
+    seen, conflicts = {}, []
+    for r in rows:
+        prev = seen.get(r["name"])
+        if prev is not None and prev != r["hub"]:
+            conflicts.append((r["name"], prev, r["hub"]))
+        seen[r["name"]] = r["hub"]
+    if conflicts:
+        raise RuntimeError(f"PogoHub gave different slugs for the same Mega name — "
+                            f"investigate before trusting any: {conflicts}")
+
+    matched = 0
+    for e in entries:
+        h = seen.get(e["name"])
+        if h:
+            e["hub"] = h
+            matched += 1
+    print(f"  Counters links: {matched}/{len(entries)} matched a PogoHub Mega row")
+
+
 def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--hub-from", dest="hub_cache",
+                     help="directory of saved PogoHub HTML (see squadhub.py), instead of "
+                          "fetching db.pokemongohub.net live")
+    args = ap.parse_args()
+
     try:
         special, out = from_bulbapedia()
         ROSTER_DATE[OUT] = "live"
@@ -269,6 +323,8 @@ def main():
     if not ranks["S"]:
         raise RuntimeError("no Mega ranked S — every type would have to be led by nothing")
 
+    add_hub_links(entries, args.hub_cache)
+
     write_js(OUT, header(gm_sha, gm_date), {"MEGAS": entries})
 
 
@@ -304,7 +360,10 @@ HEADER = """/**
  *         offer "search the whole family" — typing Weedle finds Mega Beedrill. Absent when
  *         the species is its own whole family. Matching keys, not display names: the Game
  *         Master carries no localised names.
-
+ * hub     Pokemon GO Hub's own page slug (https://db.pokemongohub.net/pokemon/<hub>), present
+ *         only where Hub's whole-list "mega-pokemon" page actually ranks this name — never
+ *         invented. Absent means no Counters button on the card. See add_hub_links() in
+ *         scripts/update_megas.py.
  * isNew   GO-original Mega with no mainline artwork; artFallback is base-species art
  */
 """

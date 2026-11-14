@@ -85,6 +85,12 @@ UI.summary('.summary', {
 
 buildNav('megas');
 
+// web/mega-data.js's `hub` field, where present, is Pokemon GO Hub's own page slug for that
+// Mega — scraped, never guessed (see add_hub_links() in scripts/update_megas.py). Mega's
+// counters sub-path is plain "/counters" — NOT "/counters-max-battles", which is the
+// Dynamax/Gigantamax path used on dynamax.html. Confirmed against Hub's own page, not assumed.
+const HUB_BASE = 'https://db.pokemongohub.net/pokemon/';
+
 const ROWS = MEGAS.map((m) => ({ ...m, key: Store.id.mega(m.name) }));
 
 // Chip value -> the exact raid class in mega-data.js. Substring matching would be wrong:
@@ -120,6 +126,8 @@ function badgesFor(m) {
       'Extra Charged Attack unlocked at Super Max Mega Level'),
     m.isNew && UI.tag('tag-new', 'GO ORIGINAL',
       'No mainline Mega form — base-species artwork shown'),
+    m.hub && UI.linkOut(HUB_BASE + m.hub + '/counters', 'Counters',
+      "This Pokemon's best counters, from Pokemon GO Hub"),
   ].filter(Boolean);
 }
 

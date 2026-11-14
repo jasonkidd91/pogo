@@ -127,7 +127,9 @@ Plain scripts, no modules or bundler. **Load order matters**: `ui.js` → `store
 `auth.js` → `promos.js` → `promo-data.js` → data file → page script. The middle two are loaded
 on **every** page, not just `promo-codes.html` — `buildNav()`'s "unseen promo code" nudge needs
 them everywhere. The events page adds `remind.js` after those; no other page loads it. It
-also adds `official-events.js` after `events-data.js`.
+also loads `max-data.js` (read-only, to resolve a Max Battle card's Counters link against the
+same `hub` field `dynamax.html` uses — see "The events page is live data" below) before
+`events-data.js`, then adds `official-events.js` after `events-data.js`.
 
 - **`ui.js` is the design system, and everything visible goes through it.** One `el()`
   primitive, one `UI.monCard` used by all three Pokémon lists, one `UI.sectionHead`, one
@@ -237,7 +239,7 @@ also adds `official-events.js` after `events-data.js`.
 it fails, and the footer states which of the two is on screen. Regenerating the snapshot is
 not how the page stays current — that is the whole design, because events rotate daily.
 
-Three things there are easy to get wrong:
+Several things there are easy to get wrong:
 
 - **A stamp without a trailing `Z` is local wall-clock time.** A Community Day at 14:00 starts
   at 14:00 wherever the player is. **With** a `Z` it is one worldwide instant, which is how GO
@@ -251,6 +253,14 @@ Three things there are easy to get wrong:
   differs from the event's. The generator's patterns only *select and label* a sentence from
   the event's page; they never compose one. An evolution made after the deadline cannot be
   redone, so a caveat written from memory is the most expensive wrong thing this site could say.
+- **A Max Battle card's Counters link reads the boss out of the event's own title, never a
+  roster scan.** The feed's `extraData` for `max-battles`/`max-mondays` carries no boss field
+  at all — only generic flags — so `maxBoss()` in `events.js` pattern-matches "Dynamax
+  `<Name>`" / "Gigantamax `<Name>`" out of `name` itself, same select-don't-compose rule as a
+  caveat. It then resolves that name against `web/max-data.js`'s `hub` field (see "The rank"
+  → `update-dynamax`) entirely client-side; nothing is baked into `events-data.js`, since both
+  inputs it needs (`name`, `type`) are already there. A title naming no boss yet, or a boss
+  the roster doesn't carry, correctly shows no link.
 - **`web/official-events.js` holds the few events the feed misses**, hand-added from
   pokemongo.com news, never from memory. Each one is added only after a human says yes on its
   `missing-event` issue ("Automation", task 6). `events.js` merges them into the snapshot and
