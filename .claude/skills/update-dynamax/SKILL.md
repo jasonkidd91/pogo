@@ -124,3 +124,25 @@ Each entry carries its evolution family, so the page can offer "search the whole
 It is computed by `gamemaster.families()` and is absent for a species that is its own whole
 family. See the **`family-search`** skill before changing it — the guard that a family never
 exceeds 12 species is what stops a merged evolution graph from quietly poisoning the search.
+
+## The `hub` field and the Counters button
+
+Each card can carry a "Counters" link out to Pokemon GO Hub's own best-counters page for that
+form (`https://db.pokemongohub.net/pokemon/<hub>/counters-max-battles`), rendered via
+`UI.linkOut()` in `badgesFor()` in `dynamax.html`. `stopPropagation()` on that link is load-
+bearing, not decorative — the card itself is a click target that toggles the catch tick.
+
+**The slug is never invented.** `add_hub_links()` in `scripts/update_dynamax.py` reads Hub's
+own "Top N Max Battle attackers" tables (`squadhub.by_type()` — the same parser
+`update_squad.py` uses, returning every row of all 18 per-type tables, not just the few
+squad.html keeps) and only ever copies a slug Hub printed next to that exact name. A card for
+a Pokemon that doesn't place in any type's attacker table simply gets no `hub` field and no
+Counters button — never a guessed link that 404s. Expect well under 100% coverage; that is
+the feature working as designed, not a bug to chase.
+
+If Hub itself is unreachable, this is non-fatal to the whole regenerate: `add_hub_links()`
+warns and carries the previous build's `hub` fields over (`_carry_hub_links()`), the same
+spirit as `BULBAPEDIA_FALLBACK`'s roster carryover, so a card doesn't lose its button just
+because one run couldn't reach Hub. Pass `--hub-from <dir>` to read saved Hub HTML instead of
+fetching live (see `squadhub.py`'s `fetch()`), the same accommodation `update_squad.py --from`
+makes for containers where `db.pokemongohub.net` is blocked.

@@ -81,6 +81,12 @@ UI.summary('.summary', {
 
 buildNav('dynamax');
 
+// web/max-data.js's `hub` field, where present, is Pokemon GO Hub's own page slug for that
+// form — scraped, never guessed (see add_hub_links() in scripts/update_dynamax.py). Only
+// forms that place in one of Hub's "Top N Max Battle attackers" tables carry one, so this
+// link is absent on some cards rather than wrong on any of them.
+const HUB_BASE = 'https://db.pokemongohub.net/pokemon/';
+
 const G_ROWS = GIGANTAMAX.map((g) => ({ ...g, key: Store.id.gmax(g.name), kind: 'gmax' }));
 const D_ROWS = DYNAMAX.map((d) => ({ ...d, key: Store.id.dmax(d.art), kind: 'dmax' }));
 const ALL_ROWS = [...G_ROWS, ...D_ROWS];
@@ -112,6 +118,9 @@ function badgesFor(p) {
     p.gmaxMove && UI.tag('tag-attack', '★ ' + p.gmaxMove, 'Exclusive G-Max Move'),
     p.hasGmax && UI.tag('tag-new', 'G-MAX',
       'Also has a Gigantamax form — tracked separately above'),
+    p.hub && UI.linkOut(
+      HUB_BASE + p.hub + '/counters-max-battles', 'Counters',
+      "This Pokemon's best counters, from Pokemon GO Hub"),
   ].filter(Boolean);
 }
 

@@ -11,6 +11,7 @@
  *   section heading    .day-head                   UI.sectionHead()
  *   card grid          .grid / .grid.wide / .egrid UI.grid()
  *   Pokemon card       .card .card.mon .super      UI.monCard()
+ *   outbound card link .linkout                    UI.linkOut()
  *   empty state        .empty                      UI.empty()
  *   source links       .srcs                       UI.sources()
  *   attention pulse    .flash                      UI.flash()
@@ -246,6 +247,17 @@ button.time.on.armed { color: var(--e200); border-color: var(--e200); border-sty
   color: var(--super); border: 1px solid rgba(167,139,250,.45);
   padding: 1px 5px; border-radius: var(--r-xs);
 }
+
+.linkout {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: var(--fs-pill); font-weight: 600;
+  color: var(--accent); border: 1px solid rgba(91,140,255,.45);
+  background: rgba(91,140,255,.1);
+  padding: 2px 7px; border-radius: var(--r-xs);
+  text-decoration: none;
+}
+.linkout:hover, .linkout:focus-visible { border-color: var(--accent); background: rgba(91,140,255,.18); }
+.linkout::after { content: '\2197'; }
 
 .check {
   position: absolute; top: 10px; right: 10px;

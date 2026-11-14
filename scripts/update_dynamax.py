@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Regenerate web/max-data.js from Bulbapedia. Usage: python3 scripts/update_dynamax.py"""
 
-import os, re, sys
+import argparse, os, re, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from bulbapedia import (fetch_wikitext, section, rows, cells, find_date,
                         slug, check_sprites, write_js,
                         Blocked, fallback_allowed, previous_rows, ROSTER_DATE)
 import gamemaster
+import squadhub
 from rank import apply_ranks, apply_roles, power_of, power_scale
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "web", "max-data.js")
@@ -158,7 +159,105 @@ GAP_FILL_GMAX = [
 ]
 
 
+# --------------------------------------------------------------------------------------
+# COUNTERS LINK — each card's "Counters" button out to Pokemon GO Hub's own best-counters
+# page for that form, e.g. https://db.pokemongohub.net/pokemon/380-Dynamax/counters-max-battles.
+#
+# The slug is NEVER invented here. Hub's URL scheme encodes a Pokedex number plus a form
+# suffix that does not follow a fixed formula for every alternate forme (compare
+# "892-Dynamax_Single_Strike" with "849-Dynamax_Amped"), and guessing it for a form this
+# generator has not actually seen Hub name is exactly the unverifiable-table failure mode
+# CLAUDE.md exists to prevent — a wrong guess is a silent 404, not a visible error.
+#
+# Instead this reads Hub's own "Top N Max Battle attackers" tables (the same page
+# scripts/squadhub.py already parses for the Squad page, via by_type() — which returns
+# every row of all 18 per-type tables, not just the few squad.html keeps) and only ever
+# copies a slug Hub printed next to that exact name.
+#
+# COVERAGE IS PARTIAL AND THAT IS FINE. Hub's tables are a "Top N" per type, so a card for a
+# Pokemon that doesn't place in any type's attacker table gets no `hub` field and dynamax.js
+# simply renders no Counters link for it, rather than a guessed one.
+def hub_formkey(e):
+    """DYNAMAX entry -> the name Hub prints, e.g. 'Toxtricity (Amped Form)'. Mirrors
+    scripts/update_squad.py's formkey() so the two stay in sync with Hub's own naming."""
+    return e["name"] + (f" ({e['form']})" if e.get("form") else "")
+
+
+def _carry_hub_links(gmax, dyn):
+    """Previous build's `hub` fields, by name/form key — used when PogoHub can't be reached
+    this run. Same acceptance as BULBAPEDIA_FALLBACK's roster carryover: a link can go a run
+    or two stale (e.g. Hub renames a slug) rather than every card losing its Counters button
+    the moment Hub is briefly unreachable. A run that CAN reach Hub always overwrites these."""
+    try:
+        prev_gmax = {e["name"]: e.get("hub") for e in previous_rows(OUT, "GIGANTAMAX")}
+        prev_dyn = {hub_formkey(e): e.get("hub") for e in previous_rows(OUT, "DYNAMAX")}
+    except (OSError, RuntimeError) as err:
+        print(f"  no previous build to carry Counters links from: {err}")
+        return
+    carried = 0
+    for e in gmax:
+        h = prev_gmax.get(e["name"])
+        if h:
+            e["hub"] = h
+            carried += 1
+    for e in dyn:
+        h = prev_dyn.get(hub_formkey(e))
+        if h:
+            e["hub"] = h
+            carried += 1
+    print(f"  Counters links: carried {carried}/{len(gmax) + len(dyn)} over from the previous build")
+
+
+def add_hub_links(gmax, dyn, cache_dir=None):
+    try:
+        page = squadhub.fetch("dynamax-attackers-per-type", cache_dir)
+        by_type = squadhub.by_type(
+            page, r"Top \d+ (\w+)-type Max Battle attackers")
+    except squadhub.Unreadable as err:
+        # Non-fatal: the roster itself does not depend on Hub, only this one button does.
+        print(f"WARNING: PogoHub unreadable ({err}); carrying previous Counters links over")
+        _carry_hub_links(gmax, dyn)
+        return
+
+    # Every type's table carries the same Pokemon under the same slug; collapse to one
+    # {name: hub} map and raise if any two types disagree, which would mean Hub's own
+    # pages are inconsistent or this is pairing two different Pokemon by name collision.
+    seen, conflicts = {}, []
+    for rws in by_type.values():
+        for r in rws:
+            prev = seen.get(r["name"])
+            if prev is not None and prev != r["hub"]:
+                conflicts.append((r["name"], prev, r["hub"]))
+            seen[r["name"]] = r["hub"]
+    if conflicts:
+        raise RuntimeError(f"PogoHub gave different slugs for the same name across its "
+                            f"per-type tables — investigate before trusting any: {conflicts}")
+
+    gmax_by_name = {e["name"]: e for e in gmax}
+    dyn_by_key = {hub_formkey(e): e for e in dyn}
+    matched = 0
+    for name, hub_id in seen.items():
+        if name.startswith("Gigantamax "):
+            entry = gmax_by_name.get(name[len("Gigantamax "):])
+        elif name.startswith("Dynamax "):
+            entry = dyn_by_key.get(name[len("Dynamax "):])
+        else:
+            continue                       # a plain (non-Max) attacker row; not ours
+        if entry is not None:
+            entry["hub"] = hub_id
+            matched += 1
+
+    total = len(gmax) + len(dyn)
+    print(f"  Counters links: {matched}/{total} matched a PogoHub Max Battle attacker row")
+
+
 def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--hub-from", dest="hub_cache",
+                     help="directory of saved PogoHub HTML (see squadhub.py), instead of "
+                          "fetching db.pokemongohub.net live")
+    args = ap.parse_args()
+
     try:
         gmax, dyn = from_bulbapedia()
         ROSTER_DATE[OUT] = "live"
@@ -183,6 +282,8 @@ def main():
     print(f"parsed {len(dyn)} Dynamax + {len(gmax)} Gigantamax")
     orphan = [g["name"] for g in gmax if g["name"] not in {d["name"] for d in dyn}]
     print(f"  Gigantamax with no plain-Dynamax entry (expected, not a bug): {orphan}")
+
+    add_hub_links(gmax, dyn, args.hub_cache)
 
     gm_sha, gm_date = add_ranks(gmax, dyn)
 
@@ -292,6 +393,10 @@ HEADER = """/**
  *        Community Day move
  * fam    every species in this Pokemon's evolution family, lowercase, for the page's
  *        "search the whole family" toggle. Absent when the species is its own whole family.
+ * hub    Pokemon GO Hub's own page slug (https://db.pokemongohub.net/pokemon/<hub>), present
+ *        only where Hub's "Top N Max Battle attackers" tables actually rank this form — never
+ *        invented for a form Hub hasn't named. Absent means no Counters button on the card,
+ *        not a broken link. See add_hub_links() in scripts/update_dynamax.py.
  */
 """
 

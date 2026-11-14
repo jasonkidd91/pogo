@@ -85,6 +85,21 @@ function tag(kind, text, title, data) {
   return el('span', { class: kind, text, title, data });
 }
 
+/**
+ * A small outbound link rendered inside a card's `.meta` row, e.g. "Counters" out to
+ * Pokemon GO Hub. `stopPropagation` is required, not decorative — the card itself is a
+ * click target that toggles the catch tick, and without it tapping the link would also
+ * flip that tick. Always opens in a new tab/window: on iOS this hands off to Safari and
+ * leaves a home-screen-pinned page running in the background rather than navigating it
+ * away with no way back.
+ */
+function linkOut(href, label, title) {
+  return el('a', {
+    class: 'linkout', href, target: '_blank', rel: 'noopener', text: label, title,
+    on: { click: (e) => e.stopPropagation() },
+  });
+}
+
 /** Type badges — the coloured Grass/Poison row. `data-t` drives the colour. */
 function typePills(types) {
   if (!types || !types.length) return null;
@@ -454,7 +469,7 @@ function setBar(done, total) {
 }
 
 const UI = {
-  el, tag, typePills, raidPill, rankChip, powerLine, energyPill, sprite, checkMark,
+  el, tag, linkOut, typePills, raidPill, rankChip, powerLine, energyPill, sprite, checkMark,
   monCard, sectionHead, grid, empty, sources, flash,
   summary, setupControls, activeFilter, searchText, statusMatch, searchMatch,
   STATUS_FILTER, FAMILY_FILTER,
