@@ -29,7 +29,7 @@
  *        "search the whole family" toggle. Absent when the species is its own whole family.
  */
 
-// Roster: carried over from the previous build (last fetched from Bulbapedia before 2026-11-12) because Bulbapedia was blocked on 2026-11-13. Game Master data is current.
+// Roster: carried over from the previous build (last fetched from Bulbapedia 2026-11-12) because Bulbapedia was blocked on 2026-11-14. Game Master data is current.
 
 const GIGANTAMAX = [
   {"name": "Venusaur", "art": "venusaur-gigantamax", "gmaxMove": "G-Max Vine Lash", "raid": "Gigantamax Battle", "stars": 6, "released": "October 26, 2024", "types": ["Grass", "Poison"], "fam": ["bulbasaur", "ivysaur", "venusaur"], "dps": 12.1, "moves": "Vine Whip + Frenzy Plant", "legacy": true, "rank": "C", "role": "Guard"},
@@ -48,7 +48,8 @@ const GIGANTAMAX = [
   {"name": "Cinderace", "art": "cinderace-gigantamax", "gmaxMove": "G-Max Fireball", "raid": "Gigantamax Battle", "stars": 6, "released": "June 5, 2025", "types": ["Fire"], "fam": ["cinderace", "raboot", "scorbunny"], "dps": 13.3, "moves": "Fire Spin + Pyroball", "rank": "B", "role": "Attacker"},
   {"name": "Inteleon", "art": "inteleon-gigantamax", "gmaxMove": "G-Max Hydrosnipe", "raid": "Gigantamax Battle", "stars": 6, "released": "June 12, 2025", "types": ["Water"], "fam": ["drizzile", "inteleon", "sobble"], "dps": 14.3, "moves": "Pound + Hydro Cannon", "legacy": true, "rank": "A", "role": "Attacker"},
   {"name": "Toxtricity", "art": "toxtricity-gigantamax", "gmaxMove": "G-Max Stun Shock", "raid": "Gigantamax Battle", "stars": 6, "released": "November 16, 2024", "types": ["Electric", "Poison"], "fam": ["toxel", "toxtricity"], "dps": 11.6, "moves": "Poison Jab + Wild Charge", "rank": "C", "role": null},
-  {"name": "Grimmsnarl", "art": "grimmsnarl-gigantamax", "gmaxMove": "G-Max Snooze", "raid": "Gigantamax Battle", "stars": 6, "released": "November 7, 2025", "types": ["Dark", "Fairy"], "fam": ["grimmsnarl", "impidimp", "morgrem"], "dps": 10.9, "moves": "Bite + Play Rough", "rank": "C", "role": "Spirit"}
+  {"name": "Grimmsnarl", "art": "grimmsnarl-gigantamax", "gmaxMove": "G-Max Snooze", "raid": "Gigantamax Battle", "stars": 6, "released": "November 7, 2025", "types": ["Dark", "Fairy"], "fam": ["grimmsnarl", "impidimp", "morgrem"], "dps": 10.9, "moves": "Bite + Play Rough", "rank": "C", "role": "Spirit"},
+  {"name": "Duraludon", "art": "duraludon-gigantamax", "gmaxMove": "G-Max Depletion", "raid": "Gigantamax Battle", "stars": 6, "released": "Nov 6, 2026", "types": ["Steel", "Dragon"], "dps": 11.5, "moves": "Dragon Tail + Flash Cannon", "rank": "C", "role": "Attacker"}
 ];
 
 const DYNAMAX = [
@@ -82,7 +83,7 @@ const DYNAMAX = [
   {"name": "Haunter", "art": "haunter", "released": "Oct 22, 2024", "types": ["Ghost", "Poison"], "fam": ["gastly", "gengar", "haunter"], "dps": 11.5, "moves": "Shadow Claw + Shadow Ball", "rank": "C", "role": null},
   {"name": "Gengar", "art": "gengar", "released": "Oct 22, 2024", "hasGmax": true, "types": ["Ghost", "Poison"], "fam": ["gastly", "gengar", "haunter"], "dps": 13.6, "moves": "Lick + Shadow Ball", "legacy": true, "rank": "B", "role": "Attacker"},
   {"name": "Drilbur", "art": "drilbur", "released": "Nov 15, 2024", "types": ["Ground"], "fam": ["drilbur", "excadrill"], "dps": 7.8, "moves": "Scratch + Drill Run", "rank": "D", "role": null},
-  {"name": "Excadrill", "art": "excadrill", "released": "Nov 15, 2024", "types": ["Ground", "Steel"], "fam": ["drilbur", "excadrill"], "dps": 12.6, "moves": "Metal Claw + Earthquake", "rank": "B", "role": "Attacker"},
+  {"name": "Excadrill", "art": "excadrill", "released": "Nov 15, 2024", "types": ["Ground", "Steel"], "fam": ["drilbur", "excadrill"], "dps": 12.6, "moves": "Metal Claw + Earthquake", "rank": "B", "role": "Spirit"},
   {"name": "Toxtricity", "art": "toxtricity-amped", "released": "Nov 16, 2024", "form": "Amped Form", "hasGmax": true, "types": ["Electric", "Poison"], "fam": ["toxel", "toxtricity"], "dps": 11.6, "moves": "Poison Jab + Wild Charge", "rank": "C", "role": null},
   {"name": "Toxtricity", "art": "toxtricity-low-key", "released": "Nov 16, 2024", "form": "Low Key Form", "hasGmax": true, "types": ["Electric", "Poison"], "fam": ["toxel", "toxtricity"], "dps": 11.6, "moves": "Poison Jab + Wild Charge", "rank": "C", "role": null},
   {"name": "Machop", "art": "machop", "released": "Dec 3, 2024", "types": ["Fighting"], "fam": ["machamp", "machoke", "machop"], "dps": 6.4, "moves": "Karate Chop + Cross Chop", "rank": "D", "role": null},
@@ -132,7 +133,7 @@ const DYNAMAX = [
   {"name": "Abra", "art": "abra", "released": "Sep 15, 2025", "types": ["Psychic"], "fam": ["abra", "alakazam", "kadabra"], "dps": 8.7, "moves": "Zen Headbutt + Shadow Ball", "rank": "D", "role": null},
   {"name": "Kadabra", "art": "kadabra", "released": "Sep 15, 2025", "types": ["Psychic"], "fam": ["abra", "alakazam", "kadabra"], "dps": 10.8, "moves": "Confusion + Shadow Ball", "rank": "C", "role": "Attacker"},
   {"name": "Alakazam", "art": "alakazam", "released": "Sep 15, 2025", "types": ["Psychic"], "fam": ["abra", "alakazam", "kadabra"], "dps": 13.0, "moves": "Confusion + Psychic", "legacy": true, "rank": "B", "role": "Attacker"},
-  {"name": "Duraludon", "art": "duraludon", "released": "Sep 30, 2025", "types": ["Steel", "Dragon"], "dps": 11.5, "moves": "Dragon Tail + Flash Cannon", "rank": "C", "role": "Attacker"},
+  {"name": "Duraludon", "art": "duraludon", "released": "Sep 30, 2025", "hasGmax": true, "types": ["Steel", "Dragon"], "dps": 11.5, "moves": "Dragon Tail + Flash Cannon", "rank": "C", "role": "Attacker"},
   {"name": "Bounsweet", "art": "bounsweet", "released": "Oct 13, 2025", "types": ["Grass"], "fam": ["bounsweet", "steenee", "tsareena"], "dps": 3.2, "moves": "Razor Leaf + Energy Ball", "rank": "D", "role": null},
   {"name": "Steenee", "art": "steenee", "released": "Oct 13, 2025", "types": ["Grass"], "fam": ["bounsweet", "steenee", "tsareena"], "dps": 4.2, "moves": "Razor Leaf + Grass Knot", "rank": "D", "role": null},
   {"name": "Tsareena", "art": "tsareena", "released": "Oct 13, 2025", "types": ["Grass"], "fam": ["bounsweet", "steenee", "tsareena"], "dps": 11.6, "moves": "Magical Leaf + Grass Knot", "rank": "C", "role": "Guard"},
@@ -159,7 +160,7 @@ const DYNAMAX = [
   {"name": "Spheal", "art": "spheal", "released": "Dec 22, 2025", "types": ["Ice", "Water"], "fam": ["sealeo", "spheal", "walrein"], "dps": 4.8, "moves": "Water Gun + Aurora Beam", "rank": "D", "role": null},
   {"name": "Sealeo", "art": "sealeo", "released": "Dec 22, 2025", "types": ["Ice", "Water"], "fam": ["sealeo", "spheal", "walrein"], "dps": 6.5, "moves": "Water Gun + Surf", "rank": "D", "role": "Spirit"},
   {"name": "Walrein", "art": "walrein", "released": "Dec 22, 2025", "types": ["Ice", "Water"], "fam": ["sealeo", "spheal", "walrein"], "dps": 9.2, "moves": "Waterfall + Blizzard", "rank": "D", "role": "Spirit"},
-  {"name": "Drampa", "art": "drampa", "released": "Jan 5, 2026", "types": ["Normal", "Dragon"], "dps": 11.3, "moves": "Dragon Breath + Fly", "rank": "C", "role": "Attacker"},
+  {"name": "Drampa", "art": "drampa", "released": "Jan 5, 2026", "types": ["Normal", "Dragon"], "dps": 11.3, "moves": "Dragon Breath + Fly", "rank": "C", "role": null},
   {"name": "Roggenrola", "art": "roggenrola", "released": "Jan 26, 2026", "types": ["Rock"], "fam": ["boldore", "gigalith", "roggenrola"], "dps": 6.2, "moves": "Smack Down + Stone Edge", "rank": "D", "role": null},
   {"name": "Boldore", "art": "boldore", "released": "Jan 26, 2026", "types": ["Rock"], "fam": ["boldore", "gigalith", "roggenrola"], "dps": 7.9, "moves": "Smack Down + Stone Edge", "rank": "D", "role": null},
   {"name": "Gigalith", "art": "gigalith", "released": "Jan 26, 2026", "types": ["Rock"], "fam": ["boldore", "gigalith", "roggenrola"], "dps": 12.9, "moves": "Lock On + Meteor Beam", "legacy": true, "rank": "B", "role": "Guard"},
@@ -194,5 +195,14 @@ const DYNAMAX = [
   {"name": "Hitmontop", "art": "hitmontop", "released": "Aug 24, 2026", "types": ["Fighting"], "fam": ["hitmonchan", "hitmonlee", "hitmontop", "tyrogue"], "dps": 8.2, "moves": "Counter + Close Combat", "rank": "D", "role": "Guard"},
   {"name": "Rhyhorn", "art": "rhyhorn", "released": "Sep 14, 2026", "types": ["Ground", "Rock"], "fam": ["rhydon", "rhyhorn", "rhyperior"], "dps": 6.1, "moves": "Mud Slap + Bulldoze", "rank": "D", "role": null},
   {"name": "Rhydon", "art": "rhydon", "released": "Sep 14, 2026", "types": ["Ground", "Rock"], "fam": ["rhydon", "rhyhorn", "rhyperior"], "dps": 10.8, "moves": "Mud Slap + Earthquake", "rank": "C", "role": "Spirit"},
-  {"name": "Rhyperior", "art": "rhyperior", "released": "Sep 14, 2026", "types": ["Ground", "Rock"], "fam": ["rhydon", "rhyhorn", "rhyperior"], "dps": 12.1, "moves": "Mud Slap + Rock Wrecker", "legacy": true, "rank": "C", "role": "Spirit"}
+  {"name": "Rhyperior", "art": "rhyperior", "released": "Sep 14, 2026", "types": ["Ground", "Rock"], "fam": ["rhydon", "rhyhorn", "rhyperior"], "dps": 12.1, "moves": "Mud Slap + Rock Wrecker", "legacy": true, "rank": "C", "role": "Spirit"},
+  {"name": "Dialga", "art": "dialga", "released": "Nov 14, 2026", "types": ["Steel", "Dragon"], "dps": 15.1, "moves": "Metal Claw + Draco Meteor", "rank": "A", "role": "Attacker"},
+  {"name": "Palkia", "art": "palkia", "released": "Nov 15, 2026", "types": ["Water", "Dragon"], "dps": 14.4, "moves": "Dragon Breath + Draco Meteor", "rank": "A", "role": "Attacker"},
+  {"name": "Uxie", "art": "uxie", "released": "Oct 24, 2026", "types": ["Psychic"], "dps": 7.8, "moves": "Extrasensory + Futuresight", "rank": "D", "role": "Guard"},
+  {"name": "Mesprit", "art": "mesprit", "released": "Oct 24, 2026", "types": ["Psychic"], "dps": 10.3, "moves": "Confusion + Futuresight", "rank": "C", "role": "Guard"},
+  {"name": "Azelf", "art": "azelf", "released": "Oct 24, 2026", "types": ["Psychic"], "dps": 12.6, "moves": "Extrasensory + Futuresight", "rank": "B", "role": "Attacker"},
+  {"name": "Regidrago", "art": "regidrago", "released": "Nov 12, 2026", "types": ["Dragon"], "dps": 13.2, "moves": "Dragon Breath + Dragon Energy", "legacy": true, "rank": "B", "role": "Spirit"},
+  {"name": "Meltan", "art": "meltan", "released": "Nov 9, 2026", "types": ["Steel"], "fam": ["melmetal", "meltan"], "dps": 6.2, "moves": "Thunder Shock + Flash Cannon", "rank": "D", "role": null},
+  {"name": "Sizzlipede", "art": "sizzlipede", "released": "Oct 5, 2026", "types": ["Fire", "Bug"], "fam": ["centiskorch", "sizzlipede"], "dps": 6.0, "moves": "Bug Bite + Bug Buzz", "rank": "D", "role": null},
+  {"name": "Centiskorch", "art": "centiskorch", "released": "Oct 5, 2026", "types": ["Fire", "Bug"], "fam": ["centiskorch", "sizzlipede"], "dps": 10.0, "moves": "Bug Bite + Bug Buzz", "rank": "D", "role": "Spirit"}
 ];

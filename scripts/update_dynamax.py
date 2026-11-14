@@ -75,12 +75,87 @@ DYN_FIELDS = ("name", "art", "released", "form", "hasGmax")
 
 
 def from_previous():
-    """The same two lists, carried over from the last build of web/max-data.js."""
+    """The same two lists, carried over from the last build of web/max-data.js, plus
+    GAP_FILL (below) while Bulbapedia stays blocked."""
     pick = lambda e, keys: {k: e[k] for k in keys if k in e}
     gmax = [pick(e, GMAX_FIELDS) for e in previous_rows(OUT, "GIGANTAMAX")]
     dyn = [pick(e, DYN_FIELDS) for e in previous_rows(OUT, "DYNAMAX")]
     print(f"carried over {len(dyn)} Dynamax + {len(gmax)} Gigantamax from {os.path.relpath(OUT)}")
+
+    added = []
+    for e in GAP_FILL_GMAX:
+        if e["name"] not in {g["name"] for g in gmax}:
+            gmax.append(dict(e)); added.append(e["name"] + " (Gigantamax)")
+        match = next((d for d in dyn if d["name"] == e["name"]), None)
+        if match:
+            match["hasGmax"] = True
+    for e in GAP_FILL_DYN:
+        if e["name"] not in {d["name"] for d in dyn}:
+            dyn.append(dict(e)); added.append(e["name"])
+    if added:
+        print(f"  gap-fill while Bulbapedia is blocked (verified below): {added}")
     return gmax, dyn
+
+
+# --------------------------------------------------------------------------------------
+# GAP FILL — while Bulbapedia is blocked (see BULBAPEDIA_FALLBACK in bulbapedia.py), the
+# carried-over roster above is frozen and scripts/check_serebii.py's weekly diff against
+# Serebii is report-only. These ten names were flagged there as present on Serebii but
+# missing on the site; each is verified here against independent sources before being
+# added, per the "one source cannot settle a roster" rule (CLAUDE.md). Delete an entry
+# once a live Bulbapedia run (Bulbapedia unblocked) carries it naturally — this list
+# exists only to cover the gap, not to replace Bulbapedia going forward.
+#
+# Checked 2026-11-14, all via WebSearch/WebFetch (Bulbapedia itself still 403s):
+#   - Dialga, Palkia: official GO Wild Area 2026: Global event (leekduck.com/events/
+#     pokemon-go-wild-area-2026-global/, pokemongo.com news) — Dynamax Dialga in six-star
+#     Max Battles Sat Nov 14 2026, Dynamax Palkia Sun Nov 15 2026.
+#   - Uxie, Mesprit, Azelf: Dynamax Lake Trio Max Battle Day, Sat Oct 24 2026
+#     (leekduck.com/events/dynamax-uxie-mesprit-azelf-max-battle-day-2026/, matched by
+#     pokemongohub.net, nintendowire.com, pocketmonsters.net independently).
+#   - Regidrago: official Into the Wild 2026 announcement (pokemongo.com/en/news/
+#     into-the-wild-2026, read directly) — Dynamax debut in five-star Max Battles,
+#     Thu Nov 12 2026.
+#   - Meltan: same official Into the Wild 2026 announcement, read directly — Dynamax
+#     debut via GO Pass: Into the Wild, released Nov 9 2026.
+#   - Sizzlipede, Centiskorch: Max Monday, Mon Oct 5 2026 (leekduck.com/events/
+#     max-mondays-2026-10-05/, matched by a PokemonGOHub tweet and world-today-news.com).
+#   - Duraludon (Gigantamax; the plain Dynamax entry already matched Serebii): debuted
+#     in person at GO Wild Area 2026: Sendai • Tohoku, Nov 6 2026 (nisu.io, pogoskill.com
+#     independently), G-Max move G-Max Depletion (db.pokemongohub.net/pokemon/884-
+#     Gigantamax, bulbapedia's G-Max Depletion article via search cache).
+#
+# Explicitly NOT added, for the opposite reason — still unresolved or contradicted:
+#   - Mawile: Serebii's Dynamax-capable list includes it, but db.pokemongohub.net's
+#     dedicated Dynamax roster does not, and a direct search says plainly "Mawile cannot
+#     Dynamax... it can be encountered in Dynamax raids" (i.e. a non-Dynamax bonus
+#     encounter at a Max Battle, not a Dynamax form of its own). Two sources disagree;
+#     left out.
+#   - Melmetal (plain Dynamax and Gigantamax): one search result claimed a Nov 9 2026
+#     GO Pass debut alongside Meltan, but reading the actual Into the Wild 2026
+#     announcement directly shows no mention of Melmetal at all, and the Gigantamax-side
+#     sources only gave the 2020 HOME-compatibility date, which is the mainline-game
+#     date, not Pokemon GO's. Left out until a primary source actually names a GO date.
+#
+# All ten added names have a normal Game Master entry (stats + breadTierGroup), so they
+# rank normally rather than showing "?" — the Game Master carries every species' base
+# stats regardless of Dynamax eligibility; it has no "can Dynamax" flag of its own, which
+# is exactly why this roster question needs an outside source at all.
+GAP_FILL_DYN = [
+    {"name": "Dialga",      "art": "dialga",      "released": "Nov 14, 2026"},
+    {"name": "Palkia",      "art": "palkia",      "released": "Nov 15, 2026"},
+    {"name": "Uxie",        "art": "uxie",        "released": "Oct 24, 2026"},
+    {"name": "Mesprit",     "art": "mesprit",     "released": "Oct 24, 2026"},
+    {"name": "Azelf",       "art": "azelf",       "released": "Oct 24, 2026"},
+    {"name": "Regidrago",   "art": "regidrago",   "released": "Nov 12, 2026"},
+    {"name": "Meltan",      "art": "meltan",      "released": "Nov 9, 2026"},
+    {"name": "Sizzlipede",  "art": "sizzlipede",  "released": "Oct 5, 2026"},
+    {"name": "Centiskorch", "art": "centiskorch", "released": "Oct 5, 2026"},
+]
+GAP_FILL_GMAX = [
+    {"name": "Duraludon", "art": "duraludon-gigantamax", "gmaxMove": "G-Max Depletion",
+     "raid": "Gigantamax Battle", "stars": 6, "released": "Nov 6, 2026"},
+]
 
 
 def main():
