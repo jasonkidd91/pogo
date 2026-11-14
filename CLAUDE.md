@@ -35,6 +35,10 @@ python3 scripts/update_events.py
 # above has to events.js. Also loaded on every OTHER page, for the nav "unseen code" nudge.
 python3 scripts/update_promos.py
 
+# Regenerate the Squad page's picks from Pokemon GO Hub. --from <dir> parses saved HTML
+# instead of fetching, for containers where db.pokemongohub.net is blocked.
+python3 scripts/update_squad.py
+
 # Report official pokemongo.com news articles that match no event the site has ever shown
 # (a second source for the events feed — see "Automation", task 6). Read-only.
 python3 scripts/check_official_news.py
@@ -109,6 +113,10 @@ rather than a guess) and that Mega stats live in `tempEvoOverrides`, not `stats`
    This once made Mega Slowbro read 300 energy instead of 100.
 
 Both generators verify every sprite URL and raise rather than write bad data. Keep that.
+
+`web/squad-data.js` carries the same `GENERATED` header and comes from `scripts/update_squad.py`.
+Its sources are different in kind from the other two — see "The Squad page" below — but the rule
+is identical: change the generator, never the file.
 
 `web/data.js` (the Mega Finale event) is hand-written but carries its verification sources and
 date in the header — preserve that convention for new event data.
@@ -292,6 +300,43 @@ live.
 Nothing here is tracked on a Google account — a promo code is either spent at Niantic's store
 or it isn't, and this site has no way to know which — so the page carries no sign-in gate and
 no `data-tracker`.
+
+### The Squad page
+
+`squad.html` answers "what do I power up next" for each of the 18 types, PvE only — the owner
+does not play PvP, so no league list is read. Six picks per type, ordered Gigantamax, Dynamax,
+Mega, then a plain attacker. It is a recommendation, not a tracker: nothing is tickable, so it
+has no `data-tracker` and no sign-in gate, same as the events and promo-codes pages. Every card
+is an `<a>` out to that Pokemon's Pokemon GO Hub page.
+
+**This page breaks the "never rank from a scraped tier list" rule on purpose.** The owner asked
+for it explicitly, for *all four tiers*. Everywhere else on this site "how good is this Pokemon"
+is computed in `scripts/rank.py` from the Game Master; here every ordering is Pokemon GO Hub's.
+The site's own S/A/B/C/D rank is deliberately **not** rendered on this page — two ladders on one
+card makes both unreadable — so the chip here is `.phtier` (Hub's `SS–F`), a different shape from
+`.rank` for exactly that reason. **Do not "restore" rank.py to this page without asking the owner.**
+
+What did *not* move to Hub is the **roster**: which Pokemon actually have a Gigantamax, Dynamax or
+Mega form still comes from `web/max-data.js` and `web/mega-data.js`. That gate earns its keep —
+Hub ranks **Mega Clefable** 8th among Normal attackers and it is not released in GO. The generator
+prints every ranked form its roster rejects, as a tripwire rather than a filter: some of those are
+unreleased, and some may be gaps in this site's own roster while Bulbapedia is blocked.
+
+Two judgment calls recorded in `scripts/update_squad.py`'s docstring, both visible on the page:
+
+- **Taking "ordered Gmax > Dmax > Mega > plain" as a strict fill empties the page.** Gmax+Dmax
+  alone supplies six or more candidates in 17 of the 18 types, so no Mega and no plain attacker
+  would appear anywhere on a page whose job is raiding — and the owner's own crowd-out rule would
+  be dead letter, since a Mega could never reach a slot to be crowded out of. One slot is reserved
+  per tier that has a candidate; the rest fill by priority.
+- **Max Battles cap at four players, so bulk is weighted evenly with damage** for the Gmax/Dmax
+  tiers, from Hub's Max-tank list. The candidate pool is still the type's *attacker* table, so a
+  wall that cannot deal the type's damage never enters. This means a tanky #10 can sit above a
+  frail #2, which is why the `#` on a card has a tooltip saying it is Hub's damage placing and not
+  the card's position here.
+
+Crowding out is by **evolution line**, using the `fam` field the other two generators compute from
+the Game Master's evolution graph, falling back to the Pokedex number in Hub's own URL.
 
 ### Free tier is the budget
 

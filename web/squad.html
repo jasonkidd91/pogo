@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Squad — Pokémon GO</title>
+<meta name="description" content="Which Pokémon to power up first for every type, for raids and Max Battles. Ranked by Pokémon GO Hub, filtered to forms actually released in Pokémon GO.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27%235b8cff%27/%3E%3Cpath d=%27M2 16h28%27 stroke=%27%230f1219%27 stroke-width=%273%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%230f1219%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%23e8ecf4%27/%3E%3C/svg%3E">
+<!-- auth.js pulls the Firebase SDK from here; warm the connection during parse. -->
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://db.pokemongohub.net">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Pokémon GO</p>
+    <h1>Squad</h1>
+    <p class="sub">
+      What to power up next, type by type — <strong>PvE only</strong>, for raids, gyms and
+      Max Battles. Six picks per type, ordered Gigantamax, then Dynamax, then Mega, then a
+      plain attacker, with one slot kept for each so the list stays useful in both Max
+      Battles and ordinary raids. Only one Pokémon per evolution line gets a slot: if its
+      Gigantamax or Dynamax form is already here, its Mega and plain forms are not repeated.
+      Cards are listed in the order worth investing in, and for the two Max tiers that order
+      weighs damage and bulk evenly — so the <code>#</code> on a card is its damage placing
+      on Hub, not its position in this list. Every card opens that Pokémon on
+      <a href="https://db.pokemongohub.net/" target="_blank" rel="noopener">Pokémon GO Hub</a>,
+      where the full moveset breakdown lives.
+    </p>
+  </header>
+
+  <div class="summary"></div>
+
+  <main id="list"></main>
+
+  <footer>
+    <p id="freshness" class="freshness"></p>
+    <p>
+      <strong>The ranking on this page is Pokémon GO Hub's, not this site's.</strong> Every
+      other page here computes its S/A/B/C/D grade from the game's own data file rather than
+      trusting a tier list. This page deliberately does the opposite, for all four tiers,
+      because a squad recommendation is a judgement call and Hub's simulations are the one
+      being borrowed. The two ladders are not the same scale and are never shown together —
+      the chip here is Hub's <code>SS–F</code>, not this site's <code>S–D</code>.
+    </p>
+    <p>
+      What is still this site's own: <strong>which Pokémon actually have a Gigantamax,
+      Dynamax or Mega form</strong>. That comes from the generated collection data, so a
+      form Hub ranks but Niantic has not released is dropped rather than recommended.
+    </p>
+    <p>
+      A Max pick is rated on its Max move damage and its showing on Hub's Max-tank list,
+      weighted evenly — Max Battles cap at four trainers, so soaking hits is worth as much
+      as dealing them. A raid pick is rated on simulated DPS. Those are different numbers
+      measuring different things; the label on each card says which one it is.
+    </p>
+    <div class="srcs">
+      <span>Sources</span>
+      <a href="https://db.pokemongohub.net/best/attackers-per-type">Hub — best attackers per type</a>
+      <a href="https://db.pokemongohub.net/best/dynamax-attackers-per-type">Hub — Max Battle attackers</a>
+      <a href="https://db.pokemongohub.net/best/dynamax-tanks-per-type">Hub — Max Battle tanks</a>
+      <a href="https://db.pokemongohub.net/best/mega-pokemon">Hub — best Mega Pokémon</a>
+      <span>· roster from this site's own Mega and Dynamax data · regenerate with scripts/update_squad.py</span>
+    </div>
+  </footer>
+
+</div>
+<script src="ui.js"></script>
+<script src="store.js"></script>
+<script src="auth.js"></script>
+<script src="promos.js"></script>
+<script src="promo-data.js"></script>
+<script src="squad-data.js"></script>
+<script src="squad.js"></script>
+</body>
+</html>

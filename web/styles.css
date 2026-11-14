@@ -19,6 +19,8 @@
  *   reminder list      .rlist .rrow .rstate        render()            (notifications.js)
  *   nav nudge           .nudge                      buildNav()          (store.js)
  *   promo code card     .pcard .pcode .pcode-text   promo-codes.js
+ *   squad pick card     .scard .stier .sbulk        squad.js
+ *   PogoHub tier chip   .phtier                     squad.js
  *
  * A page owns its domain-specific components and builds them from the primitives above —
  * the events page's .ecard/.erow/.ecaveat in events.js, and .remindbox/.rb-* in remind.js,
@@ -28,6 +30,9 @@
  * fit "LEGENDARY MEGA" on one line in a narrow card, so it runs smaller than a type badge:
  *
  *   .type      10px   species typing            .rank      18px box  combat-power grade
+ *   .phtier    10px   PogoHub's OWN tier, on the Squad page only — a different ladder
+ *                     from .rank and deliberately a different shape, so the two are
+ *                     never read as the same grade
  *   .raid      9.5px  battle class + stars      .energy    11px      Mega Energy cost
  *   .tag-new / .tag-attack / .tag-weather / .tag-role      10px      card badges
  *   .etype / .gtag / .ctag                                 events page labels
@@ -841,3 +846,65 @@ a.rname:hover { color: var(--accent); }
      25 monospace characters and the pair does not fit beside a label on a phone. */
   .rb-label { flex-basis: 100%; }
 }
+
+
+/* ---------- Squad page (squad.js) ----------
+   A recommendation card, not a tracker card: it is an <a> out to PogoHub, so it has no
+   check mark, no role="checkbox" and no .caught state. The geometry deliberately matches
+   .card.mon so the two read as the same family when you move between pages. */
+
+.scard {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  display: flex; gap: var(--sp-4); align-items: flex-start;
+  text-decoration: none; color: inherit;
+  transition: border-color .15s, background .15s, transform .12s;
+}
+.scard:hover { border-color: var(--accent); transform: translateY(-1px); }
+.scard:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.scard img {
+  width: 68px; height: 68px; flex: 0 0 68px;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,.5));
+}
+.scard .body { min-width: 0; flex: 1; }
+.scard .name { font-size: var(--fs-name); font-weight: 600; line-height: 1.3; }
+.scard .power { margin-top: 4px; margin-bottom: 0; }
+
+/* The tier lead — which of the four kinds of pick this is, and where PogoHub placed it
+   within this type. Colour-coded so a column of cards shows its shape at a glance. */
+.stier {
+  display: flex; align-items: baseline; gap: var(--sp-2);
+  font-size: var(--fs-meta); font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.stier .pl { font-weight: 600; letter-spacing: 0; color: var(--muted); font-variant-numeric: tabular-nums; }
+.scard[data-tier="gmax"]  .stier { color: var(--super); }
+.scard[data-tier="dmax"]  .stier { color: var(--accent); }
+.scard[data-tier="mega"]  .stier { color: var(--e200); }
+.scard[data-tier="plain"] .stier { color: var(--muted); }
+
+/* Bulk, on the Max tiers only — why a pick that is not the hardest hitter is still here. */
+.sbulk {
+  font-size: var(--fs-meta); color: var(--muted);
+  margin-top: 4px; cursor: help;
+}
+
+/* PogoHub's letter tier. Filled chips on the same palette as .rank — every one clears
+   4.5:1 — but a pill rather than a square, because it is NOT the site's own grade. */
+.phtier {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 26px; padding: 1px var(--sp-2); border-radius: var(--r-pill);
+  font-size: var(--fs-pill); font-weight: 800; line-height: 1.5;
+  vertical-align: 1px; letter-spacing: .02em;
+}
+.phtier[data-t="SS"] { background: var(--super); color: #0b1020; }
+.phtier[data-t="S"]  { background: #fbbf24; color: #0b1020; }
+.phtier[data-t="A"]  { background: #34d399; color: #0b1020; }
+.phtier[data-t="B"]  { background: #5b8cff; color: #0b1020; }
+.phtier[data-t="C"]  { background: #8b93a7; color: #0b1020; }
+.phtier[data-t="D"], .phtier[data-t="E"], .phtier[data-t="F"] { background: #333b4d; color: #c3cad9; }
