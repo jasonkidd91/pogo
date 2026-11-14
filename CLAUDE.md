@@ -573,6 +573,7 @@ workflows, which would silently stop `pages.yml` from deploying an automated com
 | `event-reminders` | The Remind me button — ntfy.sh, the topic, the three-day scheduling limit |
 | `update-megas` / `update-dynamax` | Regenerating the two collection data files |
 | `update-ranks` | The S/A/B/C/D rank — the Game Master, the scoring model, the bands |
+| `update-squad` | The Squad page's by-type picks — Pokemon GO Hub's tier lists, the deliberate exception to `update-ranks`'s rule, `monthly-squad.yml` |
 | `new-event-tracker` | Building a catch-list page for an event **when asked** — including via a `tracker-request` issue comment, see "Automation" |
 | `design-system` | Anything visible — `web/ui.js` components and the `styles.css` contract |
 | `verify-site` | Browser verification, including getting Chromium up without root |
