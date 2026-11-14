@@ -1,0 +1,5367 @@
+{
+ "slug": "little-league",
+ "count": 168,
+ "entries": [
+  {
+   "pokemon": {
+    "id": 690,
+    "name": "Skrelp",
+    "form": null,
+    "type1": "poison",
+    "type2": "water",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 1,
+   "score": 95.9,
+   "tier": 0,
+   "fastMove": {
+    "id": 225,
+    "name": "Acid",
+    "type": "poison",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 58,
+    "name": "Aqua Tail",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 90,
+    "name": "Sludge Bomb",
+    "type": "poison",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 580,
+    "name": "Ducklett",
+    "form": null,
+    "type1": "water",
+    "type2": "flying",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 2,
+   "score": 93,
+   "tier": 1,
+   "fastMove": {
+    "id": 210,
+    "name": "Wing Attack",
+    "type": "flying",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 256,
+    "name": "Brave Bird",
+    "type": "flying",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 45,
+    "name": "Aerial Ace",
+    "type": "flying",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 318,
+    "name": "Shadow Carvanha",
+    "form": "Shadow",
+    "type1": "water",
+    "type2": "dark",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 3,
+   "score": 89.9,
+   "tier": 2,
+   "fastMove": {
+    "id": 202,
+    "name": "Bite",
+    "type": "dark",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 57,
+    "name": "Aqua Jet",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 50,
+    "name": "Poison Fang",
+    "type": "poison",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 753,
+    "name": "Fomantis",
+    "form": null,
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 4,
+   "score": 89.4,
+   "tier": 2,
+   "fastMove": {
+    "id": 200,
+    "name": "Fury Cutter",
+    "type": "bug",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 117,
+    "name": "Leaf Blade",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 392,
+    "name": "Trailblaze",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 710,
+    "name": "Pumpkaboo (Super size)",
+    "form": "Super",
+    "type1": "ghost",
+    "type2": "grass",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 5,
+   "score": 88.9,
+   "tier": 3,
+   "fastMove": {
+    "id": 263,
+    "name": "Astonish",
+    "type": "ghost",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 280,
+    "name": "Foul Play",
+    "type": "dark",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 590,
+    "name": "Foongus",
+    "form": null,
+    "type1": "grass",
+    "type2": "poison",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 6,
+   "score": 88.6,
+   "tier": 3,
+   "fastMove": {
+    "id": 263,
+    "name": "Astonish",
+    "type": "ghost",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 592,
+    "name": "Frillish",
+    "form": null,
+    "type1": "water",
+    "type2": "ghost",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 7,
+   "score": 87.6,
+   "tier": 3,
+   "fastMove": {
+    "id": 264,
+    "name": "Hex",
+    "type": "ghost",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 265,
+    "name": "Night Shade",
+    "type": "ghost",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 39,
+    "name": "Ice Beam",
+    "type": "ice",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 751,
+    "name": "Dewpider",
+    "form": null,
+    "type1": "water",
+    "type2": "bug",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 8,
+   "score": 87.3,
+   "tier": 3,
+   "fastMove": {
+    "id": 201,
+    "name": "Bug Bite",
+    "type": "bug",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 276,
+    "name": "Mirror Coat",
+    "type": "psychic",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 53,
+    "name": "Bubble Beam",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 710,
+    "name": "Pumpkaboo (Average size)",
+    "form": "Average",
+    "type1": "ghost",
+    "type2": "grass",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 9,
+   "score": 87.3,
+   "tier": 3,
+   "fastMove": {
+    "id": 263,
+    "name": "Astonish",
+    "type": "ghost",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 280,
+    "name": "Foul Play",
+    "type": "dark",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 590,
+    "name": "Shadow Foongus",
+    "form": "Shadow",
+    "type1": "grass",
+    "type2": "poison",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 10,
+   "score": 87.2,
+   "tier": 3,
+   "fastMove": {
+    "id": 263,
+    "name": "Astonish",
+    "type": "ghost",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 710,
+    "name": "Pumpkaboo (Large size)",
+    "form": "Large",
+    "type1": "ghost",
+    "type2": "grass",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 11,
+   "score": 87.2,
+   "tier": 3,
+   "fastMove": {
+    "id": 263,
+    "name": "Astonish",
+    "type": "ghost",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 280,
+    "name": "Foul Play",
+    "type": "dark",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 710,
+    "name": "Pumpkaboo (Small size)",
+    "form": "Small",
+    "type1": "ghost",
+    "type2": "grass",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 12,
+   "score": 86.5,
+   "tier": 3,
+   "fastMove": {
+    "id": 263,
+    "name": "Astonish",
+    "type": "ghost",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 280,
+    "name": "Foul Play",
+    "type": "dark",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 580,
+    "name": "Shadow Ducklett",
+    "form": "Shadow",
+    "type1": "water",
+    "type2": "flying",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 13,
+   "score": 86.4,
+   "tier": 3,
+   "fastMove": {
+    "id": 210,
+    "name": "Wing Attack",
+    "type": "flying",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 256,
+    "name": "Brave Bird",
+    "type": "flying",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 45,
+    "name": "Aerial Ace",
+    "type": "flying",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 345,
+    "name": "Shadow Lileep",
+    "form": "Shadow",
+    "type1": "rock",
+    "type2": "grass",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 14,
+   "score": 86.3,
+   "tier": 3,
+   "fastMove": {
+    "id": 225,
+    "name": "Acid",
+    "type": "poison",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 62,
+    "name": "Ancient Power",
+    "type": "rock",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 688,
+    "name": "Binacle",
+    "form": null,
+    "type1": "rock",
+    "type2": "water",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 15,
+   "score": 85.8,
+   "tier": 3,
+   "fastMove": {
+    "id": 233,
+    "name": "Mud-Slap",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 62,
+    "name": "Ancient Power",
+    "type": "rock",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 28,
+    "name": "Cross Chop",
+    "type": "fighting",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 607,
+    "name": "Litwick",
+    "form": null,
+    "type1": "ghost",
+    "type2": "fire",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 16,
+   "score": 85.6,
+   "tier": 3,
+   "fastMove": {
+    "id": 263,
+    "name": "Astonish",
+    "type": "ghost",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 382,
+    "name": "Mystical Fire",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 318,
+    "name": "Carvanha",
+    "form": null,
+    "type1": "water",
+    "type2": "dark",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 17,
+   "score": 84.9,
+   "tier": 3,
+   "fastMove": {
+    "id": 202,
+    "name": "Bite",
+    "type": "dark",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 57,
+    "name": "Aqua Jet",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 50,
+    "name": "Poison Fang",
+    "type": "poison",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 345,
+    "name": "Lileep",
+    "form": null,
+    "type1": "rock",
+    "type2": "grass",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 18,
+   "score": 84.8,
+   "tier": 3,
+   "fastMove": {
+    "id": 225,
+    "name": "Acid",
+    "type": "poison",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 62,
+    "name": "Ancient Power",
+    "type": "rock",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 607,
+    "name": "Shadow Litwick",
+    "form": "Shadow",
+    "type1": "ghost",
+    "type2": "fire",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 19,
+   "score": 84.1,
+   "tier": 4,
+   "fastMove": {
+    "id": 263,
+    "name": "Astonish",
+    "type": "ghost",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 382,
+    "name": "Mystical Fire",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 72,
+    "name": "Tentacool",
+    "form": null,
+    "type1": "water",
+    "type2": "poison",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 20,
+   "score": 82.8,
+   "tier": 4,
+   "fastMove": {
+    "id": 236,
+    "name": "Poison Sting",
+    "type": "poison",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 13,
+    "name": "Wrap",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 105,
+    "name": "Water Pulse",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 339,
+    "name": "Shadow Barboach",
+    "form": "Shadow",
+    "type1": "water",
+    "type2": "ground",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 21,
+   "score": 82.4,
+   "tier": 4,
+   "fastMove": {
+    "id": 216,
+    "name": "Mud Shot",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 96,
+    "name": "Mud Bomb",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 58,
+    "name": "Aqua Tail",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 422,
+    "name": "Shellos (West Sea)",
+    "form": "West Sea",
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 22,
+   "score": 81.4,
+   "tier": 4,
+   "fastMove": {
+    "id": 233,
+    "name": "Mud-Slap",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 96,
+    "name": "Mud Bomb",
+    "type": "ground",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 194,
+    "name": "Wooper",
+    "form": null,
+    "type1": "water",
+    "type2": "ground",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 23,
+   "score": 81.1,
+   "tier": 4,
+   "fastMove": {
+    "id": 216,
+    "name": "Mud Shot",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 96,
+    "name": "Mud Bomb",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 597,
+    "name": "Ferroseed",
+    "form": null,
+    "type1": "grass",
+    "type2": "steel",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 24,
+   "score": 80.9,
+   "tier": 4,
+   "fastMove": {
+    "id": 221,
+    "name": "Tackle",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 74,
+    "name": "Iron Head",
+    "type": "steel",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 36,
+    "name": "Flash Cannon",
+    "type": "steel",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 72,
+    "name": "Shadow Tentacool",
+    "form": "Shadow",
+    "type1": "water",
+    "type2": "poison",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 25,
+   "score": 80.9,
+   "tier": 4,
+   "fastMove": {
+    "id": 236,
+    "name": "Poison Sting",
+    "type": "poison",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 13,
+    "name": "Wrap",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 105,
+    "name": "Water Pulse",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 406,
+    "name": "Budew",
+    "form": null,
+    "type1": "grass",
+    "type2": "poison",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 26,
+   "score": 80.6,
+   "tier": 4,
+   "fastMove": {
+    "id": 215,
+    "name": "Razor Leaf",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 273,
+    "name": "Energy Ball",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 86,
+    "name": "Seel",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 27,
+   "score": 80.5,
+   "tier": 4,
+   "fastMove": {
+    "id": 212,
+    "name": "Lick",
+    "type": "ghost",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 58,
+    "name": "Aqua Tail",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 111,
+    "name": "Icy Wind",
+    "type": "ice",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 194,
+    "name": "Shadow Wooper",
+    "form": "Shadow",
+    "type1": "water",
+    "type2": "ground",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 28,
+   "score": 80.3,
+   "tier": 4,
+   "fastMove": {
+    "id": 216,
+    "name": "Mud Shot",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 96,
+    "name": "Mud Bomb",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 387,
+    "name": "Shadow Turtwig",
+    "form": "Shadow",
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 29,
+   "score": 80.2,
+   "tier": 4,
+   "fastMove": {
+    "id": 215,
+    "name": "Razor Leaf",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 152,
+    "name": "Shadow Chikorita",
+    "form": "Shadow",
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 30,
+   "score": 79.9,
+   "tier": 4,
+   "fastMove": {
+    "id": 214,
+    "name": "Vine Whip",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 43,
+    "name": "Shadow Oddish",
+    "form": "Shadow",
+    "type1": "grass",
+    "type2": "poison",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 31,
+   "score": 79.9,
+   "tier": 4,
+   "fastMove": {
+    "id": 215,
+    "name": "Razor Leaf",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 90,
+    "name": "Sludge Bomb",
+    "type": "poison",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 339,
+    "name": "Barboach",
+    "form": null,
+    "type1": "water",
+    "type2": "ground",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 32,
+   "score": 79.8,
+   "tier": 4,
+   "fastMove": {
+    "id": 216,
+    "name": "Mud Shot",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 96,
+    "name": "Mud Bomb",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 58,
+    "name": "Aqua Tail",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 320,
+    "name": "Shadow Wailmer",
+    "form": "Shadow",
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 33,
+   "score": 78.1,
+   "tier": 4,
+   "fastMove": {
+    "id": 368,
+    "name": "Rollout",
+    "type": "rock",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 106,
+    "name": "Scald",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 810,
+    "name": "Grookey",
+    "form": null,
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 34,
+   "score": 77.9,
+   "tier": 4,
+   "fastMove": {
+    "id": 215,
+    "name": "Razor Leaf",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 273,
+    "name": "Energy Ball",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 152,
+    "name": "Chikorita",
+    "form": null,
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 35,
+   "score": 77.8,
+   "tier": 4,
+   "fastMove": {
+    "id": 214,
+    "name": "Vine Whip",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 155,
+    "name": "Shadow Cyndaquil",
+    "form": "Shadow",
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 36,
+   "score": 77.8,
+   "tier": 4,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 125,
+    "name": "Swift",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 79,
+    "name": "Shadow Slowpoke",
+    "form": "Shadow",
+    "type1": "water",
+    "type2": "psychic",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 37,
+   "score": 77.6,
+   "tier": 4,
+   "fastMove": {
+    "id": 235,
+    "name": "Confusion",
+    "type": "psychic",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 60,
+    "name": "Psyshock",
+    "type": "psychic",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 105,
+    "name": "Water Pulse",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 653,
+    "name": "Fennekin",
+    "form": null,
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 38,
+   "score": 77.4,
+   "tier": 4,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 60,
+    "name": "Psyshock",
+    "type": "psychic",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 170,
+    "name": "Chinchou",
+    "form": null,
+    "type1": "water",
+    "type2": "electric",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 39,
+   "score": 76.7,
+   "tier": 5,
+   "fastMove": {
+    "id": 206,
+    "name": "Spark",
+    "type": "electric",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 79,
+    "name": "Thunderbolt",
+    "type": "electric",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 53,
+    "name": "Bubble Beam",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 564,
+    "name": "Tirtouga",
+    "form": null,
+    "type1": "water",
+    "type2": "rock",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 40,
+   "score": 76.7,
+   "tier": 5,
+   "fastMove": {
+    "id": 230,
+    "name": "Water Gun",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 62,
+    "name": "Ancient Power",
+    "type": "rock",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 37,
+    "name": "Vulpix",
+    "form": null,
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 41,
+   "score": 76.4,
+   "tier": 5,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 292,
+    "name": "Weather Ball",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 546,
+    "name": "Cottonee",
+    "form": null,
+    "type1": "grass",
+    "type2": "fairy",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 42,
+   "score": 76.3,
+   "tier": 5,
+   "fastMove": {
+    "id": 320,
+    "name": "Charm",
+    "type": "fairy",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 667,
+    "name": "Litleo",
+    "form": null,
+    "type1": "fire",
+    "type2": "normal",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 43,
+   "score": 76.3,
+   "tier": 5,
+   "fastMove": {
+    "id": 346,
+    "name": "Incinerate",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 279,
+    "name": "Crunch",
+    "type": "dark",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 43,
+    "name": "Oddish",
+    "form": null,
+    "type1": "grass",
+    "type2": "poison",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 44,
+   "score": 76.3,
+   "tier": 5,
+   "fastMove": {
+    "id": 215,
+    "name": "Razor Leaf",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 90,
+    "name": "Sludge Bomb",
+    "type": "poison",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 540,
+    "name": "Sewaddle",
+    "form": null,
+    "type1": "bug",
+    "type2": "grass",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 45,
+   "score": 76.3,
+   "tier": 5,
+   "fastMove": {
+    "id": 201,
+    "name": "Bug Bite",
+    "type": "bug",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 262,
+    "name": "Silver Wind",
+    "type": "bug",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 283,
+    "name": "Surskit",
+    "form": null,
+    "type1": "bug",
+    "type2": "water",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 46,
+   "score": 76.3,
+   "tier": 5,
+   "fastMove": {
+    "id": 201,
+    "name": "Bug Bite",
+    "type": "bug",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 57,
+    "name": "Aqua Jet",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 99,
+    "name": "Signal Beam",
+    "type": "bug",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 79,
+    "name": "Slowpoke",
+    "form": null,
+    "type1": "water",
+    "type2": "psychic",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 47,
+   "score": 76.2,
+   "tier": 5,
+   "fastMove": {
+    "id": 235,
+    "name": "Confusion",
+    "type": "psychic",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 60,
+    "name": "Psyshock",
+    "type": "psychic",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 105,
+    "name": "Water Pulse",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 458,
+    "name": "Mantyke",
+    "form": null,
+    "type1": "water",
+    "type2": "flying",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 48,
+   "score": 75.5,
+   "tier": 5,
+   "fastMove": {
+    "id": 237,
+    "name": "Bubble",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 45,
+    "name": "Aerial Ace",
+    "type": "flying",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 39,
+    "name": "Ice Beam",
+    "type": "ice",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 138,
+    "name": "Omanyte",
+    "form": null,
+    "type1": "rock",
+    "type2": "water",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 49,
+   "score": 75.5,
+   "tier": 5,
+   "fastMove": {
+    "id": 216,
+    "name": "Mud Shot",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 63,
+    "name": "Rock Tomb",
+    "type": "rock",
+    "isLegacy": true
+   },
+   "chargeMove2": {
+    "id": 259,
+    "name": "Rock Blast",
+    "type": "rock",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 322,
+    "name": "Shadow Numel",
+    "form": "Shadow",
+    "type1": "fire",
+    "type2": "ground",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 50,
+   "score": 75.3,
+   "tier": 5,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 127,
+    "name": "Stomp",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 95,
+    "name": "Bulldoze",
+    "type": "ground",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 636,
+    "name": "Larvesta",
+    "form": null,
+    "type1": "bug",
+    "type2": "fire",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 51,
+   "score": 75.2,
+   "tier": 5,
+   "fastMove": {
+    "id": 201,
+    "name": "Bug Bite",
+    "type": "bug",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 49,
+    "name": "Bug Buzz",
+    "type": "bug",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 495,
+    "name": "Snivy",
+    "form": null,
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 52,
+   "score": 74.9,
+   "tier": 5,
+   "fastMove": {
+    "id": 214,
+    "name": "Vine Whip",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 13,
+    "name": "Wrap",
+    "type": "normal",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 708,
+    "name": "Phantump",
+    "form": null,
+    "type1": "ghost",
+    "type2": "grass",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 53,
+   "score": 74.8,
+   "tier": 5,
+   "fastMove": {
+    "id": 263,
+    "name": "Astonish",
+    "type": "ghost",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 70,
+    "name": "Shadow Ball",
+    "type": "ghost",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 757,
+    "name": "Salandit",
+    "form": null,
+    "type1": "poison",
+    "type2": "fire",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 54,
+   "score": 74.8,
+   "tier": 5,
+   "fastMove": {
+    "id": 224,
+    "name": "Poison Jab",
+    "type": "poison",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 50,
+    "name": "Poison Fang",
+    "type": "poison",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 24,
+    "name": "Flamethrower",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 387,
+    "name": "Turtwig",
+    "form": null,
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 55,
+   "score": 74.8,
+   "tier": 5,
+   "fastMove": {
+    "id": 215,
+    "name": "Razor Leaf",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 46,
+    "name": "Paras",
+    "form": null,
+    "type1": "bug",
+    "type2": "grass",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 56,
+   "score": 74.7,
+   "tier": 5,
+   "fastMove": {
+    "id": 201,
+    "name": "Bug Bite",
+    "type": "bug",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 100,
+    "name": "X-Scissor",
+    "type": "bug",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 89,
+    "name": "Cross Poison",
+    "type": "poison",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 761,
+    "name": "Bounsweet",
+    "form": null,
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 57,
+   "score": 74.6,
+   "tier": 5,
+   "fastMove": {
+    "id": 215,
+    "name": "Razor Leaf",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 273,
+    "name": "Energy Ball",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 85,
+    "name": "Draining Kiss",
+    "type": "fairy",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 37,
+    "name": "Shadow Vulpix",
+    "form": "Shadow",
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 58,
+   "score": 74.6,
+   "tier": 5,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 292,
+    "name": "Weather Ball",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 511,
+    "name": "Pansage",
+    "form": null,
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 59,
+   "score": 74.5,
+   "tier": 5,
+   "fastMove": {
+    "id": 214,
+    "name": "Vine Whip",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 279,
+    "name": "Crunch",
+    "type": "dark",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 722,
+    "name": "Rowlet",
+    "form": null,
+    "type1": "grass",
+    "type2": "flying",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 60,
+   "score": 74.4,
+   "tier": 5,
+   "fastMove": {
+    "id": 385,
+    "name": "Leafage",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 273,
+    "name": "Energy Ball",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 747,
+    "name": "Mareanie",
+    "form": null,
+    "type1": "poison",
+    "type2": "water",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 61,
+   "score": 74.2,
+   "tier": 5,
+   "fastMove": {
+    "id": 236,
+    "name": "Poison Sting",
+    "type": "poison",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 91,
+    "name": "Sludge Wave",
+    "type": "poison",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 104,
+    "name": "Brine",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 320,
+    "name": "Wailmer",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 62,
+   "score": 74.2,
+   "tier": 5,
+   "fastMove": {
+    "id": 368,
+    "name": "Rollout",
+    "type": "rock",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 106,
+    "name": "Scald",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 187,
+    "name": "Shadow Hoppip",
+    "form": "Shadow",
+    "type1": "grass",
+    "type2": "flying",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 63,
+   "score": 74,
+   "tier": 5,
+   "fastMove": {
+    "id": 271,
+    "name": "Bullet Seed",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 273,
+    "name": "Shadow Seedot",
+    "form": "Shadow",
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 64,
+   "score": 73.8,
+   "tier": 5,
+   "fastMove": {
+    "id": 271,
+    "name": "Bullet Seed",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 280,
+    "name": "Foul Play",
+    "type": "dark",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 498,
+    "name": "Tepig",
+    "form": null,
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 65,
+   "score": 73.6,
+   "tier": 5,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 495,
+    "name": "Shadow Snivy",
+    "form": "Shadow",
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 66,
+   "score": 73.4,
+   "tier": 5,
+   "fastMove": {
+    "id": 214,
+    "name": "Vine Whip",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 13,
+    "name": "Wrap",
+    "type": "normal",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 850,
+    "name": "Sizzlipede",
+    "form": null,
+    "type1": "fire",
+    "type2": "bug",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 67,
+   "score": 73.2,
+   "tier": 5,
+   "fastMove": {
+    "id": 201,
+    "name": "Bug Bite",
+    "type": "bug",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 279,
+    "name": "Crunch",
+    "type": "dark",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 49,
+    "name": "Bug Buzz",
+    "type": "bug",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 278,
+    "name": "Wingull",
+    "form": null,
+    "type1": "water",
+    "type2": "flying",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 68,
+   "score": 73.2,
+   "tier": 5,
+   "fastMove": {
+    "id": 219,
+    "name": "Quick Attack",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 121,
+    "name": "Air Cutter",
+    "type": "flying",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 105,
+    "name": "Water Pulse",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 58,
+    "name": "Shadow Growlithe",
+    "form": "Shadow",
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 69,
+   "score": 73,
+   "tier": 5,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 24,
+    "name": "Flamethrower",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 138,
+    "name": "Shadow Omanyte",
+    "form": "Shadow",
+    "type1": "rock",
+    "type2": "water",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 70,
+   "score": 73,
+   "tier": 5,
+   "fastMove": {
+    "id": 216,
+    "name": "Mud Shot",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 63,
+    "name": "Rock Tomb",
+    "type": "rock",
+    "isLegacy": true
+   },
+   "chargeMove2": {
+    "id": 259,
+    "name": "Rock Blast",
+    "type": "rock",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 187,
+    "name": "Hoppip",
+    "form": null,
+    "type1": "grass",
+    "type2": "flying",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 71,
+   "score": 72.9,
+   "tier": 5,
+   "fastMove": {
+    "id": 271,
+    "name": "Bullet Seed",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 273,
+    "name": "Seedot",
+    "form": null,
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 72,
+   "score": 72.8,
+   "tier": 5,
+   "fastMove": {
+    "id": 271,
+    "name": "Bullet Seed",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 280,
+    "name": "Foul Play",
+    "type": "dark",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 1,
+    "name": "Bulbasaur",
+    "form": null,
+    "type1": "grass",
+    "type2": "poison",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 73,
+   "score": 72.5,
+   "tier": 5,
+   "fastMove": {
+    "id": 214,
+    "name": "Vine Whip",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 118,
+    "name": "Power Whip",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 90,
+    "name": "Sludge Bomb",
+    "type": "poison",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 597,
+    "name": "Shadow Ferroseed",
+    "form": "Shadow",
+    "type1": "grass",
+    "type2": "steel",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 74,
+   "score": 72.5,
+   "tier": 5,
+   "fastMove": {
+    "id": 221,
+    "name": "Tackle",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 74,
+    "name": "Iron Head",
+    "type": "steel",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 36,
+    "name": "Flash Cannon",
+    "type": "steel",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 498,
+    "name": "Shadow Tepig",
+    "form": "Shadow",
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 75,
+   "score": 72.4,
+   "tier": 5,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 60,
+    "name": "Shadow Poliwag",
+    "form": "Shadow",
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 76,
+   "score": 72.2,
+   "tier": 5,
+   "fastMove": {
+    "id": 216,
+    "name": "Mud Shot",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 96,
+    "name": "Mud Bomb",
+    "type": "ground",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 155,
+    "name": "Cyndaquil",
+    "form": null,
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 77,
+   "score": 71.6,
+   "tier": 5,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 125,
+    "name": "Swift",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 102,
+    "name": "Shadow Exeggcute",
+    "form": "Shadow",
+    "type1": "grass",
+    "type2": "psychic",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 78,
+   "score": 71.5,
+   "tier": 5,
+   "fastMove": {
+    "id": 235,
+    "name": "Confusion",
+    "type": "psychic",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 62,
+    "name": "Ancient Power",
+    "type": "rock",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 60,
+    "name": "Poliwag",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 79,
+   "score": 71.5,
+   "tier": 5,
+   "fastMove": {
+    "id": 216,
+    "name": "Mud Shot",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 96,
+    "name": "Mud Bomb",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 650,
+    "name": "Chespin",
+    "form": null,
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 80,
+   "score": 71.4,
+   "tier": 5,
+   "fastMove": {
+    "id": 214,
+    "name": "Vine Whip",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 285,
+    "name": "Shroomish",
+    "form": null,
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 81,
+   "score": 71.4,
+   "tier": 5,
+   "fastMove": {
+    "id": 271,
+    "name": "Bullet Seed",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 140,
+    "name": "Kabuto",
+    "form": null,
+    "type1": "rock",
+    "type2": "water",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 82,
+   "score": 70.7,
+   "tier": 5,
+   "fastMove": {
+    "id": 216,
+    "name": "Mud Shot",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 63,
+    "name": "Rock Tomb",
+    "type": "rock",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 62,
+    "name": "Ancient Power",
+    "type": "rock",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 240,
+    "name": "Magby",
+    "form": null,
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 83,
+   "score": 70.4,
+   "tier": 5,
+   "fastMove": {
+    "id": 208,
+    "name": "Karate Chop",
+    "type": "fighting",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 115,
+    "name": "Fire Punch",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 123,
+    "name": "Brick Break",
+    "type": "fighting",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 252,
+    "name": "Treecko",
+    "form": null,
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 84,
+   "score": 70.2,
+   "tier": 5,
+   "fastMove": {
+    "id": 271,
+    "name": "Bullet Seed",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 45,
+    "name": "Aerial Ace",
+    "type": "flying",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 58,
+    "name": "Hisuian Growlithe",
+    "form": "Hisuian",
+    "type1": "fire",
+    "type2": "rock",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 85,
+   "score": 69.9,
+   "tier": 5,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 64,
+    "name": "Rock Slide",
+    "type": "rock",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 279,
+    "name": "Crunch",
+    "type": "dark",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 585,
+    "name": "Deerling",
+    "form": null,
+    "type1": "normal",
+    "type2": "grass",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 86,
+   "score": 69.8,
+   "tier": 5,
+   "fastMove": {
+    "id": 221,
+    "name": "Tackle",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 251,
+    "name": "Wild Charge",
+    "type": "electric",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 392,
+    "name": "Trailblaze",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 120,
+    "name": "Staryu",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 87,
+   "score": 69.8,
+   "tier": 5,
+   "fastMove": {
+    "id": 219,
+    "name": "Quick Attack",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 125,
+    "name": "Swift",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 65,
+    "name": "Power Gem",
+    "type": "rock",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 909,
+    "name": "Fuecoco",
+    "form": null,
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 88,
+   "score": 69.5,
+   "tier": 5,
+   "fastMove": {
+    "id": 346,
+    "name": "Incinerate",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 279,
+    "name": "Crunch",
+    "type": "dark",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 84,
+    "name": "Disarming Voice",
+    "type": "fairy",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 564,
+    "name": "Shadow Tirtouga",
+    "form": "Shadow",
+    "type1": "water",
+    "type2": "rock",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 89,
+   "score": 69.2,
+   "tier": 5,
+   "fastMove": {
+    "id": 230,
+    "name": "Water Gun",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 62,
+    "name": "Ancient Power",
+    "type": "rock",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 393,
+    "name": "Shadow Piplup",
+    "form": "Shadow",
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 90,
+   "score": 68.9,
+   "tier": 5,
+   "fastMove": {
+    "id": 237,
+    "name": "Bubble",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 38,
+    "name": "Drill Peck",
+    "type": "flying",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 111,
+    "name": "Icy Wind",
+    "type": "ice",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 501,
+    "name": "Shadow Oshawott",
+    "form": "Shadow",
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 91,
+   "score": 68.6,
+   "tier": 5,
+   "fastMove": {
+    "id": 230,
+    "name": "Water Gun",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 51,
+    "name": "Night Slash",
+    "type": "dark",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 58,
+    "name": "Aqua Tail",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 554,
+    "name": "Shadow Darumaka",
+    "form": "Shadow",
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 92,
+   "score": 68.3,
+   "tier": 5,
+   "fastMove": {
+    "id": 240,
+    "name": "Fire Fang",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 115,
+    "name": "Fire Punch",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 58,
+    "name": "Growlithe",
+    "form": null,
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 93,
+   "score": 68.3,
+   "tier": 5,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 24,
+    "name": "Flamethrower",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 513,
+    "name": "Pansear",
+    "form": null,
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 94,
+   "score": 68.2,
+   "tier": 5,
+   "fastMove": {
+    "id": 269,
+    "name": "Fire Spin",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 279,
+    "name": "Crunch",
+    "type": "dark",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 829,
+    "name": "Gossifleur",
+    "form": null,
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 95,
+   "score": 68.1,
+   "tier": 5,
+   "fastMove": {
+    "id": 271,
+    "name": "Bullet Seed",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 273,
+    "name": "Energy Ball",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 191,
+    "name": "Sunkern",
+    "form": null,
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 96,
+   "score": 68.1,
+   "tier": 5,
+   "fastMove": {
+    "id": 215,
+    "name": "Razor Leaf",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 228,
+    "name": "Houndour",
+    "form": null,
+    "type1": "dark",
+    "type2": "fire",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 97,
+   "score": 67.9,
+   "tier": 5,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 279,
+    "name": "Crunch",
+    "type": "dark",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 24,
+    "name": "Flamethrower",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 535,
+    "name": "Tympole",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 98,
+   "score": 67.8,
+   "tier": 5,
+   "fastMove": {
+    "id": 216,
+    "name": "Mud Shot",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 96,
+    "name": "Mud Bomb",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 91,
+    "name": "Sludge Wave",
+    "type": "poison",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 755,
+    "name": "Morelull",
+    "form": null,
+    "type1": "grass",
+    "type2": "fairy",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 99,
+   "score": 67.7,
+   "tier": 5,
+   "fastMove": {
+    "id": 263,
+    "name": "Astonish",
+    "type": "ghost",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 86,
+    "name": "Dazzling Gleam",
+    "type": "fairy",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 692,
+    "name": "Clauncher",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 100,
+   "score": 67.4,
+   "tier": 5,
+   "fastMove": {
+    "id": 297,
+    "name": "Smack Down",
+    "type": "rock",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 57,
+    "name": "Aqua Jet",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 305,
+    "name": "Crabhammer",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 554,
+    "name": "Darumaka",
+    "form": null,
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 101,
+   "score": 67.1,
+   "tier": 6,
+   "fastMove": {
+    "id": 240,
+    "name": "Fire Fang",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 115,
+    "name": "Fire Punch",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 1,
+    "name": "Shadow Bulbasaur",
+    "form": "Shadow",
+    "type1": "grass",
+    "type2": "poison",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 102,
+   "score": 67,
+   "tier": 6,
+   "fastMove": {
+    "id": 214,
+    "name": "Vine Whip",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 118,
+    "name": "Power Whip",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 90,
+    "name": "Sludge Bomb",
+    "type": "poison",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 218,
+    "name": "Slugma",
+    "form": null,
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 103,
+   "score": 66.9,
+   "tier": 6,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 64,
+    "name": "Rock Slide",
+    "type": "rock",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 418,
+    "name": "Buizel",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 104,
+   "score": 66.8,
+   "tier": 6,
+   "fastMove": {
+    "id": 219,
+    "name": "Quick Attack",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 125,
+    "name": "Swift",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 57,
+    "name": "Aqua Jet",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 252,
+    "name": "Shadow Treecko",
+    "form": "Shadow",
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 105,
+   "score": 66.7,
+   "tier": 6,
+   "fastMove": {
+    "id": 271,
+    "name": "Bullet Seed",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 45,
+    "name": "Aerial Ace",
+    "type": "flying",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 100,
+    "name": "Hisuian Voltorb",
+    "form": "Hisuian",
+    "type1": "electric",
+    "type2": "grass",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 106,
+   "score": 66.6,
+   "tier": 6,
+   "fastMove": {
+    "id": 249,
+    "name": "Charge Beam",
+    "type": "electric",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 79,
+    "name": "Thunderbolt",
+    "type": "electric",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 125,
+    "name": "Swift",
+    "type": "normal",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 935,
+    "name": "Charcadet",
+    "form": null,
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 107,
+   "score": 66.5,
+   "tier": 6,
+   "fastMove": {
+    "id": 346,
+    "name": "Incinerate",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 24,
+    "name": "Flamethrower",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 501,
+    "name": "Oshawott",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 108,
+   "score": 66.4,
+   "tier": 6,
+   "fastMove": {
+    "id": 230,
+    "name": "Water Gun",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 51,
+    "name": "Night Slash",
+    "type": "dark",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 58,
+    "name": "Aqua Tail",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 102,
+    "name": "Exeggcute",
+    "form": null,
+    "type1": "grass",
+    "type2": "psychic",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 109,
+   "score": 66.3,
+   "tier": 6,
+   "fastMove": {
+    "id": 235,
+    "name": "Confusion",
+    "type": "psychic",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 62,
+    "name": "Ancient Power",
+    "type": "rock",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 840,
+    "name": "Applin",
+    "form": null,
+    "type1": "grass",
+    "type2": "dragon",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 110,
+   "score": 66,
+   "tier": 6,
+   "fastMove": {
+    "id": 263,
+    "name": "Astonish",
+    "type": "ghost",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 133,
+    "name": "Struggle",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": null
+  },
+  {
+   "pokemon": {
+    "id": 390,
+    "name": "Shadow Chimchar",
+    "form": "Shadow",
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 111,
+   "score": 66,
+   "tier": 6,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 24,
+    "name": "Flamethrower",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 912,
+    "name": "Quaxly",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 112,
+   "score": 66,
+   "tier": 6,
+   "fastMove": {
+    "id": 210,
+    "name": "Wing Attack",
+    "type": "flying",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 45,
+    "name": "Aerial Ace",
+    "type": "flying",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 57,
+    "name": "Aqua Jet",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 228,
+    "name": "Shadow Houndour",
+    "form": "Shadow",
+    "type1": "dark",
+    "type2": "fire",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 113,
+   "score": 65.9,
+   "tier": 6,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 279,
+    "name": "Crunch",
+    "type": "dark",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 24,
+    "name": "Flamethrower",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 928,
+    "name": "Smoliv",
+    "form": null,
+    "type1": "grass",
+    "type2": "normal",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 114,
+   "score": 65.8,
+   "tier": 6,
+   "fastMove": {
+    "id": 221,
+    "name": "Tackle",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 392,
+    "name": "Trailblaze",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 304,
+    "name": "Earth Power",
+    "type": "ground",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 77,
+    "name": "Ponyta",
+    "form": null,
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 115,
+   "score": 65.6,
+   "tier": 6,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 127,
+    "name": "Stomp",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 393,
+    "name": "Piplup",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 116,
+   "score": 64.7,
+   "tier": 6,
+   "fastMove": {
+    "id": 237,
+    "name": "Bubble",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 38,
+    "name": "Drill Peck",
+    "type": "flying",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 111,
+    "name": "Icy Wind",
+    "type": "ice",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 54,
+    "name": "Shadow Psyduck",
+    "form": "Shadow",
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 117,
+   "score": 64.7,
+   "tier": 6,
+   "fastMove": {
+    "id": 230,
+    "name": "Water Gun",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 58,
+    "name": "Aqua Tail",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 28,
+    "name": "Cross Chop",
+    "type": "fighting",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 550,
+    "name": "Basculin",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 118,
+   "score": 64.6,
+   "tier": 6,
+   "fastMove": {
+    "id": 221,
+    "name": "Tackle",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 58,
+    "name": "Aqua Tail",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 57,
+    "name": "Aqua Jet",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 255,
+    "name": "Torchic",
+    "form": null,
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 119,
+   "score": 64.6,
+   "tier": 6,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 63,
+    "name": "Rock Tomb",
+    "type": "rock",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 322,
+    "name": "Numel",
+    "form": null,
+    "type1": "fire",
+    "type2": "ground",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 120,
+   "score": 64.5,
+   "tier": 6,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 127,
+    "name": "Stomp",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 95,
+    "name": "Bulldoze",
+    "type": "ground",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 725,
+    "name": "Litten",
+    "form": null,
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 121,
+   "score": 64.2,
+   "tier": 6,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 279,
+    "name": "Crunch",
+    "type": "dark",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 331,
+    "name": "Shadow Cacnea",
+    "form": "Shadow",
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 122,
+   "score": 64,
+   "tier": 6,
+   "fastMove": {
+    "id": 203,
+    "name": "Sucker Punch",
+    "type": "dark",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 392,
+    "name": "Trailblaze",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 333,
+    "name": "Payback",
+    "type": "dark",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 390,
+    "name": "Chimchar",
+    "form": null,
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 123,
+   "score": 64,
+   "tier": 6,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 24,
+    "name": "Flamethrower",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 4,
+    "name": "Shadow Charmander",
+    "form": "Shadow",
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 124,
+   "score": 63.9,
+   "tier": 6,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 24,
+    "name": "Flamethrower",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 363,
+    "name": "Shadow Spheal",
+    "form": "Shadow",
+    "type1": "ice",
+    "type2": "water",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 125,
+   "score": 63.8,
+   "tier": 6,
+   "fastMove": {
+    "id": 230,
+    "name": "Water Gun",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 105,
+    "name": "Water Pulse",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 255,
+    "name": "Shadow Torchic",
+    "form": "Shadow",
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 126,
+   "score": 63.7,
+   "tier": 6,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 63,
+    "name": "Rock Tomb",
+    "type": "rock",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 4,
+    "name": "Charmander",
+    "form": null,
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 127,
+   "score": 63.6,
+   "tier": 6,
+   "fastMove": {
+    "id": 209,
+    "name": "Ember",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 24,
+    "name": "Flamethrower",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 363,
+    "name": "Spheal",
+    "form": null,
+    "type1": "ice",
+    "type2": "water",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 128,
+   "score": 63.6,
+   "tier": 6,
+   "fastMove": {
+    "id": 230,
+    "name": "Water Gun",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 105,
+    "name": "Water Pulse",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 728,
+    "name": "Popplio",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 129,
+   "score": 63.5,
+   "tier": 6,
+   "fastMove": {
+    "id": 230,
+    "name": "Water Gun",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 58,
+    "name": "Aqua Tail",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 57,
+    "name": "Aqua Jet",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 54,
+    "name": "Psyduck",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 130,
+   "score": 63.1,
+   "tier": 6,
+   "fastMove": {
+    "id": 230,
+    "name": "Water Gun",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 58,
+    "name": "Aqua Tail",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 28,
+    "name": "Cross Chop",
+    "type": "fighting",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 420,
+    "name": "Cherubi",
+    "form": null,
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 131,
+   "score": 62.8,
+   "tier": 6,
+   "fastMove": {
+    "id": 271,
+    "name": "Bullet Seed",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 86,
+    "name": "Dazzling Gleam",
+    "type": "fairy",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 7,
+    "name": "Shadow Squirtle",
+    "form": "Shadow",
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 132,
+   "score": 62.2,
+   "tier": 6,
+   "fastMove": {
+    "id": 237,
+    "name": "Bubble",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 58,
+    "name": "Aqua Tail",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 57,
+    "name": "Aqua Jet",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 7,
+    "name": "Squirtle",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 133,
+   "score": 62,
+   "tier": 6,
+   "fastMove": {
+    "id": 237,
+    "name": "Bubble",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 58,
+    "name": "Aqua Tail",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 57,
+    "name": "Aqua Jet",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 331,
+    "name": "Cacnea",
+    "form": null,
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 134,
+   "score": 61.1,
+   "tier": 6,
+   "fastMove": {
+    "id": 203,
+    "name": "Sucker Punch",
+    "type": "dark",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 392,
+    "name": "Trailblaze",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 333,
+    "name": "Payback",
+    "type": "dark",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 366,
+    "name": "Clamperl",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 135,
+   "score": 60.5,
+   "tier": 6,
+   "fastMove": {
+    "id": 230,
+    "name": "Water Gun",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 131,
+    "name": "Body Slam",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 39,
+    "name": "Ice Beam",
+    "type": "ice",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 158,
+    "name": "Totodile",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 136,
+   "score": 60.3,
+   "tier": 6,
+   "fastMove": {
+    "id": 230,
+    "name": "Water Gun",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 279,
+    "name": "Crunch",
+    "type": "dark",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 57,
+    "name": "Aqua Jet",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 69,
+    "name": "Shadow Bellsprout",
+    "form": "Shadow",
+    "type1": "grass",
+    "type2": "poison",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 137,
+   "score": 60.2,
+   "tier": 6,
+   "fastMove": {
+    "id": 225,
+    "name": "Acid",
+    "type": "poison",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 118,
+    "name": "Power Whip",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 90,
+    "name": "Sludge Bomb",
+    "type": "poison",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 456,
+    "name": "Finneon",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 138,
+   "score": 60.2,
+   "tier": 6,
+   "fastMove": {
+    "id": 230,
+    "name": "Water Gun",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 262,
+    "name": "Silver Wind",
+    "type": "bug",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 39,
+    "name": "Ice Beam",
+    "type": "ice",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 813,
+    "name": "Scorbunny",
+    "form": null,
+    "type1": "fire",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 139,
+   "score": 60.2,
+   "tier": 6,
+   "fastMove": {
+    "id": 269,
+    "name": "Fire Spin",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 101,
+    "name": "Flame Charge",
+    "type": "fire",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 24,
+    "name": "Flamethrower",
+    "type": "fire",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 459,
+    "name": "Shadow Snover",
+    "form": "Shadow",
+    "type1": "grass",
+    "type2": "ice",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 140,
+   "score": 60,
+   "tier": 6,
+   "fastMove": {
+    "id": 385,
+    "name": "Leafage",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 273,
+    "name": "Energy Ball",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 39,
+    "name": "Ice Beam",
+    "type": "ice",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 118,
+    "name": "Goldeen",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 141,
+   "score": 59.8,
+   "tier": 6,
+   "fastMove": {
+    "id": 216,
+    "name": "Mud Shot",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 58,
+    "name": "Aqua Tail",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 126,
+    "name": "Horn Attack",
+    "type": "normal",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 114,
+    "name": "Tangela",
+    "form": null,
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 142,
+   "score": 59.6,
+   "tier": 6,
+   "fastMove": {
+    "id": 214,
+    "name": "Vine Whip",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 90,
+    "name": "Sludge Bomb",
+    "type": "poison",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 515,
+    "name": "Panpour",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 143,
+   "score": 59.1,
+   "tier": 6,
+   "fastMove": {
+    "id": 230,
+    "name": "Water Gun",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 279,
+    "name": "Crunch",
+    "type": "dark",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 284,
+    "name": "Surf",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 223,
+    "name": "Remoraid",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 144,
+   "score": 59.1,
+   "tier": 6,
+   "fastMove": {
+    "id": 216,
+    "name": "Mud Shot",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 259,
+    "name": "Rock Blast",
+    "type": "rock",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 105,
+    "name": "Water Pulse",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 258,
+    "name": "Mudkip",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 145,
+   "score": 59,
+   "tier": 6,
+   "fastMove": {
+    "id": 230,
+    "name": "Water Gun",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 18,
+    "name": "Sludge",
+    "type": "poison",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 26,
+    "name": "Dig",
+    "type": "ground",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 960,
+    "name": "Wiglett",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 146,
+   "score": 59,
+   "tier": 6,
+   "fastMove": {
+    "id": 233,
+    "name": "Mud-Slap",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 383,
+    "name": "Liquidation",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 26,
+    "name": "Dig",
+    "type": "ground",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 90,
+    "name": "Shadow Shellder",
+    "form": "Shadow",
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 147,
+   "score": 58.5,
+   "tier": 6,
+   "fastMove": {
+    "id": 221,
+    "name": "Tackle",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 111,
+    "name": "Icy Wind",
+    "type": "ice",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 318,
+    "name": "Razor Shell",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 656,
+    "name": "Froakie",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 148,
+   "score": 58.4,
+   "tier": 6,
+   "fastMove": {
+    "id": 237,
+    "name": "Bubble",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 45,
+    "name": "Aerial Ace",
+    "type": "flying",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 284,
+    "name": "Surf",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 459,
+    "name": "Snover",
+    "form": null,
+    "type1": "grass",
+    "type2": "ice",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 149,
+   "score": 57.9,
+   "tier": 6,
+   "fastMove": {
+    "id": 385,
+    "name": "Leafage",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 273,
+    "name": "Energy Ball",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 39,
+    "name": "Ice Beam",
+    "type": "ice",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 906,
+    "name": "Sprigatito",
+    "form": null,
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 150,
+   "score": 57.8,
+   "tier": 6,
+   "fastMove": {
+    "id": 385,
+    "name": "Leafage",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 273,
+    "name": "Energy Ball",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 69,
+    "name": "Bellsprout",
+    "form": null,
+    "type1": "grass",
+    "type2": "poison",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 151,
+   "score": 57.7,
+   "tier": 6,
+   "fastMove": {
+    "id": 225,
+    "name": "Acid",
+    "type": "poison",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 118,
+    "name": "Power Whip",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 90,
+    "name": "Sludge Bomb",
+    "type": "poison",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 90,
+    "name": "Shellder",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 152,
+   "score": 57.4,
+   "tier": 6,
+   "fastMove": {
+    "id": 217,
+    "name": "Ice Shard",
+    "type": "ice",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 111,
+    "name": "Icy Wind",
+    "type": "ice",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 318,
+    "name": "Razor Shell",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 270,
+    "name": "Lotad",
+    "form": null,
+    "type1": "water",
+    "type2": "grass",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 153,
+   "score": 57.3,
+   "tier": 6,
+   "fastMove": {
+    "id": 230,
+    "name": "Water Gun",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 273,
+    "name": "Energy Ball",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 106,
+    "name": "Scald",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 158,
+    "name": "Shadow Totodile",
+    "form": "Shadow",
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 154,
+   "score": 57.2,
+   "tier": 6,
+   "fastMove": {
+    "id": 230,
+    "name": "Water Gun",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 279,
+    "name": "Crunch",
+    "type": "dark",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 57,
+    "name": "Aqua Jet",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 258,
+    "name": "Shadow Mudkip",
+    "form": "Shadow",
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 155,
+   "score": 55.7,
+   "tier": 6,
+   "fastMove": {
+    "id": 221,
+    "name": "Tackle",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 18,
+    "name": "Sludge",
+    "type": "poison",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 26,
+    "name": "Dig",
+    "type": "ground",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 341,
+    "name": "Shadow Corphish",
+    "form": "Shadow",
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 156,
+   "score": 55.6,
+   "tier": 6,
+   "fastMove": {
+    "id": 237,
+    "name": "Bubble",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 57,
+    "name": "Aqua Jet",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 318,
+    "name": "Razor Shell",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 341,
+    "name": "Corphish",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 157,
+   "score": 54.4,
+   "tier": 6,
+   "fastMove": {
+    "id": 237,
+    "name": "Bubble",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 57,
+    "name": "Aqua Jet",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 318,
+    "name": "Razor Shell",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 548,
+    "name": "Petilil",
+    "form": null,
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 158,
+   "score": 53.9,
+   "tier": 6,
+   "fastMove": {
+    "id": 281,
+    "name": "Hidden Power",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 273,
+    "name": "Energy Ball",
+    "type": "grass",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 114,
+    "name": "Shadow Tangela",
+    "form": "Shadow",
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 159,
+   "score": 53,
+   "tier": 6,
+   "fastMove": {
+    "id": 214,
+    "name": "Vine Whip",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 272,
+    "name": "Grass Knot",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 90,
+    "name": "Sludge Bomb",
+    "type": "poison",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 98,
+    "name": "Krabby",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 160,
+   "score": 51.7,
+   "tier": 6,
+   "fastMove": {
+    "id": 216,
+    "name": "Mud Shot",
+    "type": "ground",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 318,
+    "name": "Razor Shell",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 20,
+    "name": "Vise Grip",
+    "type": "normal",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 816,
+    "name": "Sobble",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 161,
+   "score": 51.6,
+   "tier": 6,
+   "fastMove": {
+    "id": 230,
+    "name": "Water Gun",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 284,
+    "name": "Surf",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 105,
+    "name": "Water Pulse",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 767,
+    "name": "Wimpod",
+    "form": null,
+    "type1": "bug",
+    "type2": "water",
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 162,
+   "score": 51.3,
+   "tier": 6,
+   "fastMove": {
+    "id": 261,
+    "name": "Struggle Bug",
+    "type": "bug",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 49,
+    "name": "Bug Buzz",
+    "type": "bug",
+    "isLegacy": false
+   },
+   "chargeMove2": null
+  },
+  {
+   "pokemon": {
+    "id": 116,
+    "name": "Shadow Horsea",
+    "form": "Shadow",
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 163,
+   "score": 45.5,
+   "tier": 6,
+   "fastMove": {
+    "id": 237,
+    "name": "Bubble",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 82,
+    "name": "Dragon Pulse",
+    "type": "dragon",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 53,
+    "name": "Bubble Beam",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 116,
+    "name": "Horsea",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 164,
+   "score": 43.5,
+   "tier": 6,
+   "fastMove": {
+    "id": 237,
+    "name": "Bubble",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 82,
+    "name": "Dragon Pulse",
+    "type": "dragon",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 53,
+    "name": "Bubble Beam",
+    "type": "water",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 349,
+    "name": "Feebas",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 165,
+   "score": 40.3,
+   "tier": 6,
+   "fastMove": {
+    "id": 221,
+    "name": "Tackle",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 276,
+    "name": "Mirror Coat",
+    "type": "psychic",
+    "isLegacy": false
+   },
+   "chargeMove2": null
+  },
+  {
+   "pokemon": {
+    "id": 672,
+    "name": "Skiddo",
+    "form": null,
+    "type1": "grass",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 166,
+   "score": 38.3,
+   "tier": 6,
+   "fastMove": {
+    "id": 241,
+    "name": "Rock Smash",
+    "type": "fighting",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 59,
+    "name": "Seed Bomb",
+    "type": "grass",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 64,
+    "name": "Rock Slide",
+    "type": "rock",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 129,
+    "name": "Magikarp",
+    "form": null,
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 167,
+   "score": 7.9,
+   "tier": 6,
+   "fastMove": {
+    "id": 231,
+    "name": "Splash",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 323,
+    "name": "Return",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 133,
+    "name": "Struggle",
+    "type": "normal",
+    "isLegacy": false
+   }
+  },
+  {
+   "pokemon": {
+    "id": 129,
+    "name": "Shadow Magikarp",
+    "form": "Shadow",
+    "type1": "water",
+    "type2": null,
+    "isLegendary": 0,
+    "isMythical": 0
+   },
+   "ranking": 168,
+   "score": 6.7,
+   "tier": 6,
+   "fastMove": {
+    "id": 231,
+    "name": "Splash",
+    "type": "water",
+    "isLegacy": false
+   },
+   "chargeMove1": {
+    "id": 133,
+    "name": "Struggle",
+    "type": "normal",
+    "isLegacy": false
+   },
+   "chargeMove2": {
+    "id": 322,
+    "name": "Frustration",
+    "type": "normal",
+    "isLegacy": false
+   }
+  }
+ ]
+}

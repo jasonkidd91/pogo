@@ -1,0 +1,1591 @@
+{
+ "slug": "dynamax-attackers-per-type",
+ "tables": [
+  {
+   "section": "Top 10 Normal-type Max Battle attackers",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Max Attack",
+    "DMG"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Gigantamax Snorlax",
+     "Lick",
+     "G-Max Replenish",
+     "244"
+    ],
+    [
+     "S",
+     "2.",
+     "Dynamax Darmanitan",
+     "Tackle",
+     "Max Strike",
+     "214"
+    ],
+    [
+     "S",
+     "3.",
+     "Dynamax Inteleon",
+     "Pound",
+     "Max Strike",
+     "213"
+    ],
+    [
+     "A",
+     "4.",
+     "Dynamax Rillaboom",
+     "Scratch",
+     "Max Strike",
+     "196"
+    ],
+    [
+     "A",
+     "5.",
+     "Dynamax Ho-Oh",
+     "Hidden Power",
+     "Max Strike",
+     "196"
+    ],
+    [
+     "A",
+     "6.",
+     "Dynamax Cinderace",
+     "Tackle",
+     "Max Strike",
+     "195"
+    ],
+    [
+     "A",
+     "7.",
+     "Dynamax Gigalith",
+     "Lock-On",
+     "Max Strike",
+     "186"
+    ],
+    [
+     "A",
+     "8.",
+     "Dynamax Passimian",
+     "Take Down",
+     "Max Strike",
+     "183"
+    ],
+    [
+     "A",
+     "9.",
+     "Dynamax Leafeon",
+     "Quick Attack",
+     "Max Strike",
+     "178"
+    ],
+    [
+     "B",
+     "10.",
+     "Dynamax Sylveon",
+     "Quick Attack",
+     "Max Strike",
+     "168"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 Fighting-type Max Battle attackers",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Max Attack",
+    "DMG"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Gigantamax Machamp",
+     "Bullet Punch",
+     "G-Max Chi Strike",
+     "296"
+    ],
+    [
+     "S",
+     "2.",
+     "Dynamax Urshifu (Rapid Strike Style)",
+     "Counter",
+     "Max Knuckle",
+     "249"
+    ],
+    [
+     "S",
+     "3.",
+     "Dynamax Urshifu (Single Strike Style)",
+     "Counter",
+     "Max Knuckle",
+     "249"
+    ],
+    [
+     "A",
+     "4.",
+     "Dynamax Gallade",
+     "Low Kick",
+     "Max Knuckle",
+     "233"
+    ],
+    [
+     "A",
+     "5.",
+     "Dynamax Machamp",
+     "Counter",
+     "Max Knuckle",
+     "230"
+    ],
+    [
+     "A",
+     "6.",
+     "Dynamax Hitmonlee",
+     "Low Kick",
+     "Max Knuckle",
+     "221"
+    ],
+    [
+     "A",
+     "7.",
+     "Dynamax Alakazam",
+     "Counter",
+     "Max Knuckle",
+     "220"
+    ],
+    [
+     "A",
+     "8.",
+     "Dynamax Passimian",
+     "Counter",
+     "Max Knuckle",
+     "219"
+    ],
+    [
+     "B",
+     "9.",
+     "Dynamax Electivire",
+     "Low Kick",
+     "Max Knuckle",
+     "203"
+    ],
+    [
+     "B",
+     "10.",
+     "Dynamax Hitmonchan",
+     "Counter",
+     "Max Knuckle",
+     "192"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 Flying-type Max Battle attackers",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Max Attack",
+    "DMG"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Dynamax Moltres",
+     "Wing Attack",
+     "Max Airstream",
+     "246"
+    ],
+    [
+     "S",
+     "2.",
+     "Dynamax Unfezant",
+     "Air Slash",
+     "Max Airstream",
+     "223"
+    ],
+    [
+     "S",
+     "3.",
+     "Dynamax Charizard",
+     "Air Slash",
+     "Max Airstream",
+     "220"
+    ],
+    [
+     "A",
+     "4.",
+     "Dynamax Corviknight",
+     "Air Slash",
+     "Max Airstream",
+     "165"
+    ],
+    [
+     "A",
+     "5.",
+     "Dynamax Swoobat",
+     "Air Slash",
+     "Max Airstream",
+     "163"
+    ],
+    [
+     "B",
+     "6.",
+     "Dynamax Noctowl",
+     "Wing Attack",
+     "Max Airstream",
+     "148"
+    ],
+    [
+     "B",
+     "7.",
+     "Dynamax Malamar",
+     "Peck",
+     "Max Airstream",
+     "148"
+    ],
+    [
+     "B",
+     "8.",
+     "Dynamax Tranquill",
+     "Air Slash",
+     "Max Airstream",
+     "147"
+    ],
+    [
+     "C",
+     "9.",
+     "Dynamax Corvisquire",
+     "Air Slash",
+     "Max Airstream",
+     "133"
+    ],
+    [
+     "D",
+     "10.",
+     "Dynamax Woobat",
+     "Air Slash",
+     "Max Airstream",
+     "113"
+    ]
+   ]
+  },
+  {
+   "section": "Top 3 Poison-type Max Battle attackers",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Max Attack",
+    "DMG"
+   ],
+   "rows": [
+    [
+     "S",
+     "1.",
+     "Gigantamax Garbodor",
+     "Infestation",
+     "G-Max Malodor",
+     "233"
+    ],
+    [
+     "A",
+     "2.",
+     "Dynamax Toxtricity (Amped Form)",
+     "Acid",
+     "Max Ooze",
+     "221"
+    ],
+    [
+     "A",
+     "3.",
+     "Dynamax Toxtricity (Low Key Form)",
+     "Acid",
+     "Max Ooze",
+     "221"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 Ground-type Max Battle attackers",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Max Attack",
+    "DMG"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Dynamax Excadrill",
+     "Mud Shot",
+     "Max Quake",
+     "249"
+    ],
+    [
+     "SS",
+     "2.",
+     "Dynamax Rhyperior",
+     "Mud-Slap",
+     "Max Quake",
+     "237"
+    ],
+    [
+     "S",
+     "3.",
+     "Dynamax Rhydon",
+     "Mud-Slap",
+     "Max Quake",
+     "219"
+    ],
+    [
+     "A",
+     "4.",
+     "Dynamax Flygon",
+     "Mud Shot",
+     "Max Quake",
+     "203"
+    ],
+    [
+     "A",
+     "5.",
+     "Dynamax Kingler",
+     "Mud Shot",
+     "Max Quake",
+     "196"
+    ],
+    [
+     "B",
+     "6.",
+     "Dynamax Gigalith",
+     "Mud-Slap",
+     "Max Quake",
+     "186"
+    ],
+    [
+     "B",
+     "7.",
+     "Dynamax Kabutops",
+     "Mud Shot",
+     "Max Quake",
+     "181"
+    ],
+    [
+     "C",
+     "8.",
+     "Dynamax Omastar",
+     "Mud Shot",
+     "Max Quake",
+     "171"
+    ],
+    [
+     "C",
+     "9.",
+     "Dynamax Trapinch",
+     "Mud Shot",
+     "Max Quake",
+     "164"
+    ],
+    [
+     "D",
+     "10.",
+     "Dynamax Drilbur",
+     "Mud-Slap",
+     "Max Quake",
+     "156"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 Rock-type Max Battle attackers",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Max Attack",
+    "DMG"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Dynamax Rhyperior",
+     "Smack Down",
+     "Max Rockfall",
+     "237"
+    ],
+    [
+     "S",
+     "2.",
+     "Dynamax Gigalith",
+     "Smack Down",
+     "Max Rockfall",
+     "223"
+    ],
+    [
+     "A",
+     "3.",
+     "Dynamax Omastar",
+     "Rock Throw",
+     "Max Rockfall",
+     "205"
+    ],
+    [
+     "B",
+     "4.",
+     "Dynamax Regirock",
+     "Rock Throw",
+     "Max Rockfall",
+     "179"
+    ],
+    [
+     "B",
+     "5.",
+     "Dynamax Boldore",
+     "Smack Down",
+     "Max Rockfall",
+     "175"
+    ],
+    [
+     "C",
+     "6.",
+     "Dynamax Wailord",
+     "Rollout",
+     "Max Rockfall",
+     "146"
+    ],
+    [
+     "C",
+     "7.",
+     "Dynamax Blastoise",
+     "Rollout",
+     "Max Rockfall",
+     "143"
+    ],
+    [
+     "D",
+     "8.",
+     "Dynamax Roggenrola",
+     "Smack Down",
+     "Max Rockfall",
+     "126"
+    ],
+    [
+     "E",
+     "9.",
+     "Dynamax Wailmer",
+     "Rollout",
+     "Max Rockfall",
+     "117"
+    ],
+    [
+     "F",
+     "10.",
+     "Dynamax Shuckle",
+     "Rock Throw",
+     "Max Rockfall",
+     "30"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 Bug-type Max Battle attackers",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Max Attack",
+    "DMG"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Dynamax Centiskorch",
+     "Bug Bite",
+     "Max Flutterby",
+     "217"
+    ],
+    [
+     "SS",
+     "2.",
+     "Gigantamax Butterfree",
+     "Bug Bite",
+     "G-Max Befuddle",
+     "216"
+    ],
+    [
+     "S",
+     "3.",
+     "Dynamax Metagross",
+     "Fury Cutter",
+     "Max Flutterby",
+     "209"
+    ],
+    [
+     "A",
+     "4.",
+     "Dynamax Kabutops",
+     "Fury Cutter",
+     "Max Flutterby",
+     "181"
+    ],
+    [
+     "B",
+     "5.",
+     "Dynamax Butterfree",
+     "Bug Bite",
+     "Max Flutterby",
+     "168"
+    ],
+    [
+     "C",
+     "6.",
+     "Dynamax Garbodor",
+     "Infestation",
+     "Max Flutterby",
+     "151"
+    ],
+    [
+     "D",
+     "7.",
+     "Dynamax Trapinch",
+     "Struggle Bug",
+     "Max Flutterby",
+     "136"
+    ],
+    [
+     "E",
+     "8.",
+     "Dynamax Sizzlipede",
+     "Bug Bite",
+     "Max Flutterby",
+     "123"
+    ],
+    [
+     "E",
+     "9.",
+     "Dynamax Metang",
+     "Fury Cutter",
+     "Max Flutterby",
+     "118"
+    ],
+    [
+     "F",
+     "10.",
+     "Dynamax Caterpie",
+     "Bug Bite",
+     "Max Flutterby",
+     "65"
+    ]
+   ]
+  },
+  {
+   "section": "Top 6 Ghost-type Max Battle attackers",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Max Attack",
+    "DMG"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Gigantamax Gengar",
+     "Lick",
+     "G-Max Terror",
+     "328"
+    ],
+    [
+     "S",
+     "2.",
+     "Dynamax Gengar",
+     "Lick",
+     "Max Phantasm",
+     "255"
+    ],
+    [
+     "A",
+     "3.",
+     "Dynamax Haunter",
+     "Lick",
+     "Max Phantasm",
+     "220"
+    ],
+    [
+     "B",
+     "4.",
+     "Dynamax Metagross",
+     "Shadow Claw",
+     "Max Phantasm",
+     "209"
+    ],
+    [
+     "C",
+     "5.",
+     "Dynamax Gastly",
+     "Lick",
+     "Max Phantasm",
+     "186"
+    ],
+    [
+     "D",
+     "6.",
+     "Dynamax Sableye",
+     "Shadow Claw",
+     "Max Phantasm",
+     "144"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 Steel-type Max Battle attackers",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Max Attack",
+    "DMG"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Crowned Sword Zacian",
+     "Metal Claw",
+     "Behemoth Blade",
+     "320"
+    ],
+    [
+     "S",
+     "2.",
+     "Gigantamax Melmetal",
+     "Thunder Shock",
+     "G-Max Meltdown",
+     "286"
+    ],
+    [
+     "A",
+     "3.",
+     "Dynamax Dialga",
+     "Metal Claw",
+     "Max Steelspike",
+     "268"
+    ],
+    [
+     "B",
+     "4.",
+     "Dynamax Metagross",
+     "Bullet Punch",
+     "Max Steelspike",
+     "251"
+    ],
+    [
+     "B",
+     "5.",
+     "Dynamax Excadrill",
+     "Metal Claw",
+     "Max Steelspike",
+     "249"
+    ],
+    [
+     "B",
+     "6.",
+     "Crowned Shield Zamazenta",
+     "Metal Claw",
+     "Behemoth Bash",
+     "245"
+    ],
+    [
+     "C",
+     "7.",
+     "Dynamax Duraludon",
+     "Metal Claw",
+     "Max Steelspike",
+     "235"
+    ],
+    [
+     "D",
+     "8.",
+     "Dynamax Kingler",
+     "Metal Claw",
+     "Max Steelspike",
+     "196"
+    ],
+    [
+     "D",
+     "9.",
+     "Dynamax Ho-Oh",
+     "Steel Wing",
+     "Max Steelspike",
+     "196"
+    ],
+    [
+     "D",
+     "10.",
+     "Dynamax Machamp",
+     "Bullet Punch",
+     "Max Steelspike",
+     "192"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 Fire-type Max Battle attackers",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Max Attack",
+    "DMG"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Gigantamax Cinderace",
+     "Tackle",
+     "G-Max Fireball",
+     "300"
+    ],
+    [
+     "S",
+     "2.",
+     "Gigantamax Charizard",
+     "Dragon Breath",
+     "G-Max Wildfire",
+     "283"
+    ],
+    [
+     "A",
+     "3.",
+     "Dynamax Darmanitan",
+     "Fire Fang",
+     "Max Flare",
+     "257"
+    ],
+    [
+     "B",
+     "4.",
+     "Dynamax Moltres",
+     "Fire Spin",
+     "Max Flare",
+     "246"
+    ],
+    [
+     "B",
+     "5.",
+     "Dynamax Flareon",
+     "Ember",
+     "Max Flare",
+     "241"
+    ],
+    [
+     "C",
+     "6.",
+     "Dynamax Ho-Oh",
+     "Incinerate",
+     "Max Flare",
+     "235"
+    ],
+    [
+     "C",
+     "7.",
+     "Dynamax Cinderace",
+     "Fire Spin",
+     "Max Flare",
+     "234"
+    ],
+    [
+     "C",
+     "8.",
+     "Dynamax Entei",
+     "Fire Fang",
+     "Max Flare",
+     "231"
+    ],
+    [
+     "D",
+     "9.",
+     "Dynamax Arcanine",
+     "Fire Fang",
+     "Max Flare",
+     "224"
+    ],
+    [
+     "D",
+     "10.",
+     "Dynamax Charizard",
+     "Ember",
+     "Max Flare",
+     "220"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 Water-type Max Battle attackers",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Max Attack",
+    "DMG"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Gigantamax Inteleon",
+     "Pound",
+     "G-Max Hydrosnipe",
+     "329"
+    ],
+    [
+     "S",
+     "2.",
+     "Gigantamax Kingler",
+     "Metal Claw",
+     "G-Max Foam Burst",
+     "303"
+    ],
+    [
+     "A",
+     "3.",
+     "Dynamax Inteleon",
+     "Water Gun",
+     "Max Geyser",
+     "256"
+    ],
+    [
+     "A",
+     "4.",
+     "Dynamax Urshifu (Rapid Strike Style)",
+     "Waterfall",
+     "Max Geyser",
+     "249"
+    ],
+    [
+     "B",
+     "5.",
+     "Dynamax Kingler",
+     "Bubble",
+     "Max Geyser",
+     "236"
+    ],
+    [
+     "B",
+     "6.",
+     "Dynamax Gyarados",
+     "Waterfall",
+     "Max Geyser",
+     "233"
+    ],
+    [
+     "C",
+     "7.",
+     "Gigantamax Blastoise",
+     "Bite",
+     "G-Max Cannonade",
+     "221"
+    ],
+    [
+     "C",
+     "8.",
+     "Dynamax Kabutops",
+     "Waterfall",
+     "Max Geyser",
+     "217"
+    ],
+    [
+     "C",
+     "9.",
+     "Dynamax Omastar",
+     "Water Gun",
+     "Max Geyser",
+     "205"
+    ],
+    [
+     "C",
+     "10.",
+     "Dynamax Vaporeon",
+     "Water Gun",
+     "Max Geyser",
+     "203"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 Grass-type Max Battle attackers",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Max Attack",
+    "DMG"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Gigantamax Rillaboom",
+     "Scratch",
+     "G-Max Drum Solo",
+     "302"
+    ],
+    [
+     "S",
+     "2.",
+     "Gigantamax Venusaur",
+     "Vine Whip",
+     "G-Max Vine Lash",
+     "253"
+    ],
+    [
+     "A",
+     "3.",
+     "Dynamax Rillaboom",
+     "Razor Leaf",
+     "Max Overgrowth",
+     "235"
+    ],
+    [
+     "B",
+     "4.",
+     "Dynamax Tsareena",
+     "Razor Leaf",
+     "Max Overgrowth",
+     "219"
+    ],
+    [
+     "B",
+     "5.",
+     "Dynamax Leafeon",
+     "Bullet Seed",
+     "Max Overgrowth",
+     "213"
+    ],
+    [
+     "C",
+     "6.",
+     "Dynamax Venusaur",
+     "Vine Whip",
+     "Max Overgrowth",
+     "197"
+    ],
+    [
+     "C",
+     "7.",
+     "Dynamax Gardevoir",
+     "Magical Leaf",
+     "Max Overgrowth",
+     "194"
+    ],
+    [
+     "D",
+     "8.",
+     "Dynamax Thwackey",
+     "Razor Leaf",
+     "Max Overgrowth",
+     "166"
+    ],
+    [
+     "D",
+     "9.",
+     "Dynamax Ivysaur",
+     "Vine Whip",
+     "Max Overgrowth",
+     "154"
+    ],
+    [
+     "E",
+     "10.",
+     "Dynamax Greedent",
+     "Bullet Seed",
+     "Max Overgrowth",
+     "135"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 Electric-type Max Battle attackers",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Max Attack",
+    "DMG"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Gigantamax Toxtricity",
+     "Spark",
+     "G-Max Stun Shock",
+     "284"
+    ],
+    [
+     "S",
+     "2.",
+     "Dynamax Zapdos",
+     "Thunder Shock",
+     "Max Lightning",
+     "248"
+    ],
+    [
+     "S",
+     "3.",
+     "Dynamax Electivire",
+     "Thunder Shock",
+     "Max Lightning",
+     "244"
+    ],
+    [
+     "S",
+     "4.",
+     "Dynamax Raikou",
+     "Thunder Shock",
+     "Max Lightning",
+     "237"
+    ],
+    [
+     "A",
+     "5.",
+     "Dynamax Jolteon",
+     "Thunder Shock",
+     "Max Lightning",
+     "228"
+    ],
+    [
+     "A",
+     "6.",
+     "Dynamax Toxtricity (Amped Form)",
+     "Spark",
+     "Max Lightning",
+     "221"
+    ],
+    [
+     "A",
+     "7.",
+     "Dynamax Toxtricity (Low Key Form)",
+     "Spark",
+     "Max Lightning",
+     "221"
+    ],
+    [
+     "B",
+     "8.",
+     "Dynamax Electabuzz",
+     "Thunder Shock",
+     "Max Lightning",
+     "197"
+    ],
+    [
+     "B",
+     "9.",
+     "Dynamax Gardevoir",
+     "Charge Beam",
+     "Max Lightning",
+     "194"
+    ],
+    [
+     "C",
+     "10.",
+     "Dynamax Melmetal",
+     "Thunder Shock",
+     "Max Lightning",
+     "186"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 Psychic-type Max Battle attackers",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Max Attack",
+    "DMG"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Dynamax Alakazam",
+     "Psycho Cut",
+     "Max Mindstorm",
+     "264"
+    ],
+    [
+     "SS",
+     "2.",
+     "Dynamax Azelf",
+     "Extrasensory",
+     "Max Mindstorm",
+     "263"
+    ],
+    [
+     "SS",
+     "3.",
+     "Dynamax Latios",
+     "Zen Headbutt",
+     "Max Mindstorm",
+     "261"
+    ],
+    [
+     "SS",
+     "4.",
+     "Dynamax Espeon",
+     "Zen Headbutt",
+     "Max Mindstorm",
+     "255"
+    ],
+    [
+     "SS",
+     "5.",
+     "Dynamax Metagross",
+     "Zen Headbutt",
+     "Max Mindstorm",
+     "251"
+    ],
+    [
+     "S",
+     "6.",
+     "Dynamax Gallade",
+     "Psycho Cut",
+     "Max Mindstorm",
+     "233"
+    ],
+    [
+     "S",
+     "7.",
+     "Dynamax Hatterene",
+     "Psycho Cut",
+     "Max Mindstorm",
+     "233"
+    ],
+    [
+     "S",
+     "8.",
+     "Dynamax Gardevoir",
+     "Confusion",
+     "Max Mindstorm",
+     "233"
+    ],
+    [
+     "S",
+     "9.",
+     "Dynamax Kadabra",
+     "Psycho Cut",
+     "Max Mindstorm",
+     "228"
+    ],
+    [
+     "S",
+     "10.",
+     "Dynamax Latias",
+     "Zen Headbutt",
+     "Max Mindstorm",
+     "225"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 Ice-type Max Battle attackers",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Max Attack",
+    "DMG"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Dynamax Weavile",
+     "Ice Shard",
+     "Max Hailstorm",
+     "238"
+    ],
+    [
+     "S",
+     "2.",
+     "Dynamax Glaceon",
+     "Frost Breath",
+     "Max Hailstorm",
+     "234"
+    ],
+    [
+     "A",
+     "3.",
+     "Gigantamax Lapras",
+     "Psywave",
+     "G-Max Resonance",
+     "214"
+    ],
+    [
+     "B",
+     "4.",
+     "Dynamax Articuno",
+     "Frost Breath",
+     "Max Hailstorm",
+     "191"
+    ],
+    [
+     "B",
+     "5.",
+     "Dynamax Cryogonal",
+     "Frost Breath",
+     "Max Hailstorm",
+     "190"
+    ],
+    [
+     "B",
+     "6.",
+     "Dynamax Sneasel",
+     "Ice Shard",
+     "Max Hailstorm",
+     "189"
+    ],
+    [
+     "C",
+     "7.",
+     "Dynamax Walrein",
+     "Frost Breath",
+     "Max Hailstorm",
+     "182"
+    ],
+    [
+     "C",
+     "8.",
+     "Dynamax Regice",
+     "Frost Breath",
+     "Max Hailstorm",
+     "179"
+    ],
+    [
+     "D",
+     "9.",
+     "Dynamax Lapras",
+     "Frost Breath",
+     "Max Hailstorm",
+     "166"
+    ],
+    [
+     "E",
+     "10.",
+     "Dynamax Suicune",
+     "Ice Fang",
+     "Max Hailstorm",
+     "150"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 Dragon-type Max Battle attackers",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Max Attack",
+    "DMG"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Eternatus",
+     "Dragon Tail",
+     "Dynamax Cannon",
+     "348"
+    ],
+    [
+     "S",
+     "2.",
+     "Gigantamax Duraludon",
+     "Metal Claw",
+     "G-Max Depletion",
+     "302"
+    ],
+    [
+     "A",
+     "3.",
+     "Dynamax Palkia",
+     "Dragon Breath",
+     "Max Wyrmwind",
+     "272"
+    ],
+    [
+     "A",
+     "4.",
+     "Dynamax Dialga",
+     "Dragon Breath",
+     "Max Wyrmwind",
+     "268"
+    ],
+    [
+     "A",
+     "5.",
+     "Dynamax Latios",
+     "Dragon Breath",
+     "Max Wyrmwind",
+     "261"
+    ],
+    [
+     "B",
+     "6.",
+     "Dynamax Hydreigon",
+     "Dragon Breath",
+     "Max Wyrmwind",
+     "250"
+    ],
+    [
+     "C",
+     "7.",
+     "Dynamax Duraludon",
+     "Dragon Tail",
+     "Max Wyrmwind",
+     "235"
+    ],
+    [
+     "C",
+     "8.",
+     "Dynamax Drampa",
+     "Dragon Breath",
+     "Max Wyrmwind",
+     "227"
+    ],
+    [
+     "C",
+     "9.",
+     "Dynamax Latias",
+     "Dragon Breath",
+     "Max Wyrmwind",
+     "225"
+    ],
+    [
+     "D",
+     "10.",
+     "Dynamax Flygon",
+     "Dragon Tail",
+     "Max Wyrmwind",
+     "203"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 Dark-type Max Battle attackers",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Max Attack",
+    "DMG"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Gigantamax Grimmsnarl",
+     "Bite",
+     "G-Max Snooze",
+     "287"
+    ],
+    [
+     "S",
+     "2.",
+     "Dynamax Hydreigon",
+     "Bite",
+     "Max Darkness",
+     "250"
+    ],
+    [
+     "S",
+     "3.",
+     "Dynamax Urshifu (Single Strike Style)",
+     "Sucker Punch",
+     "Max Darkness",
+     "249"
+    ],
+    [
+     "S",
+     "4.",
+     "Dynamax Weavile",
+     "Feint Attack",
+     "Max Darkness",
+     "238"
+    ],
+    [
+     "A",
+     "5.",
+     "Dynamax Gengar",
+     "Sucker Punch",
+     "Max Darkness",
+     "213"
+    ],
+    [
+     "B",
+     "6.",
+     "Dynamax Gyarados",
+     "Bite",
+     "Max Darkness",
+     "194"
+    ],
+    [
+     "B",
+     "7.",
+     "Dynamax Sneasel",
+     "Feint Attack",
+     "Max Darkness",
+     "189"
+    ],
+    [
+     "B",
+     "8.",
+     "Dynamax Arcanine",
+     "Bite",
+     "Max Darkness",
+     "186"
+    ],
+    [
+     "C",
+     "9.",
+     "Dynamax Regidrago",
+     "Bite",
+     "Max Darkness",
+     "167"
+    ],
+    [
+     "C",
+     "10.",
+     "Dynamax Zweilous",
+     "Bite",
+     "Max Darkness",
+     "161"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 Fairy-type Max Battle attackers",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Max Attack",
+    "DMG"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Dynamax Gardevoir",
+     "Charm",
+     "Max Starfall",
+     "233"
+    ],
+    [
+     "SS",
+     "2.",
+     "Dynamax Hatterene",
+     "Charm",
+     "Max Starfall",
+     "233"
+    ],
+    [
+     "S",
+     "3.",
+     "Dynamax Sylveon",
+     "Fairy Wind",
+     "Max Starfall",
+     "201"
+    ],
+    [
+     "A",
+     "4.",
+     "Dynamax Gallade",
+     "Charm",
+     "Max Starfall",
+     "194"
+    ],
+    [
+     "B",
+     "5.",
+     "Dynamax Latias",
+     "Charm",
+     "Max Starfall",
+     "187"
+    ],
+    [
+     "B",
+     "6.",
+     "Dynamax Tsareena",
+     "Charm",
+     "Max Starfall",
+     "183"
+    ],
+    [
+     "C",
+     "7.",
+     "Dynamax Hattrem",
+     "Charm",
+     "Max Starfall",
+     "130"
+    ],
+    [
+     "D",
+     "8.",
+     "Dynamax Hatenna",
+     "Charm",
+     "Max Starfall",
+     "87"
+    ],
+    [
+     "E",
+     "9.",
+     "Dynamax Steenee",
+     "Charm",
+     "Max Starfall",
+     "72"
+    ],
+    [
+     "F",
+     "10.",
+     "Dynamax Bounsweet",
+     "Charm",
+     "Max Starfall",
+     "54"
+    ]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1679 @@
+{
+ "slug": "dynamax-tanks-per-type",
+ "tables": [
+  {
+   "section": "Top 10 tanks against Normal-type Attacks in Max Battles",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Score",
+    "Avg. HP lost / hit"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Dynamax Regirock",
+     "Lock-On",
+     "112.4",
+     "23.3%"
+    ],
+    [
+     "SS",
+     "2.",
+     "Crowned Shield Zamazenta",
+     "Metal Claw",
+     "107.1",
+     "24.5%"
+    ],
+    [
+     "SS",
+     "3.",
+     "Dynamax Registeel",
+     "Metal Claw",
+     "104.1",
+     "25.2%"
+    ],
+    [
+     "S",
+     "4.",
+     "Dynamax Blissey",
+     "Pound",
+     "100",
+     "26.2%"
+    ],
+    [
+     "S",
+     "5.",
+     "Gigantamax Melmetal",
+     "Thunder Shock",
+     "96.6",
+     "27.1%"
+    ],
+    [
+     "S",
+     "6.",
+     "Dynamax Melmetal",
+     "Thunder Shock",
+     "96.6",
+     "27.1%"
+    ],
+    [
+     "S",
+     "7.",
+     "Dynamax Rhyperior",
+     "Smack Down",
+     "92.1",
+     "28.4%"
+    ],
+    [
+     "A",
+     "8.",
+     "Crowned Sword Zacian",
+     "Metal Claw",
+     "88.8",
+     "29.5%"
+    ],
+    [
+     "A",
+     "9.",
+     "Dynamax Lugia",
+     "Extrasensory",
+     "85.8",
+     "30.5%"
+    ],
+    [
+     "A",
+     "10.",
+     "Dynamax Metagross",
+     "Fury Cutter",
+     "84.4",
+     "31%"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 tanks against Fighting-type Attacks in Max Battles",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Score",
+    "Avg. HP lost / hit"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Dynamax Lugia",
+     "Extrasensory",
+     "217.8",
+     "12%"
+    ],
+    [
+     "S",
+     "2.",
+     "Gigantamax Gengar",
+     "Lick",
+     "120.2",
+     "21.8%"
+    ],
+    [
+     "S",
+     "3.",
+     "Dynamax Gengar",
+     "Lick",
+     "120.2",
+     "21.8%"
+    ],
+    [
+     "A",
+     "4.",
+     "Dynamax Gardevoir",
+     "Charge Beam",
+     "103.6",
+     "25.3%"
+    ],
+    [
+     "A",
+     "5.",
+     "Dynamax Ho-Oh",
+     "Extrasensory",
+     "100.3",
+     "26.1%"
+    ],
+    [
+     "A",
+     "6.",
+     "Eternatus",
+     "Dragon Tail",
+     "99.7",
+     "26.3%"
+    ],
+    [
+     "A",
+     "7.",
+     "Dynamax Uxie",
+     "Extrasensory",
+     "94.9",
+     "27.6%"
+    ],
+    [
+     "B",
+     "8.",
+     "Dynamax Latias",
+     "Dragon Breath",
+     "90.2",
+     "29%"
+    ],
+    [
+     "B",
+     "9.",
+     "Dynamax Hatterene",
+     "Psycho Cut",
+     "87.6",
+     "29.9%"
+    ],
+    [
+     "B",
+     "10.",
+     "Dynamax Sylveon",
+     "Fairy Wind",
+     "86.1",
+     "30.4%"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 tanks against Flying-type Attacks in Max Battles",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Score",
+    "Avg. HP lost / hit"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Dynamax Regirock",
+     "Lock-On",
+     "112.4",
+     "23.3%"
+    ],
+    [
+     "S",
+     "2.",
+     "Dynamax Registeel",
+     "Metal Claw",
+     "104.1",
+     "25.2%"
+    ],
+    [
+     "S",
+     "3.",
+     "Dynamax Blissey",
+     "Pound",
+     "100",
+     "26.2%"
+    ],
+    [
+     "S",
+     "4.",
+     "Gigantamax Melmetal",
+     "Thunder Shock",
+     "96.6",
+     "27.1%"
+    ],
+    [
+     "S",
+     "5.",
+     "Dynamax Melmetal",
+     "Thunder Shock",
+     "96.6",
+     "27.1%"
+    ],
+    [
+     "A",
+     "6.",
+     "Dynamax Rhyperior",
+     "Smack Down",
+     "92.1",
+     "28.4%"
+    ],
+    [
+     "A",
+     "7.",
+     "Crowned Sword Zacian",
+     "Metal Claw",
+     "88.8",
+     "29.5%"
+    ],
+    [
+     "A",
+     "8.",
+     "Dynamax Lugia",
+     "Extrasensory",
+     "85.8",
+     "30.5%"
+    ],
+    [
+     "A",
+     "9.",
+     "Dynamax Metagross",
+     "Fury Cutter",
+     "84.4",
+     "31%"
+    ],
+    [
+     "A",
+     "10.",
+     "Dynamax Dialga",
+     "Dragon Breath",
+     "84.3",
+     "31.1%"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 tanks against Poison-type Attacks in Max Battles",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Score",
+    "Avg. HP lost / hit"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Crowned Shield Zamazenta",
+     "Metal Claw",
+     "167.9",
+     "15.6%"
+    ],
+    [
+     "SS",
+     "2.",
+     "Dynamax Registeel",
+     "Metal Claw",
+     "164.7",
+     "15.9%"
+    ],
+    [
+     "SS",
+     "3.",
+     "Dynamax Excadrill",
+     "Metal Claw",
+     "159.9",
+     "16.4%"
+    ],
+    [
+     "S",
+     "4.",
+     "Gigantamax Melmetal",
+     "Thunder Shock",
+     "153.9",
+     "17%"
+    ],
+    [
+     "S",
+     "5.",
+     "Dynamax Melmetal",
+     "Thunder Shock",
+     "153.9",
+     "17%"
+    ],
+    [
+     "S",
+     "6.",
+     "Dynamax Rhyperior",
+     "Smack Down",
+     "146.8",
+     "17.8%"
+    ],
+    [
+     "A",
+     "7.",
+     "Dynamax Metagross",
+     "Fury Cutter",
+     "134.6",
+     "19.4%"
+    ],
+    [
+     "A",
+     "8.",
+     "Dynamax Dialga",
+     "Dragon Breath",
+     "133.9",
+     "19.6%"
+    ],
+    [
+     "A",
+     "9.",
+     "Dynamax Corviknight",
+     "Sand Attack",
+     "132",
+     "19.8%"
+    ],
+    [
+     "A",
+     "10.",
+     "Dynamax Rhydon",
+     "Mud-Slap",
+     "124.4",
+     "21%"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 tanks against Ground-type Attacks in Max Battles",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Score",
+    "Avg. HP lost / hit"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Dynamax Lugia",
+     "Extrasensory",
+     "217.8",
+     "12%"
+    ],
+    [
+     "S",
+     "2.",
+     "Dynamax Articuno",
+     "Frost Breath",
+     "150.6",
+     "17.4%"
+    ],
+    [
+     "A",
+     "3.",
+     "Dynamax Gyarados",
+     "Bite",
+     "125.8",
+     "20.8%"
+    ],
+    [
+     "A",
+     "4.",
+     "Gigantamax Butterfree",
+     "Bug Bite",
+     "111.7",
+     "23.4%"
+    ],
+    [
+     "A",
+     "5.",
+     "Dynamax Butterfree",
+     "Bug Bite",
+     "111.7",
+     "23.4%"
+    ],
+    [
+     "A",
+     "6.",
+     "Dynamax Noctowl",
+     "Wing Attack",
+     "111",
+     "23.6%"
+    ],
+    [
+     "B",
+     "7.",
+     "Dynamax Ho-Oh",
+     "Extrasensory",
+     "100.3",
+     "26.1%"
+    ],
+    [
+     "B",
+     "8.",
+     "Dynamax Blissey",
+     "Pound",
+     "100",
+     "26.2%"
+    ],
+    [
+     "B",
+     "9.",
+     "Dynamax Unfezant",
+     "Air Slash",
+     "89.8",
+     "29.2%"
+    ],
+    [
+     "C",
+     "10.",
+     "Dynamax Corviknight",
+     "Sand Attack",
+     "83.1",
+     "31.5%"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 tanks against Rock-type Attacks in Max Battles",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Score",
+    "Avg. HP lost / hit"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Crowned Shield Zamazenta",
+     "Metal Claw",
+     "167.9",
+     "15.6%"
+    ],
+    [
+     "S",
+     "2.",
+     "Dynamax Registeel",
+     "Metal Claw",
+     "104.1",
+     "25.2%"
+    ],
+    [
+     "S",
+     "3.",
+     "Dynamax Excadrill",
+     "Metal Claw",
+     "100.3",
+     "26.1%"
+    ],
+    [
+     "S",
+     "4.",
+     "Dynamax Blissey",
+     "Pound",
+     "100",
+     "26.2%"
+    ],
+    [
+     "S",
+     "5.",
+     "Gigantamax Melmetal",
+     "Thunder Shock",
+     "96.6",
+     "27.1%"
+    ],
+    [
+     "S",
+     "6.",
+     "Dynamax Melmetal",
+     "Thunder Shock",
+     "96.6",
+     "27.1%"
+    ],
+    [
+     "S",
+     "7.",
+     "Dynamax Rhyperior",
+     "Smack Down",
+     "92.1",
+     "28.4%"
+    ],
+    [
+     "A",
+     "8.",
+     "Crowned Sword Zacian",
+     "Metal Claw",
+     "88.8",
+     "29.5%"
+    ],
+    [
+     "A",
+     "9.",
+     "Dynamax Metagross",
+     "Fury Cutter",
+     "84.4",
+     "31%"
+    ],
+    [
+     "A",
+     "10.",
+     "Dynamax Dialga",
+     "Dragon Breath",
+     "84.3",
+     "31.1%"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 tanks against Bug-type Attacks in Max Battles",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Score",
+    "Avg. HP lost / hit"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Crowned Shield Zamazenta",
+     "Metal Claw",
+     "167.9",
+     "15.6%"
+    ],
+    [
+     "SS",
+     "2.",
+     "Dynamax Ho-Oh",
+     "Extrasensory",
+     "160.6",
+     "16.3%"
+    ],
+    [
+     "S",
+     "3.",
+     "Crowned Sword Zacian",
+     "Metal Claw",
+     "141.6",
+     "18.5%"
+    ],
+    [
+     "S",
+     "4.",
+     "Dynamax Corviknight",
+     "Sand Attack",
+     "132",
+     "19.8%"
+    ],
+    [
+     "A",
+     "5.",
+     "Dynamax Moltres",
+     "Fire Spin",
+     "117.8",
+     "22.2%"
+    ],
+    [
+     "A",
+     "6.",
+     "Dynamax Registeel",
+     "Metal Claw",
+     "104.1",
+     "25.2%"
+    ],
+    [
+     "A",
+     "7.",
+     "Gigantamax Charizard",
+     "Dragon Breath",
+     "102.1",
+     "25.7%"
+    ],
+    [
+     "A",
+     "8.",
+     "Dynamax Charizard",
+     "Dragon Breath",
+     "102.1",
+     "25.7%"
+    ],
+    [
+     "A",
+     "9.",
+     "Dynamax Blissey",
+     "Pound",
+     "100",
+     "26.2%"
+    ],
+    [
+     "A",
+     "10.",
+     "Eternatus",
+     "Dragon Tail",
+     "99.7",
+     "26.3%"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 tanks against Ghost-type Attacks in Max Battles",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Score",
+    "Avg. HP lost / hit"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Dynamax Blissey",
+     "Pound",
+     "253.2",
+     "10.3%"
+    ],
+    [
+     "S",
+     "2.",
+     "Dynamax Chansey",
+     "Pound",
+     "193.2",
+     "13.5%"
+    ],
+    [
+     "A",
+     "3.",
+     "Gigantamax Snorlax",
+     "Lick",
+     "171",
+     "15.3%"
+    ],
+    [
+     "B",
+     "4.",
+     "Dynamax Greedent",
+     "Tackle",
+     "127.1",
+     "20.6%"
+    ],
+    [
+     "B",
+     "5.",
+     "Dynamax Noctowl",
+     "Wing Attack",
+     "111",
+     "23.6%"
+    ],
+    [
+     "B",
+     "6.",
+     "Dynamax Dubwool",
+     "Tackle",
+     "109.8",
+     "23.8%"
+    ],
+    [
+     "C",
+     "7.",
+     "Dynamax Umbreon",
+     "Feint Attack",
+     "99.1",
+     "26.4%"
+    ],
+    [
+     "C",
+     "8.",
+     "Dynamax Drampa",
+     "Dragon Breath",
+     "97.8",
+     "26.8%"
+    ],
+    [
+     "C",
+     "9.",
+     "Dynamax Unfezant",
+     "Air Slash",
+     "89.8",
+     "29.2%"
+    ],
+    [
+     "D",
+     "10.",
+     "Dynamax Urshifu (Single Strike Style)",
+     "Sucker Punch",
+     "78.2",
+     "33.5%"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 tanks against Steel-type Attacks in Max Battles",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Score",
+    "Avg. HP lost / hit"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Crowned Shield Zamazenta",
+     "Metal Claw",
+     "107.1",
+     "24.5%"
+    ],
+    [
+     "SS",
+     "2.",
+     "Dynamax Registeel",
+     "Metal Claw",
+     "104.1",
+     "25.2%"
+    ],
+    [
+     "SS",
+     "3.",
+     "Dynamax Suicune",
+     "Water Gun",
+     "101.3",
+     "25.8%"
+    ],
+    [
+     "SS",
+     "4.",
+     "Dynamax Ho-Oh",
+     "Extrasensory",
+     "100.3",
+     "26.1%"
+    ],
+    [
+     "SS",
+     "5.",
+     "Dynamax Blissey",
+     "Pound",
+     "100",
+     "26.2%"
+    ],
+    [
+     "SS",
+     "6.",
+     "Gigantamax Melmetal",
+     "Thunder Shock",
+     "96.6",
+     "27.1%"
+    ],
+    [
+     "SS",
+     "7.",
+     "Dynamax Melmetal",
+     "Thunder Shock",
+     "96.6",
+     "27.1%"
+    ],
+    [
+     "S",
+     "8.",
+     "Dynamax Milotic",
+     "Waterfall",
+     "91.9",
+     "28.5%"
+    ],
+    [
+     "S",
+     "9.",
+     "Dynamax Vaporeon",
+     "Water Gun",
+     "87.2",
+     "30%"
+    ],
+    [
+     "S",
+     "10.",
+     "Dynamax Lugia",
+     "Extrasensory",
+     "85.8",
+     "30.5%"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 tanks against Fire-type Attacks in Max Battles",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Score",
+    "Avg. HP lost / hit"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Dynamax Palkia",
+     "Dragon Breath",
+     "126.9",
+     "20.6%"
+    ],
+    [
+     "S",
+     "2.",
+     "Dynamax Regirock",
+     "Lock-On",
+     "112.4",
+     "23.3%"
+    ],
+    [
+     "S",
+     "3.",
+     "Dynamax Omastar",
+     "Water Gun",
+     "108.2",
+     "24.2%"
+    ],
+    [
+     "S",
+     "4.",
+     "Dynamax Suicune",
+     "Water Gun",
+     "101.3",
+     "25.8%"
+    ],
+    [
+     "S",
+     "5.",
+     "Dynamax Ho-Oh",
+     "Extrasensory",
+     "100.3",
+     "26.1%"
+    ],
+    [
+     "S",
+     "6.",
+     "Dynamax Blissey",
+     "Pound",
+     "100",
+     "26.2%"
+    ],
+    [
+     "S",
+     "7.",
+     "Eternatus",
+     "Dragon Tail",
+     "99.7",
+     "26.3%"
+    ],
+    [
+     "A",
+     "8.",
+     "Dynamax Kabutops",
+     "Fury Cutter",
+     "92.6",
+     "28.3%"
+    ],
+    [
+     "A",
+     "9.",
+     "Dynamax Rhyperior",
+     "Smack Down",
+     "92.1",
+     "28.4%"
+    ],
+    [
+     "A",
+     "10.",
+     "Dynamax Milotic",
+     "Waterfall",
+     "91.9",
+     "28.5%"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 tanks against Water-type Attacks in Max Battles",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Score",
+    "Avg. HP lost / hit"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Dynamax Palkia",
+     "Dragon Breath",
+     "126.9",
+     "20.6%"
+    ],
+    [
+     "S",
+     "2.",
+     "Dynamax Suicune",
+     "Water Gun",
+     "101.3",
+     "25.8%"
+    ],
+    [
+     "S",
+     "3.",
+     "Dynamax Blissey",
+     "Pound",
+     "100",
+     "26.2%"
+    ],
+    [
+     "S",
+     "4.",
+     "Eternatus",
+     "Dragon Tail",
+     "99.7",
+     "26.3%"
+    ],
+    [
+     "S",
+     "5.",
+     "Gigantamax Lapras",
+     "Psywave",
+     "93.7",
+     "28%"
+    ],
+    [
+     "S",
+     "6.",
+     "Dynamax Lapras",
+     "Water Gun",
+     "93.7",
+     "28%"
+    ],
+    [
+     "S",
+     "7.",
+     "Dynamax Milotic",
+     "Waterfall",
+     "91.9",
+     "28.5%"
+    ],
+    [
+     "A",
+     "8.",
+     "Dynamax Latias",
+     "Dragon Breath",
+     "90.2",
+     "29%"
+    ],
+    [
+     "A",
+     "9.",
+     "Dynamax Vaporeon",
+     "Water Gun",
+     "87.2",
+     "30%"
+    ],
+    [
+     "A",
+     "10.",
+     "Dynamax Lugia",
+     "Extrasensory",
+     "85.8",
+     "30.5%"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 tanks against Grass-type Attacks in Max Battles",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Score",
+    "Avg. HP lost / hit"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Dynamax Ho-Oh",
+     "Extrasensory",
+     "160.6",
+     "16.3%"
+    ],
+    [
+     "SS",
+     "2.",
+     "Eternatus",
+     "Dragon Tail",
+     "158.2",
+     "16.5%"
+    ],
+    [
+     "S",
+     "3.",
+     "Dynamax Lugia",
+     "Extrasensory",
+     "137",
+     "19.1%"
+    ],
+    [
+     "S",
+     "4.",
+     "Dynamax Dialga",
+     "Dragon Breath",
+     "133.9",
+     "19.6%"
+    ],
+    [
+     "S",
+     "5.",
+     "Dynamax Corviknight",
+     "Sand Attack",
+     "132",
+     "19.8%"
+    ],
+    [
+     "A",
+     "6.",
+     "Dynamax Moltres",
+     "Fire Spin",
+     "117.8",
+     "22.2%"
+    ],
+    [
+     "A",
+     "7.",
+     "Gigantamax Venusaur",
+     "Vine Whip",
+     "112.4",
+     "23.3%"
+    ],
+    [
+     "A",
+     "8.",
+     "Dynamax Venusaur",
+     "Vine Whip",
+     "112.4",
+     "23.3%"
+    ],
+    [
+     "A",
+     "9.",
+     "Dynamax Centiskorch",
+     "Bug Bite",
+     "112.2",
+     "23.3%"
+    ],
+    [
+     "A",
+     "10.",
+     "Crowned Shield Zamazenta",
+     "Metal Claw",
+     "107.1",
+     "24.5%"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 tanks against Electric-type Attacks in Max Battles",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Score",
+    "Avg. HP lost / hit"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Dynamax Flygon",
+     "Mud Shot",
+     "161.6",
+     "16.2%"
+    ],
+    [
+     "SS",
+     "2.",
+     "Dynamax Rhyperior",
+     "Smack Down",
+     "146.8",
+     "17.8%"
+    ],
+    [
+     "S",
+     "3.",
+     "Dynamax Rhydon",
+     "Mud-Slap",
+     "124.4",
+     "21%"
+    ],
+    [
+     "A",
+     "4.",
+     "Dynamax Excadrill",
+     "Metal Claw",
+     "100.3",
+     "26.1%"
+    ],
+    [
+     "A",
+     "5.",
+     "Dynamax Blissey",
+     "Pound",
+     "100",
+     "26.2%"
+    ],
+    [
+     "A",
+     "6.",
+     "Eternatus",
+     "Dragon Tail",
+     "99.7",
+     "26.3%"
+    ],
+    [
+     "A",
+     "7.",
+     "Dynamax Latias",
+     "Dragon Breath",
+     "90.2",
+     "29%"
+    ],
+    [
+     "B",
+     "8.",
+     "Dynamax Dialga",
+     "Dragon Breath",
+     "84.3",
+     "31.1%"
+    ],
+    [
+     "B",
+     "9.",
+     "Dynamax Regidrago",
+     "Dragon Breath",
+     "81.8",
+     "32%"
+    ],
+    [
+     "B",
+     "10.",
+     "Dynamax Latios",
+     "Dragon Breath",
+     "78.9",
+     "33.2%"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 tanks against Psychic-type Attacks in Max Battles",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Score",
+    "Avg. HP lost / hit"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Dynamax Malamar",
+     "Psycho Cut",
+     "166.3",
+     "15.7%"
+    ],
+    [
+     "SS",
+     "2.",
+     "Dynamax Umbreon",
+     "Feint Attack",
+     "158",
+     "16.6%"
+    ],
+    [
+     "S",
+     "3.",
+     "Dynamax Lugia",
+     "Extrasensory",
+     "137",
+     "19.1%"
+    ],
+    [
+     "S",
+     "4.",
+     "Dynamax Metagross",
+     "Fury Cutter",
+     "134.6",
+     "19.4%"
+    ],
+    [
+     "S",
+     "5.",
+     "Dynamax Hydreigon",
+     "Bite",
+     "123.9",
+     "21.1%"
+    ],
+    [
+     "A",
+     "6.",
+     "Dynamax Registeel",
+     "Metal Claw",
+     "104.1",
+     "25.2%"
+    ],
+    [
+     "A",
+     "7.",
+     "Dynamax Blissey",
+     "Pound",
+     "100",
+     "26.2%"
+    ],
+    [
+     "A",
+     "8.",
+     "Gigantamax Melmetal",
+     "Thunder Shock",
+     "96.6",
+     "27.1%"
+    ],
+    [
+     "A",
+     "9.",
+     "Dynamax Melmetal",
+     "Thunder Shock",
+     "96.6",
+     "27.1%"
+    ],
+    [
+     "A",
+     "10.",
+     "Gigantamax Grimmsnarl",
+     "Bite",
+     "95.6",
+     "27.4%"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 tanks against Ice-type Attacks in Max Battles",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Score",
+    "Avg. HP lost / hit"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Gigantamax Lapras",
+     "Psywave",
+     "149.2",
+     "17.6%"
+    ],
+    [
+     "SS",
+     "2.",
+     "Dynamax Lapras",
+     "Water Gun",
+     "149.2",
+     "17.6%"
+    ],
+    [
+     "S",
+     "3.",
+     "Dynamax Walrein",
+     "Frost Breath",
+     "132.9",
+     "19.7%"
+    ],
+    [
+     "A",
+     "4.",
+     "Dynamax Regice",
+     "Lock-On",
+     "112.4",
+     "23.3%"
+    ],
+    [
+     "A",
+     "5.",
+     "Crowned Shield Zamazenta",
+     "Metal Claw",
+     "107.1",
+     "24.5%"
+    ],
+    [
+     "A",
+     "6.",
+     "Dynamax Registeel",
+     "Metal Claw",
+     "104.1",
+     "25.2%"
+    ],
+    [
+     "A",
+     "7.",
+     "Dynamax Suicune",
+     "Water Gun",
+     "101.3",
+     "25.8%"
+    ],
+    [
+     "A",
+     "8.",
+     "Dynamax Blissey",
+     "Pound",
+     "100",
+     "26.2%"
+    ],
+    [
+     "A",
+     "9.",
+     "Gigantamax Melmetal",
+     "Thunder Shock",
+     "96.6",
+     "27.1%"
+    ],
+    [
+     "A",
+     "10.",
+     "Dynamax Melmetal",
+     "Thunder Shock",
+     "96.6",
+     "27.1%"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 tanks against Dragon-type Attacks in Max Battles",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Score",
+    "Avg. HP lost / hit"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Crowned Sword Zacian",
+     "Metal Claw",
+     "225.4",
+     "11.6%"
+    ],
+    [
+     "S",
+     "2.",
+     "Dynamax Sylveon",
+     "Fairy Wind",
+     "136.5",
+     "19.2%"
+    ],
+    [
+     "A",
+     "3.",
+     "Crowned Shield Zamazenta",
+     "Metal Claw",
+     "107.1",
+     "24.5%"
+    ],
+    [
+     "A",
+     "4.",
+     "Dynamax Registeel",
+     "Metal Claw",
+     "104.1",
+     "25.2%"
+    ],
+    [
+     "A",
+     "5.",
+     "Dynamax Gardevoir",
+     "Charge Beam",
+     "103.6",
+     "25.3%"
+    ],
+    [
+     "A",
+     "6.",
+     "Dynamax Blissey",
+     "Pound",
+     "100",
+     "26.2%"
+    ],
+    [
+     "A",
+     "7.",
+     "Gigantamax Melmetal",
+     "Thunder Shock",
+     "96.6",
+     "27.1%"
+    ],
+    [
+     "A",
+     "8.",
+     "Dynamax Melmetal",
+     "Thunder Shock",
+     "96.6",
+     "27.1%"
+    ],
+    [
+     "A",
+     "9.",
+     "Gigantamax Grimmsnarl",
+     "Bite",
+     "95.6",
+     "27.4%"
+    ],
+    [
+     "B",
+     "10.",
+     "Dynamax Hatterene",
+     "Psycho Cut",
+     "87.6",
+     "29.9%"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 tanks against Dark-type Attacks in Max Battles",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Score",
+    "Avg. HP lost / hit"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Dynamax Urshifu (Single Strike Style)",
+     "Sucker Punch",
+     "124.1",
+     "21.1%"
+    ],
+    [
+     "S",
+     "2.",
+     "Crowned Shield Zamazenta",
+     "Metal Claw",
+     "107.1",
+     "24.5%"
+    ],
+    [
+     "S",
+     "3.",
+     "Dynamax Blissey",
+     "Pound",
+     "100",
+     "26.2%"
+    ],
+    [
+     "S",
+     "4.",
+     "Dynamax Umbreon",
+     "Feint Attack",
+     "99.1",
+     "26.4%"
+    ],
+    [
+     "S",
+     "5.",
+     "Gigantamax Grimmsnarl",
+     "Bite",
+     "95.6",
+     "27.4%"
+    ],
+    [
+     "A",
+     "6.",
+     "Crowned Sword Zacian",
+     "Metal Claw",
+     "88.8",
+     "29.5%"
+    ],
+    [
+     "A",
+     "7.",
+     "Dynamax Sylveon",
+     "Fairy Wind",
+     "86.1",
+     "30.4%"
+    ],
+    [
+     "A",
+     "8.",
+     "Dynamax Urshifu (Rapid Strike Style)",
+     "Counter",
+     "78.2",
+     "33.5%"
+    ],
+    [
+     "A",
+     "9.",
+     "Dynamax Hydreigon",
+     "Bite",
+     "77.6",
+     "33.7%"
+    ],
+    [
+     "A",
+     "10.",
+     "Dynamax Chansey",
+     "Pound",
+     "76.2",
+     "34.3%"
+    ]
+   ]
+  },
+  {
+   "section": "Top 10 tanks against Fairy-type Attacks in Max Battles",
+   "header": [
+    "Tier",
+    "#",
+    "Pokémon",
+    "Fast Attack",
+    "Score",
+    "Avg. HP lost / hit"
+   ],
+   "rows": [
+    [
+     "SS",
+     "1.",
+     "Dynamax Registeel",
+     "Metal Claw",
+     "104.1",
+     "25.2%"
+    ],
+    [
+     "SS",
+     "2.",
+     "Dynamax Ho-Oh",
+     "Extrasensory",
+     "100.3",
+     "26.1%"
+    ],
+    [
+     "SS",
+     "3.",
+     "Dynamax Blissey",
+     "Pound",
+     "100",
+     "26.2%"
+    ],
+    [
+     "SS",
+     "4.",
+     "Gigantamax Melmetal",
+     "Thunder Shock",
+     "96.6",
+     "27.1%"
+    ],
+    [
+     "SS",
+     "5.",
+     "Dynamax Melmetal",
+     "Thunder Shock",
+     "96.6",
+     "27.1%"
+    ],
+    [
+     "S",
+     "6.",
+     "Crowned Sword Zacian",
+     "Metal Claw",
+     "88.8",
+     "29.5%"
+    ],
+    [
+     "S",
+     "7.",
+     "Dynamax Lugia",
+     "Extrasensory",
+     "85.8",
+     "30.5%"
+    ],
+    [
+     "S",
+     "8.",
+     "Dynamax Metagross",
+     "Fury Cutter",
+     "84.4",
+     "31%"
+    ],
+    [
+     "S",
+     "9.",
+     "Dynamax Entei",
+     "Fire Fang",
+     "84.3",
+     "31%"
+    ],
+    [
+     "S",
+     "10.",
+     "Dynamax Corviknight",
+     "Sand Attack",
+     "83.1",
+     "31.5%"
+    ]
+   ]
+  }
+ ]
+}
