@@ -24,6 +24,7 @@
  *   PogoHub tier chip   .phtier                     squad.js
  *   deal calculator     .calc .cfield .cresult      value.js
  *   base price table    .refgrid .refrow            value.js
+ *   coins vs. direct    .coingrid .coinrow          value.js
  *
  * A page owns its domain-specific components and builds them from the primitives above —
  * the events page's .ecard/.erow/.ecaveat in events.js, and .remindbox/.rb-* in remind.js,
@@ -1001,7 +1002,28 @@ a.rname:hover { color: var(--accent); }
 .refname { color: var(--muted); }
 .refrate { font-weight: 600; font-variant-numeric: tabular-nums; }
 
+.coinwrap { margin-bottom: var(--sp-8); }
+.coingrid { display: flex; flex-direction: column; gap: var(--sp-3); margin-top: var(--sp-5); }
+.coinrow {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: var(--sp-5) var(--sp-6);
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4) var(--sp-6);
+}
+.coinname { font-weight: 700; flex: 0 0 auto; min-width: 150px; }
+.coinvals { display: flex; gap: var(--sp-6); flex-wrap: wrap; flex: 1; }
+.coinval { display: flex; flex-direction: column; gap: 2px; }
+.cvlbl { font-size: var(--fs-meta); text-transform: uppercase; letter-spacing: .09em; color: var(--muted); }
+.cvnum { font-weight: 700; font-variant-numeric: tabular-nums; cursor: help; }
+.coinverdict { flex: 1 1 100%; font-size: var(--fs-ui); color: var(--muted); }
+/* Tones name which route wins, not good/bad — neither is a mistake, so this is information
+   rather than a warning: direct winning and coins winning get different hues, and "it
+   depends on the pack size" gets the attention colour. */
+.coinrow[data-tone="direct"] { border-color: var(--accent); background: rgba(91,140,255,.06); }
+.coinrow[data-tone="coins"] { border-color: var(--done); background: rgba(52,211,153,.06); }
+.coinrow[data-tone="mixed"] { border-color: var(--e200); background: rgba(251,191,36,.06); }
+
 @media (max-width: 560px) {
   .calc-grid { grid-template-columns: 1fr 1fr; }
   .cverdict { flex-wrap: wrap; }
+  .coinrow { flex-direction: column; align-items: flex-start; }
 }

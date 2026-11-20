@@ -19,6 +19,57 @@ function rate(base) {
   return base.price / base.qty;
 }
 
+/**
+ * Coins vs. direct purchase, for Raid Pass and Remote Raid Pass. The coins route has a range,
+ * not one number: the smallest coin pack and the largest one charge different RM per coin, so
+ * "buy coins then spend them" is cheaper or pricier depending which pack you'd actually buy.
+ * Direct is a single number — the Web Store's own standalone pass listing.
+ */
+function renderCoinCompare() {
+  const grid = document.getElementById('coincompare');
+  grid.textContent = '';
+
+  const smallRate = rate(WEBSTORE_BASE.coins);
+  const bulkRate = WEBSTORE_BASE.coins.bulk.price / WEBSTORE_BASE.coins.bulk.qty;
+
+  const rows = [
+    { key: 'raidPass', direct: WEBSTORE_BASE.raidPass },
+    { key: 'remoteRaidPass', direct: WEBSTORE_BASE.remoteRaidPass },
+  ];
+
+  rows.forEach(({ key, direct }) => {
+    const coinsNeeded = INGAME_SHOP[key].coins;
+    const directRate = rate(direct);
+    const viaSmall = coinsNeeded * smallRate;
+    const viaBulk = coinsNeeded * bulkRate;
+    // Best case for coins is the bulk pack; worst case is the smallest. Compare the direct
+    // price against both ends rather than picking one, since which end applies depends
+    // entirely on how big a coin pack the trainer would actually buy.
+    const beatsSmall = directRate <= viaSmall;
+    const beatsBulk = directRate <= viaBulk;
+    // Tones name who wins, not good/bad — neither route is a mistake, so this is information,
+    // not a warning.
+    const tone = beatsSmall && beatsBulk ? 'direct' : !beatsSmall && !beatsBulk ? 'coins' : 'mixed';
+    const verdict = beatsSmall && beatsBulk
+      ? 'Direct is cheaper either way — buying coins for this never pays off.'
+      : !beatsSmall && !beatsBulk
+        ? 'Coins are cheaper either way — even the smallest coin pack beats buying this directly.'
+        : 'Depends on the coin pack: a small pack loses to buying direct, a bulk pack wins.';
+
+    grid.appendChild(UI.el('div', { class: 'coinrow', data: { tone } },
+      UI.el('div', { class: 'coinname', text: direct.label }),
+      UI.el('div', { class: 'coinvals' },
+        UI.el('div', { class: 'coinval' },
+          UI.el('span', { class: 'cvlbl', text: 'Direct (Web Store)' }),
+          UI.el('span', { class: 'cvnum', text: fmt(directRate) })),
+        UI.el('div', { class: 'coinval' },
+          UI.el('span', { class: 'cvlbl', text: `Via coins (${coinsNeeded} coins)` }),
+          UI.el('span', { class: 'cvnum', text: `${fmt(viaBulk)} – ${fmt(viaSmall)}`,
+            title: 'Cheapest end: buying the largest coin pack. Priciest end: buying the smallest.' }))),
+      UI.el('div', { class: 'coinverdict', text: verdict })));
+  });
+}
+
 /** The verdict band a savings percentage falls into. Order matters: first match wins. */
 const VERDICT_BANDS = [
   { min: 30, tone: 'good', text: 'Excellent deal — well below buying these separately.' },
@@ -122,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
   UI.setStat('s-coins', fmt(rate(WEBSTORE_BASE.coins) * 100));
 
   buildNav('value');
+  renderCoinCompare();
   renderRefGrid();
 
   ['c-raid', 'c-remote', 'c-coins', 'c-other', 'c-price'].forEach((id) => {
