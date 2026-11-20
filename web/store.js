@@ -207,6 +207,7 @@ function buildNav(active) {
     ['events', 'index.html', "What's on"],
     ['promos', 'promo-codes.html', 'Promo Codes'],
     ['squad', 'squad.html', 'Squad'],
+    ['value', 'value.html', 'Deal Check'],
     ['megas', 'megas.html', 'Mega Pokémon'],
     ['dynamax', 'dynamax.html', 'Dynamax'],
     ['notify', 'notifications.html', 'Notifications'],

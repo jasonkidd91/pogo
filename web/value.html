@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deal Check — Pokémon GO</title>
+<meta name="description" content="Is that Pokémon GO Web Store promo actually worth it? Type in what a bundle contains and what it costs, and compare it against the store's own base Raid Pass, Remote Raid Pass and PokéCoin prices.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27%235b8cff%27/%3E%3Cpath d=%27M2 16h28%27 stroke=%27%230f1219%27 stroke-width=%273%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%230f1219%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%23e8ecf4%27/%3E%3C/svg%3E">
+<!-- auth.js pulls the Firebase SDK from here; warm the connection during parse. -->
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Pokémon GO</p>
+    <h1>Deal Check</h1>
+    <p class="sub">
+      The Web Store's "daily bundles" show a big crossed-out price and a percentage off — but
+      that reference price is the store's own, not an independent one. This page compares a
+      bundle against <strong>base prices read off the store's own standalone, full-price
+      listings</strong> (Malaysia, MYR) for Raid Passes, Remote Raid Passes and PokéCoins, so
+      you can tell whether a promo actually undercuts buying the same things separately.
+      Promos rotate by the hour, so nothing about a current promo is stored here — type in
+      what today's bundle contains and what it costs.
+    </p>
+  </header>
+
+  <div class="summary"></div>
+
+  <main>
+    <section class="calc">
+      <h2 class="calc-h">What's in the bundle?</h2>
+      <div class="calc-grid">
+        <label class="cfield">
+          <span>Raid Passes</span>
+          <input id="c-raid" type="number" min="0" step="1" inputmode="numeric" placeholder="0">
+        </label>
+        <label class="cfield">
+          <span>Remote Raid Passes</span>
+          <input id="c-remote" type="number" min="0" step="1" inputmode="numeric" placeholder="0">
+        </label>
+        <label class="cfield">
+          <span>PokéCoins</span>
+          <input id="c-coins" type="number" min="0" step="1" inputmode="numeric" placeholder="0">
+        </label>
+        <label class="cfield">
+          <span>Other items (RM, your own estimate)</span>
+          <input id="c-other" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+        </label>
+        <label class="cfield cfield-price">
+          <span>Promo price (RM)</span>
+          <input id="c-price" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+        </label>
+      </div>
+      <p class="calc-hint">
+        "Other items" is anything the bundle throws in besides those three — Potions, Berries,
+        Incubators, a Lucky Egg. Price it yourself from the table below, or leave it at 0 to
+        compare on Raid Passes, Remote Raid Passes and Coins alone.
+      </p>
+    </section>
+
+    <div id="c-result"></div>
+
+    <section class="refwrap">
+      <h2 class="calc-h">Base prices, for pricing out the rest of a bundle</h2>
+      <div id="refgrid" class="refgrid"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p id="freshness" class="freshness"></p>
+    <p>
+      <strong>These are base rates, not today's promo.</strong> Every number above comes from
+      the store's own standalone listing for that item — the smallest pack it sells with
+      nothing bundled in — never from a limited-time offer. A promo's own contents and price
+      are exactly the kind of fact that goes stale within hours, so Deal Check never stores
+      one: open the Web Store, read off what a bundle actually contains, and type it in here.
+    </p>
+    <p>
+      Prices are regional. These were read from a Malaysia (MYR) session — if the store shows
+      you a different currency, the percentages still hold, but the base rates above won't
+      match your screen until this page is refreshed from your region.
+    </p>
+    <div class="srcs">
+      <span>Source</span>
+      <a href="https://store.pokemongo.com/">Pokémon GO Web Store</a>
+      <span>· base prices checked by hand, not fetched live — the store needs a signed-in,
+      region-matched session, so there's no feed to poll the way the events and promo-codes
+      pages do</span>
+    </div>
+  </footer>
+
+</div>
+<script src="ui.js"></script>
+<script src="store.js"></script>
+<script src="auth.js"></script>
+<script src="promos.js"></script>
+<script src="promo-data.js"></script>
+<script src="webstore-data.js"></script>
+<script src="value.js"></script>
+</body>
+</html>

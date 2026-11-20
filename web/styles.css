@@ -22,6 +22,8 @@
  *   promo code card     .pcard .pcode .pcode-text   promo-codes.js
  *   squad pick card     .scard .stier .sbulk        squad.js
  *   PogoHub tier chip   .phtier                     squad.js
+ *   deal calculator     .calc .cfield .cresult      value.js
+ *   base price table    .refgrid .refrow            value.js
  *
  * A page owns its domain-specific components and builds them from the primitives above —
  * the events page's .ecard/.erow/.ecaveat in events.js, and .remindbox/.rb-* in remind.js,
@@ -920,3 +922,86 @@ a.rname:hover { color: var(--accent); }
 .phtier[data-t="B"]  { background: #5b8cff; color: #0b1020; }
 .phtier[data-t="C"]  { background: #8b93a7; color: #0b1020; }
 .phtier[data-t="D"], .phtier[data-t="E"], .phtier[data-t="F"] { background: #333b4d; color: #c3cad9; }
+
+/* ---------- Deal Check page (value.js) ----------
+   A calculator, not a list — no cards, no grid. Inputs are plain, labelled number fields;
+   the result panel is the one thing on the page that's generated, since it changes on every
+   keystroke. */
+
+.calc-h { font-size: var(--fs-name); margin: 0 0 var(--sp-4); }
+
+.calc { margin-bottom: var(--sp-7); }
+.calc-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--sp-4);
+}
+.cfield {
+  /* min-width: 0 overrides the grid track's automatic min sizing, which otherwise takes its
+     floor from the <input>'s intrinsic ~200px default width and blows out a narrow column. */
+  display: flex; flex-direction: column; gap: var(--sp-2); min-width: 0;
+  font-size: var(--fs-sub); color: var(--muted);
+}
+.cfield input {
+  font: inherit; font-size: var(--fs-name); font-variant-numeric: tabular-nums;
+  background: var(--surface-2); color: var(--text);
+  border: 1px solid var(--border); border-radius: var(--r-lg);
+  padding: 9px 12px; width: 100%; min-width: 0;
+}
+.cfield input:focus { outline: none; border-color: var(--accent); }
+/* The price field is the one that matters most once the bundle's typed in — give it its own
+   accent border so it doesn't read as just another field in the grid. */
+.cfield-price input { border-color: var(--border-bright); }
+
+.calc-hint { font-size: var(--fs-sub); color: var(--muted); margin: var(--sp-4) 0 0; max-width: 62ch; }
+
+#c-result { margin-bottom: var(--sp-7); }
+
+.cbreak {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: var(--sp-5) var(--sp-6); margin-bottom: var(--sp-3);
+}
+.cbrow { font-size: var(--fs-ui); color: var(--muted); padding: 3px 0; }
+.cbrow:not(:last-child) { border-bottom: 1px dashed var(--border); }
+
+.ctotals { display: flex; gap: var(--sp-4); flex-wrap: wrap; margin-bottom: var(--sp-3); }
+.ctot {
+  flex: 1; min-width: 160px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: var(--sp-5) var(--sp-6);
+  display: flex; flex-direction: column; gap: 2px;
+}
+.ctlbl { font-size: var(--fs-meta); text-transform: uppercase; letter-spacing: .09em; color: var(--muted); }
+.ctval { font-size: 22px; font-weight: 700; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+
+.cverdict {
+  display: flex; align-items: center; gap: var(--sp-6);
+  border-radius: var(--radius); border: 1px solid var(--border);
+  padding: var(--sp-6);
+}
+.cpct {
+  font-size: 34px; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums;
+  flex: 0 0 auto;
+}
+.cvsave { font-weight: 600; margin-bottom: 2px; }
+.cvtext { color: var(--muted); font-size: var(--fs-ui); }
+.cverdict[data-tone="good"] { border-color: var(--done); background: rgba(52,211,153,.08); }
+.cverdict[data-tone="good"] .cpct { color: var(--done); }
+.cverdict[data-tone="ok"] { border-color: var(--e200); background: rgba(251,191,36,.08); }
+.cverdict[data-tone="ok"] .cpct { color: var(--e200); }
+.cverdict[data-tone="bad"] { border-color: #f87171; background: rgba(248,113,113,.08); }
+.cverdict[data-tone="bad"] .cpct { color: #f87171; }
+
+.refwrap { margin-bottom: var(--sp-7); }
+.refgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: var(--sp-3); }
+.refrow {
+  display: flex; justify-content: space-between; gap: var(--sp-3);
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg);
+  padding: var(--sp-3) var(--sp-4); font-size: var(--fs-ui); cursor: help;
+}
+.refname { color: var(--muted); }
+.refrate { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 560px) {
+  .calc-grid { grid-template-columns: 1fr 1fr; }
+  .cverdict { flex-wrap: wrap; }
+}
