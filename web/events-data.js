@@ -4,7 +4,7 @@
  * GENERATED — do not hand-edit. Regenerate with: python3 scripts/update_events.py
  * Source: https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json
  *         (ScrapedDuck, which scrapes https://leekduck.com/events/)
- * Fetched: 2026-11-18 01:30 local
+ * Fetched: 2026-11-20 01:04 local
  *
  * EVENTS ARE LIVE DATA. events.js fetches the feed above on every page load and renders
  * that; this file is only what it shows while the fetch is in flight or if it fails, and
@@ -23,14 +23,13 @@
  * rotations are published. events.js branches on the suffix; do not normalise it away.
  */
 
-const EVENTS_FETCHED = "2026-11-18 01:30";
+const EVENTS_FETCHED = "2026-11-20 01:04";
 const EVENTS_SOURCE = "https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json";
 
 const EVENTS_SNAPSHOT = [
   {"id": "season-24-twilight-trails", "name": "Twilight Trails", "type": "season", "heading": "Season", "link": "https://leekduck.com/events/season-24-twilight-trails/", "start": "2026-09-08T10:00:00.000", "end": "2026-12-01T10:00:00.000", "blurb": "Welcome to Pokémon GO: Twilight Trails! In Pokémon GO, Seasons are periods of time that feature new events, Pokémon debuts, and surprises that all follow a certain theme.", "has": ["bonuses", "spawns", "eggs"]},
   {"id": "pokemon-x-adidas-2026", "name": "adidas × Pokémon Timed Research", "type": "research", "heading": "Research", "link": "https://leekduck.com/events/pokemon-x-adidas-2026/", "start": "2026-09-25T10:00:00.000", "end": "2027-01-15T20:00:00.000"},
   {"id": "go-pass-november-2026", "name": "GO Pass: November", "type": "go-pass", "heading": "GO Pass", "link": "https://leekduck.com/events/go-pass-november-2026/", "start": "2026-11-03T10:00:00.000", "end": "2026-12-01T10:00:00.000", "blurb": "GO Pass: November features Groudon, 400 PokéCoins on the free track, 1,000 additional PokéCoins with GO Pass Deluxe…"},
-  {"id": "gbl-twilight-trails_great-league_ultra-league-mega-edition_2026-go-laic-cup", "name": "Great League, Ultra League: Mega Edition, and 2026 GO LAIC Cup | Twilight Trails", "type": "go-battle-league", "heading": "GO Battle League", "link": "https://leekduck.com/events/gbl-twilight-trails_great-league_ultra-league-mega-edition_2026-go-laic-cup/", "start": "2026-11-10T21:00:00.000Z", "end": "2026-11-17T21:00:00.000Z"},
   {"id": "minior-showers-leonids-2026", "name": "Minior Showers: Leonids 2026", "type": "event", "heading": "Event", "link": "https://leekduck.com/events/minior-showers-leonids-2026/", "start": "2026-11-14T17:00:00.000", "end": "2026-11-19T23:59:00.000", "blurb": "Yellow Core Minior debuts during the Leonids meteor shower! Earn increased Stardust for catching Minior…", "has": ["bonuses", "spawns", "research"], "caveats": [{"k": "debut", "t": "Minior (Yellow Core) will make its Pokémon GO debut during the Leonids meteor shower, beginning November 14, 2026, at 5:00 p.m. local time!"}]},
   {"id": "cresselia-darkrai-in-5-star-raid-battles-november-2026", "name": "Cresselia and Darkrai in 5-star Raid Battles", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/cresselia-darkrai-in-5-star-raid-battles-november-2026/", "start": "2026-11-16T06:00:00.000", "end": "2026-11-24T22:00:00.000", "blurb": "Raid bosses change at 6:00 a.m. local time. There will also be a Raid Hour featuring Cresselia and Darkrai from 6:00 p.m. to 7:00 p.m. local time on November 18.", "has": ["raids", "shiny"]},
   {"id": "mega-banette-in-mega-raids-november-2026", "name": "Mega Banette in Mega Raids", "type": "raid-battles", "heading": "Raid Battles", "link": "https://leekduck.com/events/mega-banette-in-mega-raids-november-2026/", "start": "2026-11-16T06:00:00.000", "end": "2026-11-24T22:00:00.000", "mons": ["Mega Banette"], "blurb": "Raid bosses change at 6:00 a.m. local time.", "has": ["raids", "shiny"]},
